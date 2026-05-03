@@ -15,7 +15,7 @@ export default function Navigation() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
+    const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -25,100 +25,113 @@ export default function Navigation() {
     return () => { document.body.style.overflow = ""; };
   }, [open]);
 
+  const isLight = !scrolled && !open;
+
   return (
     <>
-      <header
-        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-white/95 backdrop-blur-sm border-b border-[var(--border)]"
-            : "bg-white/80 backdrop-blur-sm"
-        }`}
-      >
-        <div className="max-w-6xl mx-auto px-5 md:px-8 h-14 md:h-16 flex items-center justify-between">
+      <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
+        open ? "bg-transparent" : scrolled ? "bg-white/97 backdrop-blur-sm border-b border-[var(--border)]" : "bg-transparent"
+      }`}>
+        <div className="px-8 md:px-12 h-16 md:h-20 flex items-center justify-between">
+
           {/* Logo */}
-          <a href="#" className="flex flex-col leading-none">
-            <span className="font-serif text-xl md:text-2xl text-[var(--text)] italic">
+          <a href="#" className="z-10 flex flex-col leading-none select-none">
+            <span className={`font-serif text-2xl md:text-[1.6rem] italic transition-colors duration-500 ${
+              isLight ? "text-white" : "text-[var(--text)]"
+            }`}>
               Amarte
             </span>
-            <span className="text-[10px] tracking-[0.25em] uppercase text-[var(--text-muted)] font-light">
+            <span className={`text-[8px] tracking-[0.32em] uppercase font-light transition-colors duration-500 ${
+              isLight ? "text-white/60" : "text-[var(--text-muted)]"
+            }`}>
               Épalinges
             </span>
           </a>
 
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-7">
-            {NAV_LINKS.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                className="text-[12px] tracking-[0.12em] uppercase text-[var(--text-muted)] hover:text-[var(--text)] transition-colors duration-200 font-light"
-              >
-                {l.label}
-              </a>
-            ))}
-            <a
-              href="#cours"
-              className="text-[12px] tracking-[0.12em] uppercase bg-[var(--text)] text-white px-5 py-2.5 hover:bg-[var(--accent)] transition-colors duration-200 font-light"
-            >
-              Réserver
-            </a>
-          </nav>
-
-          {/* Mobile burger */}
+          {/* Hamburger / Croix */}
           <button
             onClick={() => setOpen(!open)}
-            aria-label="Menu"
-            className="md:hidden flex flex-col justify-center gap-[5px] w-10 h-10 -mr-2"
+            aria-label={open ? "Fermer" : "Menu"}
+            className="z-10 relative w-8 h-8 flex items-center justify-center"
           >
-            <span
-              className={`block h-px bg-[var(--text)] transition-all duration-300 origin-center ${
-                open ? "w-6 rotate-45 translate-y-[6px]" : "w-6"
-              }`}
-            />
-            <span
-              className={`block h-px bg-[var(--text)] transition-all duration-300 ${
-                open ? "w-0 opacity-0" : "w-4"
-              }`}
-            />
-            <span
-              className={`block h-px bg-[var(--text)] transition-all duration-300 origin-center ${
-                open ? "w-6 -rotate-45 -translate-y-[6px]" : "w-5"
-              }`}
-            />
+            {/* Barre 1 */}
+            <span className={`absolute block w-6 h-px transition-all duration-500 ease-in-out ${
+              open
+                ? "rotate-45 bg-[var(--text)]"
+                : isLight ? "bg-white -translate-y-[5px]" : "bg-[var(--text)] -translate-y-[5px]"
+            }`} />
+            {/* Barre 2 */}
+            <span className={`absolute block h-px transition-all duration-300 ease-in-out ${
+              open
+                ? "w-0 opacity-0 bg-[var(--text)]"
+                : isLight ? "w-4 bg-white opacity-100" : "w-4 bg-[var(--text)] opacity-100"
+            }`} />
+            {/* Barre 3 */}
+            <span className={`absolute block w-6 h-px transition-all duration-500 ease-in-out ${
+              open
+                ? "-rotate-45 bg-[var(--text)]"
+                : isLight ? "bg-white translate-y-[5px]" : "bg-[var(--text)] translate-y-[5px]"
+            }`} />
           </button>
         </div>
       </header>
 
-      {/* Mobile menu */}
-      <div
-        className={`fixed inset-0 z-40 bg-white flex flex-col justify-between transition-all duration-300 ${
-          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
-      >
-        <div className="flex flex-col justify-center flex-1 px-5 pt-20 pb-10">
-          <nav className="flex flex-col gap-1">
-            {NAV_LINKS.map((l, i) => (
-              <a
-                key={l.href}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                className="font-serif text-4xl italic text-[var(--text)] py-3 border-b border-[var(--border)] flex items-center justify-between"
-                style={{ transitionDelay: `${i * 40}ms` }}
-              >
+      {/* Overlay menu plein écran */}
+      <div className={`fixed inset-0 z-40 bg-[#F7F3EE] flex flex-col transition-all duration-600 ease-in-out ${
+        open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+      }`}>
+        {/* Ligne verticale déco */}
+        <div className="absolute left-0 top-0 bottom-0 w-px bg-[var(--border)]" style={{ left: "5rem" }} />
+
+        <nav className="flex flex-col justify-center flex-1 pl-24 md:pl-40 pr-10 pt-24 pb-10 gap-0">
+          {NAV_LINKS.map((l, i) => (
+            <a
+              key={l.href}
+              href={l.href}
+              onClick={() => setOpen(false)}
+              className="group relative flex items-center justify-between py-5 border-b border-[var(--border)] overflow-hidden"
+              style={{
+                opacity: open ? 1 : 0,
+                transform: open ? "translateY(0)" : "translateY(12px)",
+                transition: `opacity 0.5s cubic-bezier(0.16,1,0.3,1) ${i * 55}ms, transform 0.5s cubic-bezier(0.16,1,0.3,1) ${i * 55}ms`,
+              }}
+            >
+              {/* Numéro */}
+              <span className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] font-light w-10 shrink-0">
+                0{i + 1}
+              </span>
+
+              {/* Label avec underline animé au hover */}
+              <span className="relative font-serif text-[clamp(2rem,4.5vw,3.2rem)] italic text-[var(--text)] leading-none flex-1">
                 {l.label}
-                <span className="text-[var(--accent)] text-2xl not-italic font-light font-sans">→</span>
-              </a>
-            ))}
-          </nav>
+                {/* Trait qui slide de gauche à droite au hover */}
+                <span className="absolute bottom-0 left-0 h-px bg-[var(--accent)] w-0 group-hover:w-full transition-all duration-500 ease-in-out" />
+              </span>
+
+              {/* Flèche qui se décale au hover */}
+              <span className="text-[var(--accent)] text-base font-light transition-transform duration-300 group-hover:translate-x-1 opacity-0 group-hover:opacity-100">
+                →
+              </span>
+            </a>
+          ))}
+        </nav>
+
+        {/* Bas du menu */}
+        <div
+          className="pl-24 md:pl-40 pr-10 pb-10 flex flex-col sm:flex-row items-start sm:items-center gap-6"
+          style={{
+            opacity: open ? 1 : 0,
+            transform: open ? "translateY(0)" : "translateY(10px)",
+            transition: `opacity 0.5s ease ${NAV_LINKS.length * 55 + 80}ms, transform 0.5s ease ${NAV_LINKS.length * 55 + 80}ms`,
+          }}
+        >
           <a
             href="#cours"
             onClick={() => setOpen(false)}
-            className="mt-8 text-center text-[11px] tracking-[0.15em] uppercase bg-[var(--text)] text-white py-4 hover:bg-[var(--accent)] transition-colors duration-200 font-light"
+            className="text-[11px] tracking-[0.2em] uppercase bg-[var(--text)] text-white px-8 py-3.5 hover:bg-[var(--accent)] transition-colors duration-300 font-light"
           >
             Réserver un cours
           </a>
-        </div>
-        <div className="px-5 pb-8">
           <p className="text-[11px] text-[var(--text-muted)] font-light">
             +41 78 810 64 64 · info@amarte.ch
           </p>
