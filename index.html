@@ -6,24 +6,58 @@
   <title>Amarte — Yoga &amp; Pilates à Épalinges</title>
   <meta name="description" content="Studio de yoga, pilates et bien-être à Épalinges. Un espace bienveillant, sans jugement, pour tous les niveaux." />
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet" />
 
-  <!-- Styles -->
+  <link rel="canonical" href="https://amarte.ch/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Amarte — Studio Yoga &amp; Pilates à Épalinges" />
+  <meta property="og:description" content="Studio de yoga, pilates et bien-être à Épalinges. Un espace bienveillant, sans jugement, pour tous les niveaux." />
+  <meta property="og:url" content="https://amarte.ch/" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SportsActivityLocation",
+    "name": "Amarte Studio",
+    "description": "Studio de yoga, pilates et bien-être à Épalinges, Vaud. Un espace bienveillant pour tous les niveaux.",
+    "url": "https://amarte.ch",
+    "telephone": "+41794621747",
+    "email": "info@amarte.ch",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Route du Village 1A",
+      "addressLocality": "Épalinges",
+      "postalCode": "1066",
+      "addressCountry": "CH"
+    },
+    "openingHoursSpecification": [
+      {"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"08:00","closes":"20:00"},
+      {"@type":"OpeningHoursSpecification","dayOfWeek":"Saturday","opens":"08:00","closes":"17:00"}
+    ],
+    "sameAs": ["https://instagram.com/amarte_epalinges","https://facebook.com/AmarteEpalinges"]
+  }
+  </script>
+
   <link rel="stylesheet" href="css/style.css" />
-
-  <!-- GSAP CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+  <!-- End Google Tag Manager -->
 </head>
 <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 
 <!-- ===== NAVIGATION ===== -->
 <header id="nav-header">
   <div class="nav-inner">
-    <a href="#" class="nav-logo">
+    <a href="index.html" class="nav-logo">
       <span class="nav-logo-main">Amarte</span>
       <span class="nav-logo-sub">Épalinges</span>
     </a>
@@ -38,35 +72,50 @@
 <div id="nav-menu">
   <div class="nav-menu-line"></div>
   <nav class="nav-menu-links">
-    <a href="#a-propos" class="nav-menu-link">
+    <a href="index.html" class="nav-menu-link">
       <span class="nav-menu-num">01</span>
-      <span class="nav-menu-label-wrap">À propos</span>
+      <span class="nav-menu-label-wrap">Accueil</span>
       <span class="nav-menu-arrow">→</span>
     </a>
-    <a href="#cours" class="nav-menu-link">
+    <a href="premiere-fois.html" class="nav-menu-link">
       <span class="nav-menu-num">02</span>
+      <span class="nav-menu-label-wrap">Première fois</span>
+      <span class="nav-menu-arrow">→</span>
+    </a>
+    <a href="cours.html" class="nav-menu-link">
+      <span class="nav-menu-num">03</span>
       <span class="nav-menu-label-wrap">Cours</span>
       <span class="nav-menu-arrow">→</span>
     </a>
-    <a href="#horaires" class="nav-menu-link">
-      <span class="nav-menu-num">03</span>
-      <span class="nav-menu-label-wrap">Horaires</span>
+    <a href="calendrier.html" class="nav-menu-link">
+      <span class="nav-menu-num">04</span>
+      <span class="nav-menu-label-wrap">Calendrier</span>
       <span class="nav-menu-arrow">→</span>
     </a>
-    <a href="#tarifs" class="nav-menu-link">
-      <span class="nav-menu-num">04</span>
+    <a href="tarifs.html" class="nav-menu-link">
+      <span class="nav-menu-num">05</span>
       <span class="nav-menu-label-wrap">Tarifs</span>
       <span class="nav-menu-arrow">→</span>
     </a>
-    <a href="#contact" class="nav-menu-link">
-      <span class="nav-menu-num">05</span>
+    <a href="location.html" class="nav-menu-link">
+      <span class="nav-menu-num">06</span>
+      <span class="nav-menu-label-wrap">Location</span>
+      <span class="nav-menu-arrow">→</span>
+    </a>
+    <a href="corpo.html" class="nav-menu-link">
+      <span class="nav-menu-num">07</span>
+      <span class="nav-menu-label-wrap">Corpo B2B</span>
+      <span class="nav-menu-arrow">→</span>
+    </a>
+    <a href="contact.html" class="nav-menu-link">
+      <span class="nav-menu-num">08</span>
       <span class="nav-menu-label-wrap">Contact</span>
       <span class="nav-menu-arrow">→</span>
     </a>
   </nav>
   <div class="nav-menu-bottom">
-    <a href="#cours" class="nav-menu-cta">Réserver un cours</a>
-    <span class="nav-menu-contact">+41 78 810 64 64 · info@amarte.ch</span>
+    <a href="tarifs.html" class="nav-menu-cta">Voir les tarifs</a>
+    <span class="nav-menu-contact">+41 79 462 17 47 · info@amarte.ch</span>
   </div>
 </div>
 
@@ -78,12 +127,12 @@
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <h1 class="hero-title">
-        <span class="hero-line-wrap"><span class="hero-line" id="hl0">S'entraîner</span></span>
-        <span class="hero-line-wrap"><span class="hero-line" id="hl1"><em>est un acte</em></span></span>
-        <span class="hero-line-wrap"><span class="hero-line" id="hl2">d'amour.</span></span>
+        <span class="hero-line-wrap"><span class="hero-line" id="hl0">Bouger.</span></span>
+        <span class="hero-line-wrap"><span class="hero-line" id="hl1"><em>Respirer.</em></span></span>
+        <span class="hero-line-wrap"><span class="hero-line" id="hl2">S'épanouir.</span></span>
       </h1>
-      <p class="hero-sub" id="hero-sub">Studio · Épalinges, Vaud</p>
-      <a href="#cours" class="hero-btn" id="hero-btn">Réserver maintenant</a>
+      <p class="hero-sub" id="hero-sub">Centre de bien-être · Épalinges, Vaud</p>
+      <a href="tarifs.html" class="hero-btn" id="hero-btn" data-cta="hero-primary">Découvrir nos offres</a>
     </div>
   </section>
 
@@ -116,6 +165,40 @@
     </div>
   </section>
 
+  <!-- ===== MARQUEE ===== -->
+  <div class="marquee-strip" aria-hidden="true">
+    <div class="marquee-track">
+      <div class="marquee-group">
+        <span class="marquee-item">Yoga</span><span class="marquee-sep"></span>
+        <span class="marquee-item">Pilates</span><span class="marquee-sep"></span>
+        <span class="marquee-item accent">Épalinges</span><span class="marquee-sep"></span>
+        <span class="marquee-item">Méditation</span><span class="marquee-sep"></span>
+        <span class="marquee-item">Yin Yoga</span><span class="marquee-sep"></span>
+        <span class="marquee-item accent">Route du Village 1A</span><span class="marquee-sep"></span>
+        <span class="marquee-item">Kundalini</span><span class="marquee-sep"></span>
+        <span class="marquee-item">Bien-être</span><span class="marquee-sep"></span>
+        <span class="marquee-item accent">Tous niveaux</span><span class="marquee-sep"></span>
+        <span class="marquee-item">Nia Doux</span><span class="marquee-sep"></span>
+        <span class="marquee-item">Hatha Flow</span><span class="marquee-sep"></span>
+        <span class="marquee-item accent">Studio</span><span class="marquee-sep"></span>
+      </div>
+      <div class="marquee-group" aria-hidden="true">
+        <span class="marquee-item">Yoga</span><span class="marquee-sep"></span>
+        <span class="marquee-item">Pilates</span><span class="marquee-sep"></span>
+        <span class="marquee-item accent">Épalinges</span><span class="marquee-sep"></span>
+        <span class="marquee-item">Méditation</span><span class="marquee-sep"></span>
+        <span class="marquee-item">Yin Yoga</span><span class="marquee-sep"></span>
+        <span class="marquee-item accent">Route du Village 1A</span><span class="marquee-sep"></span>
+        <span class="marquee-item">Kundalini</span><span class="marquee-sep"></span>
+        <span class="marquee-item">Bien-être</span><span class="marquee-sep"></span>
+        <span class="marquee-item accent">Tous niveaux</span><span class="marquee-sep"></span>
+        <span class="marquee-item">Nia Doux</span><span class="marquee-sep"></span>
+        <span class="marquee-item">Hatha Flow</span><span class="marquee-sep"></span>
+        <span class="marquee-item accent">Studio</span><span class="marquee-sep"></span>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== ABOUT ===== -->
   <section id="a-propos">
     <div class="about-inner">
@@ -143,6 +226,7 @@
     </div>
   </section>
 
+
   <!-- ===== CLASSES ===== -->
   <section id="cours">
     <div class="classes-inner">
@@ -164,8 +248,8 @@
             <h3 class="class-title">Yoga Flow</h3>
             <p class="class-subtitle">Dynamique &amp; Libérateur</p>
           </div>
-          <p class="class-desc">Un yoga fluide qui harmonise force et souplesse. Chaque séance renforce le corps tout en apaisant l'esprit. Des variations proposées à chaque cours.</p>
-          <a href="#horaires" class="class-link">Voir les horaires <span class="class-link-arrow">→</span></a>
+          <p class="class-desc">Un yoga fluide qui harmonise force et souplesse. Chaque séance renforce le corps tout en apaisant l'esprit.</p>
+          <a href="cours.html" class="class-link">Voir les cours <span class="class-link-arrow">→</span></a>
         </div>
 
         <div class="class-card gs-reveal">
@@ -181,23 +265,23 @@
             <p class="class-subtitle">Renforcement &amp; Équilibre</p>
           </div>
           <p class="class-desc">Méthode profonde de renforcement musculaire centrée sur la posture et la coordination. Des résultats visibles en quelques semaines.</p>
-          <a href="#horaires" class="class-link">Voir les horaires <span class="class-link-arrow">→</span></a>
+          <a href="cours.html" class="class-link">Voir les cours <span class="class-link-arrow">→</span></a>
         </div>
 
         <div class="class-card gs-reveal">
           <div class="class-top">
             <span class="class-num">03</span>
             <div class="class-tags">
-              <span class="class-tag">45 min</span>
-              <span class="class-tag hidden-sm">Débutants bienvenus</span>
+              <span class="class-tag">60 min</span>
+              <span class="class-tag hidden-sm">Doux</span>
             </div>
           </div>
           <div>
-            <h3 class="class-title">Méditation</h3>
-            <p class="class-subtitle">Pleine conscience</p>
+            <h3 class="class-title">Yin Yoga</h3>
+            <p class="class-subtitle">Profond &amp; Méditatif</p>
           </div>
-          <p class="class-desc">Séances guidées pour cultiver la présence. Respiration, visualisation, scan corporel. Un ancrage indispensable dans votre semaine.</p>
-          <a href="#horaires" class="class-link">Voir les horaires <span class="class-link-arrow">→</span></a>
+          <p class="class-desc">Postures tenues longtemps pour relâcher les fascias et calmer le système nerveux. Une pratique de lâcher-prise.</p>
+          <a href="cours.html" class="class-link">Voir les cours <span class="class-link-arrow">→</span></a>
         </div>
 
         <div class="class-card gs-reveal">
@@ -212,10 +296,13 @@
             <h3 class="class-title">Bien-être</h3>
             <p class="class-subtitle">Holistique &amp; Doux</p>
           </div>
-          <p class="class-desc">Mouvements thérapeutiques, étirements profonds et relaxation guidée. Parfait pour la récupération et la reconnexion corps-esprit.</p>
-          <a href="#horaires" class="class-link">Voir les horaires <span class="class-link-arrow">→</span></a>
+          <p class="class-desc">Mouvements thérapeutiques, étirements profonds et relaxation guidée. Parfait pour la récupération et la reconnexion.</p>
+          <a href="cours.html" class="class-link">Voir les cours <span class="class-link-arrow">→</span></a>
         </div>
 
+      </div>
+      <div style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end" class="gs-reveal">
+        <a href="cours.html" class="class-link" style="font-size:0.75rem">Toutes les disciplines <span class="class-link-arrow">→</span></a>
       </div>
     </div>
   </section>
@@ -227,126 +314,16 @@
     <div class="cta-content gs-stagger">
       <p class="cta-label">Commencez votre parcours</p>
       <h2 class="cta-title">Votre première séance <em>vous attend.</em></h2>
-      <a href="#contact" class="cta-btn">Réserver maintenant</a>
+      <a href="premiere-fois.html" class="cta-btn">Découvrir le Pack Découverte</a>
     </div>
   </div>
-
-  <!-- ===== SCHEDULE ===== -->
-  <section id="horaires">
-    <div class="schedule-inner">
-      <div class="schedule-header gs-stagger">
-        <div>
-          <p class="section-label">04 — Planning</p>
-          <h2 class="schedule-title">Vos horaires <em>cette semaine.</em></h2>
-        </div>
-        <a href="https://amarte.zenitoo.ch/fr/calendar" target="_blank" rel="noopener noreferrer" class="schedule-btn">Calendrier complet</a>
-      </div>
-      <div class="schedule-scroll gs-reveal">
-        <div class="schedule-grid">
-          <div class="schedule-day">
-            <div class="schedule-day-head">Lundi</div>
-            <div class="schedule-slot"><p class="slot-time">08:00</p><p class="slot-name" style="color:var(--accent)">Yoga Flow</p><p class="slot-dur">60 min</p></div>
-            <div class="schedule-slot"><p class="slot-time">12:00</p><p class="slot-name" style="color:var(--text)">Pilates</p><p class="slot-dur">60 min</p></div>
-            <div class="schedule-slot"><p class="slot-time">18:30</p><p class="slot-name" style="color:var(--accent)">Yoga Flow</p><p class="slot-dur">60 min</p></div>
-          </div>
-          <div class="schedule-day">
-            <div class="schedule-day-head">Mardi</div>
-            <div class="schedule-slot"><p class="slot-time">09:00</p><p class="slot-name" style="color:#555">Méditation</p><p class="slot-dur">45 min</p></div>
-            <div class="schedule-slot"><p class="slot-time">18:00</p><p class="slot-name" style="color:var(--text)">Pilates</p><p class="slot-dur">60 min</p></div>
-            <div class="schedule-slot"><p class="slot-time">19:30</p><p class="slot-name" style="color:#666">Bien-être</p><p class="slot-dur">60 min</p></div>
-          </div>
-          <div class="schedule-day">
-            <div class="schedule-day-head">Mercredi</div>
-            <div class="schedule-slot"><p class="slot-time">08:00</p><p class="slot-name" style="color:var(--text)">Pilates</p><p class="slot-dur">60 min</p></div>
-            <div class="schedule-slot"><p class="slot-time">18:30</p><p class="slot-name" style="color:var(--accent)">Yoga Flow</p><p class="slot-dur">60 min</p></div>
-          </div>
-          <div class="schedule-day">
-            <div class="schedule-day-head">Jeudi</div>
-            <div class="schedule-slot"><p class="slot-time">09:00</p><p class="slot-name" style="color:var(--accent)">Yoga Flow</p><p class="slot-dur">60 min</p></div>
-            <div class="schedule-slot"><p class="slot-time">18:00</p><p class="slot-name" style="color:var(--text)">Pilates</p><p class="slot-dur">60 min</p></div>
-            <div class="schedule-slot"><p class="slot-time">19:30</p><p class="slot-name" style="color:#555">Méditation</p><p class="slot-dur">45 min</p></div>
-          </div>
-          <div class="schedule-day">
-            <div class="schedule-day-head">Vendredi</div>
-            <div class="schedule-slot"><p class="slot-time">08:00</p><p class="slot-name" style="color:#666">Bien-être</p><p class="slot-dur">60 min</p></div>
-            <div class="schedule-slot"><p class="slot-time">12:00</p><p class="slot-name" style="color:var(--text)">Pilates</p><p class="slot-dur">60 min</p></div>
-            <div class="schedule-slot"><p class="slot-time">18:30</p><p class="slot-name" style="color:var(--accent)">Yoga Flow</p><p class="slot-dur">60 min</p></div>
-          </div>
-          <div class="schedule-day">
-            <div class="schedule-day-head">Samedi</div>
-            <div class="schedule-slot"><p class="slot-time">09:00</p><p class="slot-name" style="color:var(--accent)">Yoga Flow</p><p class="slot-dur">90 min</p></div>
-            <div class="schedule-slot"><p class="slot-time">11:00</p><p class="slot-name" style="color:var(--text)">Pilates</p><p class="slot-dur">60 min</p></div>
-          </div>
-        </div>
-      </div>
-      <p class="schedule-note">Horaires indicatifs — consultez le calendrier en ligne pour les disponibilités exactes.</p>
-    </div>
-  </section>
-
-  <!-- ===== PRICING ===== -->
-  <section id="tarifs">
-    <div class="pricing-inner">
-      <div class="pricing-header gs-stagger">
-        <p class="section-label">05 — Tarifs</p>
-        <h2 class="pricing-title">Investir dans soi, <em>à votre rythme.</em></h2>
-        <p class="pricing-sub">Des formules flexibles, sans engagement forcé.</p>
-      </div>
-      <div class="pricing-grid">
-        <div class="plan plan-light gs-reveal">
-          <p class="plan-tagline">Pour commencer</p>
-          <h3 class="plan-name">Découverte</h3>
-          <p class="plan-price">CHF 75 <span class="plan-unit">3 crédits</span></p>
-          <p class="plan-validity">Valables 2 mois</p>
-          <p class="plan-desc">Explorez nos disciplines à votre rythme, sans engagement.</p>
-          <ul class="plan-features">
-            <li class="plan-feature"><span class="plan-check">✓</span> 3 crédits utilisables librement</li>
-            <li class="plan-feature"><span class="plan-check">✓</span> Yoga, Pilates ou Méditation</li>
-            <li class="plan-feature"><span class="plan-check">✓</span> Valables 2 mois</li>
-            <li class="plan-feature"><span class="plan-check">✓</span> Accès app de réservation</li>
-          </ul>
-          <a href="#contact" class="plan-cta">Commencer</a>
-        </div>
-        <div class="plan plan-dark gs-reveal">
-          <span class="plan-badge">Recommandé</span>
-          <p class="plan-tagline">Le plus populaire</p>
-          <h3 class="plan-name">Mensuel</h3>
-          <p class="plan-price">CHF 180 <span class="plan-unit">/ mois</span></p>
-          <p class="plan-validity">8 crédits · Auto-renouvelable</p>
-          <p class="plan-desc">Intégrez la pratique dans votre routine avec 8 crédits par mois.</p>
-          <ul class="plan-features">
-            <li class="plan-feature"><span class="plan-check">✓</span> 8 crédits par mois</li>
-            <li class="plan-feature"><span class="plan-check">✓</span> Renouvellement automatique</li>
-            <li class="plan-feature"><span class="plan-check">✓</span> Report d'un mois possible</li>
-            <li class="plan-feature"><span class="plan-check">✓</span> Tous cours inclus</li>
-            <li class="plan-feature"><span class="plan-check">✓</span> Priorité de réservation</li>
-          </ul>
-          <a href="#contact" class="plan-cta">S'abonner</a>
-        </div>
-        <div class="plan plan-light gs-reveal">
-          <p class="plan-tagline">Pour les passionnés</p>
-          <h3 class="plan-name">Illimité</h3>
-          <p class="plan-price">CHF 280 <span class="plan-unit">/ mois</span></p>
-          <p class="plan-validity">Cours illimités</p>
-          <p class="plan-desc">Venez autant que vous voulez. Le mouvement comme priorité.</p>
-          <ul class="plan-features">
-            <li class="plan-feature"><span class="plan-check">✓</span> Cours illimités</li>
-            <li class="plan-feature"><span class="plan-check">✓</span> Accès prioritaire</li>
-            <li class="plan-feature"><span class="plan-check">✓</span> Invité offert 1×/mois</li>
-            <li class="plan-feature"><span class="plan-check">✓</span> Atelier mensuel gratuit</li>
-          </ul>
-          <a href="#contact" class="plan-cta">Devenir membre</a>
-        </div>
-      </div>
-      <p class="pricing-note">Cours privés disponibles sur demande · <a href="#contact">Nous contacter</a></p>
-    </div>
-  </section>
 
   <!-- ===== TESTIMONIALS ===== -->
   <section id="temoignages">
     <div class="testi-inner gs-reveal">
       <div class="testi-header">
         <div>
-          <p class="section-label">06 — Témoignages</p>
+          <p class="section-label">04 — Témoignages</p>
           <h2 class="testi-title">Ce qu'ils disent <em>d'Amarte.</em></h2>
         </div>
         <div class="testi-nav">
@@ -364,81 +341,60 @@
     </div>
   </section>
 
-  <!-- ===== CONTACT ===== -->
-  <section id="contact">
-    <div class="contact-inner gs-reveal">
-      <div>
-        <p class="section-label">07 — Contact</p>
-        <h2 class="contact-title">Venez nous <em>rendre visite.</em></h2>
-        <div class="contact-info-block">
-          <span class="contact-info-label">Adresse</span>
-          <p class="contact-info-val">Route du Village 1A<br>1066 Épalinges, Suisse</p>
-        </div>
-        <div class="contact-info-block">
-          <span class="contact-info-label">Contact</span>
-          <div class="contact-info-val">
-            <a href="tel:+41788106464">+41 78 810 64 64</a>
-            <a href="mailto:info@amarte.ch">info@amarte.ch</a>
-          </div>
-        </div>
-        <div class="contact-info-block">
-          <span class="contact-info-label">Horaires</span>
-          <div class="contact-hours">
-            <div class="contact-hour-row"><span class="contact-hour-day">Lundi – Vendredi</span><span class="contact-hour-val">8h00 – 20h00</span></div>
-            <div class="contact-hour-row"><span class="contact-hour-day">Samedi</span><span class="contact-hour-val">8h00 – 17h00</span></div>
-            <div class="contact-hour-row"><span class="contact-hour-day">Dimanche</span><span class="contact-hour-val">Fermé</span></div>
-          </div>
-        </div>
-        <div class="contact-info-block">
-          <span class="contact-info-label">Accès</span>
-          <div class="contact-access">
-            <div class="contact-access-item"><span class="contact-access-dash">—</span> Parking souterrain gratuit</div>
-            <div class="contact-access-item"><span class="contact-access-dash">—</span> Places extérieures</div>
-            <div class="contact-access-item"><span class="contact-access-dash">—</span> Bus Girarde à 20 m</div>
-            <div class="contact-access-item"><span class="contact-access-dash">—</span> Abri vélo sécurisé</div>
-          </div>
-        </div>
-        <div class="contact-social">
-          <a href="https://instagram.com/amarte_epalinges" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://facebook.com/AmarteEpalinges" target="_blank" rel="noopener">Facebook</a>
-        </div>
+  <!-- ===== FAQ ===== -->
+  <section class="faq-section-light">
+    <div class="faq-section-light-inner">
+      <div class="gs-stagger" style="margin-bottom:3rem">
+        <p class="section-label">05 — Questions fréquentes</p>
+        <h2 style="font-family:var(--font-serif);font-size:clamp(2rem,5vw,3rem);line-height:1.1;color:var(--text)">Ce que vous <em>voulez savoir.</em></h2>
       </div>
-      <div>
-        <div id="form-wrap">
-          <form id="contact-form">
-            <div class="form-row">
-              <div class="form-group" style="margin-bottom:0">
-                <label class="form-label">Prénom</label>
-                <input type="text" class="form-input" placeholder="Marie" required />
-              </div>
-              <div class="form-group" style="margin-bottom:0">
-                <label class="form-label">Nom</label>
-                <input type="text" class="form-input" placeholder="Dupont" required />
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Email</label>
-              <input type="email" class="form-input" placeholder="marie@exemple.ch" required />
-            </div>
-            <div class="form-group">
-              <label class="form-label">Je suis intéressé(e) par</label>
-              <select class="form-select">
-                <option value="">Choisir un cours</option>
-                <option>Yoga Flow</option>
-                <option>Pilates</option>
-                <option>Méditation</option>
-                <option>Bien-être</option>
-                <option>Pack Découverte</option>
-                <option>Cours privé</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Message</label>
-              <textarea class="form-textarea" rows="4" placeholder="Parlez-nous de vous..."></textarea>
-            </div>
-            <button type="submit" class="form-submit">Envoyer le message</button>
-          </form>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span class="faq-question-text">Puis-je utiliser mes crédits pour tous les cours ?</span>
+          <span class="faq-toggle">+</span>
         </div>
+        <p class="faq-answer">Oui. Un crédit donne accès à n'importe quel cours collectif au programme : Yoga, Pilates, Yin Yoga, Kundalini, Nia Doux ou Étirement &amp; Méditation. Certains ateliers spéciaux peuvent nécessiter un crédit supplémentaire.</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span class="faq-question-text">Comment fonctionne l'annulation d'un cours ?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <p class="faq-answer">Vous pouvez annuler gratuitement jusqu'à 2 heures avant le début du cours via l'application Amarte. Le crédit est alors automatiquement recrédité. En dessous de 2h, le crédit est consommé.</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span class="faq-question-text">Comment réserver un cours ?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <p class="faq-answer">Téléchargez l'application Amarte (iOS &amp; Android) ou réservez via notre site. Une fois votre pack ou abonnement activé, choisissez votre cours dans le calendrier et confirmez votre place en quelques secondes.</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span class="faq-question-text">Les cours sont-ils adaptés aux débutants ?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <p class="faq-answer">Absolument. Tous nos cours collectifs accueillent tous les niveaux, des débutants complets aux pratiquants réguliers. Les enseignants proposent des adaptations pour chaque corps et chaque niveau.</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span class="faq-question-text">Existe-t-il un tarif entreprise ou groupe ?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <p class="faq-answer">Oui, nous proposons des offres dédiées aux entreprises, associations et groupes. Consultez notre page Corpo B2B ou contactez-nous directement pour un devis personnalisé.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BOOKING CTA ===== -->
+  <section class="booking-cta-block">
+    <div class="booking-cta-inner gs-stagger">
+      <p class="section-label">Prêt à commencer ?</p>
+      <h2 class="booking-cta-title">Rejoignez <em>Amarte.</em></h2>
+      <p class="booking-cta-sub">Pack Découverte dès CHF 60 · 3 cours · Valable 2 mois — réservé aux nouveaux membres. Aucun renouvellement automatique, jamais.</p>
+      <div class="booking-cta-btns">
+        <a href="tarifs.html" class="btn-pill btn-pill--light">Voir les tarifs</a>
+        <a href="premiere-fois.html" class="btn-pill" style="color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.15);padding:1rem 2.25rem;border-radius:9999px;font-size:0.8125rem;font-weight:300;letter-spacing:0.05em;transition:all 0.4s">Première fois chez Amarte ?</a>
       </div>
     </div>
   </section>
@@ -449,35 +405,36 @@
 <footer>
   <div class="footer-main">
     <div class="footer-inner">
-      <p class="footer-tagline">amarte,<br><em>en mouvement.</em></p>
+      <p class="footer-tagline">Bouger.<br>Respirer.<br><em>S'épanouir.</em></p>
       <div class="footer-links">
         <ul class="footer-col">
-          <li><a href="#a-propos">À propos</a></li>
-          <li><a href="#cours">Cours</a></li>
-          <li><a href="#horaires">Horaires</a></li>
-          <li><a href="#tarifs">Tarifs</a></li>
+          <li><a href="premiere-fois.html">Première fois</a></li>
+          <li><a href="cours.html">Cours</a></li>
+          <li><a href="calendrier.html">Calendrier</a></li>
+          <li><a href="tarifs.html">Tarifs</a></li>
+          <li><a href="location.html">Location</a></li>
         </ul>
         <ul class="footer-col">
-          <li><a href="#contact">Contact</a></li>
-          <li><a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a></li>
-          <li><a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a></li>
+          <li><a href="corpo.html">Corpo B2B</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="https://instagram.com/amarte_epalinges" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href="https://facebook.com/AmarteEpalinges" target="_blank" rel="noopener">Facebook</a></li>
         </ul>
         <ul class="footer-col">
-          <li><a href="https://amarte.zenitoo.ch/fr/calendar" target="_blank" rel="noopener">Réserver</a></li>
+          <li><a href="tarifs.html">Voir les tarifs</a></li>
           <li><a href="mailto:info@amarte.ch">info@amarte.ch</a></li>
-          <li><a href="tel:+41788106464">+41 78 810 64 64</a></li>
+          <li><a href="tel:+41794621747">+41 79 462 17 47</a></li>
         </ul>
       </div>
     </div>
   </div>
   <div class="footer-bar">
-    <p class="footer-copy">© <span id="footer-year"></span> Amarte. Tous droits réservés.</p>
-    <p class="footer-addr">Route du Village 1A · 1066 Épalinges</p>
+    <p class="footer-copy">© <span class="footer-year"></span> Amarte. Tous droits réservés.</p>
+    <p class="footer-addr">Route du Village 1A, 2ème étage · 1066 Épalinges</p>
   </div>
   <div class="footer-deco"><p class="footer-deco-text">amarte</p></div>
 </footer>
 
 <script src="js/main.js"></script>
-
 </body>
 </html>
