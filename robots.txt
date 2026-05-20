@@ -1,0 +1,25 @@
+# Amarte Studio — robots.txt
+# https://amarte.ch
+
+User-agent: *
+Allow: /
+Disallow: /.next/
+Disallow: /css/
+Disallow: /js/
+Disallow: /*.pdf$
+
+# Bots IA — autoriser uniquement les bots respectueux
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# Sitemap
+Sitemap: https://amarte.ch/sitemap.xml

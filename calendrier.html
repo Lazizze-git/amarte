@@ -3,14 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calendrier &amp; Réservation de Cours | Amarte Studio Épalinges</title>
-  <meta name="description" content="Consultez le planning hebdomadaire du Studio Amarte et réservez votre cours de yoga ou pilates en ligne. Planning mis à jour en temps réel. Places limitées." />
+  <title>Calendrier &amp; Réservation Yoga / Pilates Épalinges | Amarte Studio</title>
+  <meta name="description" content="Planning hebdomadaire des cours de yoga, pilates et méditation au Studio Amarte à Épalinges. Réservez votre place en ligne. Annulation flexible jusqu'à 2h avant le cours." />
+  <meta name="keywords" content="réservation yoga Épalinges, planning pilates, calendrier cours bien-être Lausanne, horaires yoga" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#22353f" />
   <link rel="canonical" href="https://amarte.ch/calendrier.html" />
+  <link rel="alternate" hreflang="fr-CH" href="https://amarte.ch/calendrier.html" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Calendrier &amp; Réservation | Amarte Studio Épalinges" />
-  <meta property="og:description" content="Planning des cours de yoga, pilates et méditation au Studio Amarte. Réservez votre place en ligne." />
+  <meta property="og:locale" content="fr_CH" />
+  <meta property="og:site_name" content="Amarte Studio" />
+  <meta property="og:title" content="Calendrier &amp; Réservation | Amarte Studio" />
+  <meta property="og:description" content="Planning hebdomadaire des cours. Réservez en ligne, annulation flexible jusqu'à 2h avant le cours." />
   <meta property="og:url" content="https://amarte.ch/calendrier.html" />
+  <meta property="og:image" content="https://amarte.ch/public/images/og-image.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://amarte.ch/public/images/og-image.jpg" />
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"BreadcrumbList",
+    "itemListElement":[
+      {"@type":"ListItem","position":1,"name":"Accueil","item":"https://amarte.ch/"},
+      {"@type":"ListItem","position":2,"name":"Calendrier","item":"https://amarte.ch/calendrier.html"}
+    ]
+  }
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -42,7 +61,7 @@
 </header>
 
 <div id="nav-menu">
-  <div class="nav-menu-line"></div>
+  
   <nav class="nav-menu-links">
     <a href="index.html" class="nav-menu-link"><span class="nav-menu-num">01</span><span class="nav-menu-label-wrap">Accueil</span><span class="nav-menu-arrow">→</span></a>
     <a href="premiere-fois.html" class="nav-menu-link"><span class="nav-menu-num">02</span><span class="nav-menu-label-wrap">Première fois</span><span class="nav-menu-arrow">→</span></a>
@@ -75,28 +94,7 @@
     </div>
   </section>
 
-  <!-- ===== INFO CARDS ===== -->
-  <section class="cal-info">
-    <div class="cal-info-inner gs-stagger">
-      <div class="cal-info-card">
-        <p class="cal-info-icon">01</p>
-        <p class="cal-info-title">Réservation en ligne</p>
-        <p class="cal-info-text">Créez un compte sur notre application de réservation, choisissez votre cours et confirmez votre place en quelques secondes. Confirmation immédiate par email.</p>
-      </div>
-      <div class="cal-info-card">
-        <p class="cal-info-icon">02</p>
-        <p class="cal-info-title">Annulation flexible</p>
-        <p class="cal-info-text">Annulation gratuite jusqu'à 2 heures avant le début du cours. Au-delà, le crédit est consommé. En cas d'imprévu, contactez-nous directement.</p>
-      </div>
-      <div class="cal-info-card">
-        <p class="cal-info-icon">03</p>
-        <p class="cal-info-title">Places limitées</p>
-        <p class="cal-info-text">Nos cours accueillent un nombre restreint de participants pour garantir l'attention individuelle. Nous recommandons de réserver à l'avance.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== PLANNING HEBDOMADAIRE ===== -->
+  <!-- ===== PLANNING HEBDOMADAIRE — en premier ===== -->
   <section class="cal-booking">
     <div class="cal-booking-inner">
       <div class="cal-booking-header gs-stagger">
@@ -143,6 +141,27 @@
     </div>
   </section>
 
+  <!-- ===== INFO CARDS — en second ===== -->
+  <section class="cal-info">
+    <div class="cal-info-inner gs-stagger">
+      <div class="cal-info-card">
+        <p class="cal-info-icon">01</p>
+        <p class="cal-info-title">Réservation en ligne</p>
+        <p class="cal-info-text">Créez un compte sur notre application de réservation, choisissez votre cours et confirmez votre place en quelques secondes. Confirmation immédiate par email.</p>
+      </div>
+      <div class="cal-info-card">
+        <p class="cal-info-icon">02</p>
+        <p class="cal-info-title">Annulation flexible</p>
+        <p class="cal-info-text">Annulation gratuite jusqu'à 2 heures avant le début du cours. Au-delà, le crédit est consommé. En cas d'imprévu, contactez-nous directement.</p>
+      </div>
+      <div class="cal-info-card">
+        <p class="cal-info-icon">03</p>
+        <p class="cal-info-title">Places limitées</p>
+        <p class="cal-info-text">Nos cours accueillent un nombre restreint de participants pour garantir l'attention individuelle. Nous recommandons de réserver à l'avance.</p>
+      </div>
+    </div>
+  </section>
+
 
 </main>
 
@@ -181,5 +200,6 @@
 </footer>
 
 <script src="js/main.js"></script>
+<script src="js/tracking.js" defer></script>
 </body>
 </html>
