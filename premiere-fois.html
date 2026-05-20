@@ -82,6 +82,15 @@
       <span class="nav-logo-main">Amarte</span>
       <span class="nav-logo-sub">Épalinges</span>
     </a>
+    <nav class="nav-links" aria-label="Navigation principale">
+      <a href="premiere-fois.html" class="nav-link" aria-current="page">Première fois</a>
+      <a href="cours.html" class="nav-link">Cours</a>
+      <a href="calendrier.html" class="nav-link">Calendrier</a>
+      <a href="tarifs.html" class="nav-link">Tarifs</a>
+      <a href="location.html" class="nav-link">Location</a>
+      <a href="corpo.html" class="nav-link">Corpo</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+    </nav>
     <button class="burger" id="burger-btn" aria-label="Menu">
       <span class="b1"></span><span class="b2"></span><span class="b3"></span>
     </button>
@@ -89,7 +98,7 @@
 </header>
 
 <div id="nav-menu">
-  
+
   <nav class="nav-menu-links">
     <a href="index.html" class="nav-menu-link"><span class="nav-menu-num">01</span><span class="nav-menu-label-wrap">Accueil</span><span class="nav-menu-arrow">→</span></a>
     <a href="premiere-fois.html" class="nav-menu-link" aria-current="page"><span class="nav-menu-num">02</span><span class="nav-menu-label-wrap">Première fois</span><span class="nav-menu-arrow">→</span></a>
@@ -139,17 +148,14 @@
       </div>
       <div class="pf-expect-grid">
         <div class="pf-expect-card gs-reveal">
-          <p class="pf-expect-num">01</p>
           <h3 class="pf-expect-card-title">Arrivez 10 minutes avant</h3>
           <p class="pf-expect-card-text">Le temps d'être accueilli·e, de faire un tour du studio et d'échanger quelques mots avec l'instructeur sur ce que vous recherchez.</p>
         </div>
         <div class="pf-expect-card gs-reveal">
-          <p class="pf-expect-num">02</p>
           <h3 class="pf-expect-card-title">Tout est fourni</h3>
           <p class="pf-expect-card-text">Tapis, blocs, sangles, coussins, couvertures — vous n'avez besoin de rien apporter. Juste une tenue confortable et une bouteille d'eau.</p>
         </div>
         <div class="pf-expect-card gs-reveal">
-          <p class="pf-expect-num">03</p>
           <h3 class="pf-expect-card-title">Adapté à votre niveau</h3>
           <p class="pf-expect-card-text">L'instructeur propose systématiquement des variantes pour chaque posture. Vous restez en sécurité, à votre rythme, sans pression.</p>
         </div>
@@ -219,15 +225,36 @@
     </div>
   </section>
 
-  <!-- ===== CTA FINAL ===== -->
-  <section class="booking-cta-block">
-    <div class="booking-cta-inner gs-stagger">
-      <p class="section-label">Prêt·e à commencer ?</p>
-      <h2 class="booking-cta-title">Pack Découverte <em>CHF 60.</em></h2>
-      <p class="booking-cta-sub">3 cours · Valable 2 mois à compter de votre première réservation. Nouveaux membres uniquement.</p>
-      <div class="booking-cta-btns">
-        <a href="tarifs.html" class="btn-pill btn-pill--light" data-cta="pf-final">Commencer avec le Pack Découverte</a>
+  <!-- ===== PACK DÉCOUVERTE — SECTION DÉDIÉE ===== -->
+  <section class="pf-pack">
+    <div class="pf-pack-inner">
+
+      <div class="pf-pack-left gs-stagger">
+        <p class="section-label" style="color:var(--accent)">Pack Découverte</p>
+        <h2 class="pf-pack-title">Vos premiers pas <em>chez Amarte.</em></h2>
+        <p class="pf-pack-desc">Vous faites vos premiers pas chez Amarte&nbsp;? 3 cours pour explorer nos pratiques aux créneaux qui vous conviennent.</p>
+        <ul class="pf-pack-list">
+          <li><span class="pf-pack-check">✓</span> 3 cours collectifs au choix — Yoga, Pilates, Bien-être</li>
+          <li><span class="pf-pack-check">✓</span> Valable 2 mois à compter de votre première réservation</li>
+          <li><span class="pf-pack-check">✓</span> Tapis et matériel fournis — rien à apporter</li>
+          <li><span class="pf-pack-check">✓</span> Tous niveaux — instructeurs certifiés qui adaptent</li>
+        </ul>
+        <p class="pf-pack-social">C'est ainsi que la plupart de nos membres ont commencé.</p>
+        <a href="tarifs.html" class="pf-pack-cta" data-cta="pf-pack-decouverte">Commencer avec le Pack Découverte</a>
+        <p class="pf-pack-footnote">Réservé aux nouveaux membres uniquement · Aucun renouvellement automatique</p>
       </div>
+
+      <div class="pf-pack-right gs-reveal">
+        <div class="pf-pack-price-block">
+          <p class="pf-pack-price-label">Pack Découverte</p>
+          <p class="pf-pack-price">CHF 60</p>
+          <p class="pf-pack-price-sub">3 cours · 2 mois de validité</p>
+          <div class="pf-pack-divider"></div>
+          <p class="pf-pack-compare">Cours unique : CHF 30 / cours</p>
+          <p class="pf-pack-compare-val">Pack Découverte : CHF 20 / cours</p>
+        </div>
+      </div>
+
     </div>
   </section>
 

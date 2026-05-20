@@ -1,9 +1,14 @@
 gsap.registerPlugin(ScrollTrigger);
 
-// === FOOTER YEAR ===
+/* ============================================================
+   AMARTE — Animations
+   Inspiré Core Atelier : reveals variés, parallaxe, counters
+   ============================================================ */
+
+// ── FOOTER YEAR ──────────────────────────────────────────────
 document.querySelectorAll('.footer-year').forEach(el => el.textContent = new Date().getFullYear());
 
-// === NAV SCROLL ===
+// ── NAV SCROLL ───────────────────────────────────────────────
 const header = document.getElementById('nav-header');
 if (header) {
   window.addEventListener('scroll', () => {
@@ -11,7 +16,7 @@ if (header) {
   }, { passive: true });
 }
 
-// === ACTIVE NAV ===
+// ── ACTIVE NAV ───────────────────────────────────────────────
 (function () {
   const path = window.location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.nav-menu-link').forEach(link => {
@@ -20,7 +25,7 @@ if (header) {
   });
 })();
 
-// === BURGER / MENU ===
+// ── BURGER / MENU ────────────────────────────────────────────
 const burger = document.getElementById('burger-btn');
 const menu   = document.getElementById('nav-menu');
 let menuOpen = false;
@@ -31,67 +36,271 @@ if (burger && menu) {
     burger.classList.toggle('open', open);
     menu.classList.toggle('open', open);
     document.body.style.overflow = open ? 'hidden' : '';
+    if (open) {
+      gsap.fromTo(menu.querySelectorAll('.nav-menu-link'),
+        { x: -24, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.45, ease: 'power3.out', stagger: 0.06, delay: 0.15 }
+      );
+    }
   }
   burger.addEventListener('click', () => toggleMenu(!menuOpen));
   menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
 }
 
-// === HERO ANIMATIONS (homepage only) ===
+// ── NAV ENTRANCE ─────────────────────────────────────────────
+gsap.fromTo('.nav-logo',
+  { opacity: 0, x: -20 },
+  { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out', delay: 0.1 }
+);
+gsap.fromTo('.nav-links a',
+  { opacity: 0, y: -10 },
+  { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: 0.07, delay: 0.25 }
+);
+
+// ── HOMEPAGE HERO ────────────────────────────────────────────
 const heroLines = ['hl0','hl1','hl2'].map(id => document.getElementById(id)).filter(Boolean);
 if (heroLines.length) {
   const heroImg = document.getElementById('hero-img');
   const heroSub = document.getElementById('hero-sub');
   const heroBtn = document.getElementById('hero-btn');
 
-  if (heroImg) gsap.fromTo(heroImg, { scale: 1.08 }, { scale: 1, duration: 1.8, ease: 'power2.out' });
-
-  gsap.fromTo(heroLines,
-    { y: '105%', opacity: 1 },
-    { y: '0%', opacity: 1, duration: 0.9, ease: 'power3.out', stagger: 0.1, delay: 0.2 }
-  );
-
-  if (heroSub && heroBtn) {
-    gsap.fromTo([heroSub, heroBtn],
-      { y: 20, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out', stagger: 0.12, delay: 0.75 }
+  if (heroImg) {
+    gsap.fromTo(heroImg,
+      { scale: 1.1, opacity: 0.6 },
+      { scale: 1, opacity: 1, duration: 2.2, ease: 'power2.out' }
     );
+    // subtle parallax on hero
+    gsap.to(heroImg, {
+      yPercent: -8,
+      ease: 'none',
+      scrollTrigger: { trigger: heroImg.closest('section') || heroImg, start: 'top top', end: 'bottom top', scrub: 1 }
+    });
   }
+
+  // Ligne par ligne — clip-path wipe vers le haut
+  heroLines.forEach((line, i) => {
+    const wrap = line.closest('.hero-line-wrap') || line;
+    gsap.fromTo(line,
+      { y: '108%' },
+      { y: '0%', duration: 1.1, ease: 'expo.out', delay: 0.15 + i * 0.12 }
+    );
+  });
+
+  if (heroSub) gsap.fromTo(heroSub, { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', delay: 0.7 });
+  if (heroBtn) gsap.fromTo(heroBtn, { opacity: 0, y: 16, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'back.out(1.3)', delay: 0.9 });
 }
 
-// === SCROLL REVEALS ===
-document.querySelectorAll('.gs-reveal').forEach(el => {
+// ── SCROLL REVEALS — VARIÉS ───────────────────────────────────
+
+// 1. gs-reveal : fade + translateY léger (par défaut)
+document.querySelectorAll('.gs-reveal').forEach((el, i) => {
   gsap.fromTo(el,
-    { y: 50, opacity: 0 },
-    { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out',
-      scrollTrigger: { trigger: el, start: 'top 90%' } }
+    { y: 44, opacity: 0 },
+    { y: 0, opacity: 1, duration: 0.85, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 91%' } }
   );
 });
 
+// 2. gs-stagger : enfants en cascade avec direction variable
 document.querySelectorAll('.gs-stagger').forEach(el => {
-  gsap.fromTo(Array.from(el.children),
-    { y: 50, opacity: 0 },
-    { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out', stagger: 0.1,
+  const children = Array.from(el.children).filter(c => c.tagName !== 'BR');
+  gsap.fromTo(children,
+    { y: 36, opacity: 0, scale: 0.98 },
+    { y: 0, opacity: 1, scale: 1, duration: 0.78, ease: 'power3.out', stagger: 0.1,
+      scrollTrigger: { trigger: el, start: 'top 88%' } }
+  );
+});
+
+// 3. Section labels — slide depuis la gauche
+document.querySelectorAll('.section-label').forEach(el => {
+  gsap.fromTo(el,
+    { x: -20, opacity: 0 },
+    { x: 0, opacity: 1, duration: 0.7, ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 92%' } }
+  );
+});
+
+// 4. Titres de section — clip-path wipe (Core Atelier style)
+document.querySelectorAll('h1.page-hero-title, h2.pf-hero-title').forEach(el => {
+  gsap.fromTo(el,
+    { clipPath: 'inset(0 0 100% 0)', y: 18 },
+    { clipPath: 'inset(0 0 0% 0)', y: 0, duration: 1.05, ease: 'power4.out',
+      scrollTrigger: { trigger: el, start: 'top 88%' } }
+  );
+});
+
+// h2 généraux — fade + légère montée
+document.querySelectorAll('h2:not(.pf-hero-title):not(.booking-cta-title)').forEach(el => {
+  gsap.fromTo(el,
+    { y: 28, opacity: 0 },
+    { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
       scrollTrigger: { trigger: el, start: 'top 90%' } }
   );
 });
 
+// booking-cta-title — scale-in depuis légèrement plus grand
+document.querySelectorAll('.booking-cta-title, .pf-pack-title, .corps-why-title, .corpo-cta-title').forEach(el => {
+  gsap.fromTo(el,
+    { scale: 1.03, opacity: 0, y: 12 },
+    { scale: 1, opacity: 1, y: 0, duration: 1.0, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 88%' } }
+  );
+});
+
+// 5. Images — clip-path reveal + scale intérieure
 document.querySelectorAll('.gs-img-reveal').forEach(wrap => {
   const inner = wrap.querySelector('.gs-img-inner');
   gsap.fromTo(wrap,
     { clipPath: 'inset(100% 0% 0% 0%)' },
-    { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.2, ease: 'power3.inOut',
+    { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.3, ease: 'power4.inOut',
       scrollTrigger: { trigger: wrap, start: 'top 85%' } }
   );
-  if (inner) {
-    gsap.fromTo(inner,
-      { scale: 1.15 },
-      { scale: 1, duration: 1.2, ease: 'power3.inOut',
-        scrollTrigger: { trigger: wrap, start: 'top 85%' } }
-    );
-  }
+  if (inner) gsap.fromTo(inner, { scale: 1.18 }, { scale: 1, duration: 1.3, ease: 'power4.inOut',
+    scrollTrigger: { trigger: wrap, start: 'top 85%' } });
 });
 
-// === TESTIMONIALS (homepage only) ===
+// 6. Cours item cards — stagger par rangée (trigger sur la grille)
+const coursGrid = document.querySelector('.cours-grid');
+if (coursGrid) {
+  const items = coursGrid.querySelectorAll('.cours-item');
+  gsap.fromTo(items,
+    { y: 36, opacity: 0 },
+    { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out',
+      stagger: { amount: 0.45, from: 'start' },
+      scrollTrigger: { trigger: coursGrid, start: 'top 88%' }
+    }
+  );
+}
+
+// 7. Cards classes (homepage) — stagger sur le conteneur, fluide
+const classSection = document.querySelector('.classes-grid, .classes-list, [class*="classes"]');
+if (classSection) {
+  const cards = classSection.querySelectorAll('.class-card');
+  gsap.fromTo(cards,
+    { y: 32, opacity: 0 },
+    { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out',
+      stagger: { amount: 0.35, from: 'start' },
+      scrollTrigger: { trigger: classSection, start: 'top 86%' }
+    }
+  );
+} else {
+  // Fallback si pas de conteneur commun
+  document.querySelectorAll('.class-card').forEach((el, i) => {
+    gsap.fromTo(el,
+      { y: 28, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 91%' },
+        delay: Math.min(i * 0.06, 0.3)
+      }
+    );
+  });
+}
+
+// 8. Stats corpo — count-up + bounce
+document.querySelectorAll('.corpo-stat-val').forEach(el => {
+  gsap.fromTo(el,
+    { y: 40, opacity: 0, scale: 0.85 },
+    { y: 0, opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(1.8)',
+      scrollTrigger: { trigger: el, start: 'top 88%' } }
+  );
+});
+
+// 9. Trust strip items — slide depuis bas avec décalage
+document.querySelectorAll('.trust-item').forEach((el, i) => {
+  gsap.fromTo(el,
+    { y: 24, opacity: 0 },
+    { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 93%' },
+      delay: i * 0.1
+    }
+  );
+});
+
+// 10. Tarifs illimité cards — slide depuis gauche/droite alterné
+document.querySelectorAll('.tarifs-illimite-card').forEach((el, i) => {
+  gsap.fromTo(el,
+    { x: i % 2 === 0 ? -30 : 30, opacity: 0 },
+    { x: 0, opacity: 1, duration: 0.75, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 90%' },
+      delay: i * 0.06
+    }
+  );
+});
+
+// 11. Pack offre déco — scale depuis le centre
+document.querySelectorAll('.pf-pack-price-block, .tarifs-decouverte-price-block').forEach(el => {
+  gsap.fromTo(el,
+    { scale: 0.88, opacity: 0 },
+    { scale: 1, opacity: 1, duration: 0.9, ease: 'back.out(1.4)',
+      scrollTrigger: { trigger: el, start: 'top 88%' } }
+  );
+});
+
+// 12. Image parallax — sur toutes les images hero
+document.querySelectorAll('.pf-hero-img, .cours-hero-img-wrap img, .about-img').forEach(img => {
+  const section = img.closest('section') || img.parentElement;
+  gsap.to(img, {
+    yPercent: -10,
+    ease: 'none',
+    scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: 1 }
+  });
+});
+
+// 13. Corpo offer cards — fade-scale stagger
+document.querySelectorAll('.corpo-offer-card').forEach((el, i) => {
+  gsap.fromTo(el,
+    { y: 32, opacity: 0, scale: 0.97 },
+    { y: 0, opacity: 1, scale: 1, duration: 0.7, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 92%' },
+      delay: i * 0.07
+    }
+  );
+});
+
+// 14. Process steps corpo — slide from bottom avec delay progressif
+document.querySelectorAll('.corpo-step').forEach((el, i) => {
+  gsap.fromTo(el,
+    { y: 36, opacity: 0 },
+    { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 91%' },
+      delay: i * 0.12
+    }
+  );
+});
+
+// 15. Testimonial quote — clip-path + fade
+const quoteEl = document.getElementById('testi-quote');
+if (quoteEl) {
+  gsap.fromTo(quoteEl,
+    { clipPath: 'inset(0 100% 0 0)', opacity: 0 },
+    { clipPath: 'inset(0 0% 0 0)', opacity: 1, duration: 1.1, ease: 'power3.out',
+      scrollTrigger: { trigger: quoteEl, start: 'top 88%' } }
+  );
+}
+
+// 16. Hero de cours — scale-in avec parallaxe
+const coursHero = document.querySelector('.cours-hero-img-wrap');
+if (coursHero) {
+  gsap.fromTo(coursHero,
+    { scale: 1.08 },
+    { scale: 1, duration: 2.0, ease: 'power2.out' }
+  );
+}
+
+// ── HOVER MAGNÉTIQUE sur les CTAs principaux ─────────────────
+document.querySelectorAll('.btn-pill, .btn-rect, .pf-pack-cta, .pf-hero-cta').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    gsap.to(btn, { x: x * 0.18, y: y * 0.18, duration: 0.3, ease: 'power2.out' });
+  });
+  btn.addEventListener('mouseleave', () => {
+    gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
+  });
+});
+
+// ── TESTIMONIALS (homepage only) ─────────────────────────────
 const testimonials = [
   { text: 'Une expérience fantastique. L\'accueil est chaleureux, l\'espace est spacieux et les installations sont entièrement neuves. Je me sens vraiment chez moi.', author: 'Sophie M.', detail: 'Membre depuis 6 mois · Yoga Flow' },
   { text: 'J\'avais peur de ne pas être au niveau. Mais les enseignants proposent toujours des adaptations. Pour la première fois, j\'ai trouvé un cours vraiment accessible.', author: 'Laurent D.', detail: 'Membre depuis 3 mois · Pilates' },
@@ -99,7 +308,6 @@ const testimonials = [
   { text: 'J\'ai commencé avec le pack Découverte. Deux semaines plus tard, j\'ai pris l\'abonnement mensuel. Amarte m\'a redonné le goût du mouvement.', author: 'Isabelle C.', detail: 'Membre depuis 8 mois · Yoga &amp; Bien-être' }
 ];
 
-const quoteEl = document.getElementById('testi-quote');
 if (quoteEl) {
   let currentTesti = 0;
   const authorEl  = document.getElementById('testi-author');
@@ -107,15 +315,15 @@ if (quoteEl) {
   const counterEl = document.getElementById('testi-counter');
   const dotsEl    = document.getElementById('testi-dots');
 
-  function renderTesti(index) {
+  function renderTesti(index, dir = 1) {
     const t = testimonials[index];
-    quoteEl.innerHTML = '“' + t.text + '”';
-    if (authorEl)  authorEl.textContent = t.author;
-    if (detailEl)  detailEl.innerHTML   = t.detail;
-    if (counterEl) counterEl.textContent = (index + 1) + ' / ' + testimonials.length;
-    quoteEl.classList.remove('fade-slide');
-    void quoteEl.offsetWidth;
-    quoteEl.classList.add('fade-slide');
+    gsap.to(quoteEl, { opacity: 0, x: dir * -20, duration: 0.25, ease: 'power2.in', onComplete: () => {
+      quoteEl.innerHTML = '“' + t.text + '”';
+      if (authorEl)  authorEl.textContent = t.author;
+      if (detailEl)  detailEl.innerHTML   = t.detail;
+      if (counterEl) counterEl.textContent = (index + 1) + ' / ' + testimonials.length;
+      gsap.fromTo(quoteEl, { opacity: 0, x: dir * 20 }, { opacity: 1, x: 0, duration: 0.45, ease: 'power3.out' });
+    }});
     if (dotsEl) dotsEl.querySelectorAll('.testi-dot').forEach((d, i) => d.classList.toggle('active', i === index));
   }
 
@@ -124,7 +332,7 @@ if (quoteEl) {
       const btn = document.createElement('button');
       btn.className = 'testi-dot' + (i === 0 ? ' active' : '');
       btn.setAttribute('aria-label', 'Témoignage ' + (i + 1));
-      btn.addEventListener('click', () => { currentTesti = i; renderTesti(i); });
+      btn.addEventListener('click', () => { const dir = i > currentTesti ? 1 : -1; currentTesti = i; renderTesti(i, dir); });
       dotsEl.appendChild(btn);
     });
   }
@@ -132,38 +340,52 @@ if (quoteEl) {
   renderTesti(0);
   const prevBtn = document.getElementById('testi-prev');
   const nextBtn = document.getElementById('testi-next');
-  if (prevBtn) prevBtn.addEventListener('click', () => { currentTesti = (currentTesti === 0 ? testimonials.length - 1 : currentTesti - 1); renderTesti(currentTesti); });
-  if (nextBtn) nextBtn.addEventListener('click', () => { currentTesti = (currentTesti === testimonials.length - 1 ? 0 : currentTesti + 1); renderTesti(currentTesti); });
+  if (prevBtn) prevBtn.addEventListener('click', () => { const prev = currentTesti === 0 ? testimonials.length - 1 : currentTesti - 1; currentTesti = prev; renderTesti(prev, -1); });
+  if (nextBtn) nextBtn.addEventListener('click', () => { const next = currentTesti === testimonials.length - 1 ? 0 : currentTesti + 1; currentTesti = next; renderTesti(next, 1); });
 }
 
-// === CONTACT FORMS (any page) ===
+// ── CONTACT FORMS ─────────────────────────────────────────────
 document.querySelectorAll('.contact-form').forEach(form => {
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     const wrap = this.closest('.form-wrap');
     if (wrap) {
-      wrap.innerHTML = '<div class="form-success"><p class="form-success-title">Merci.</p><p class="form-success-sub">Nous vous répondons dans les 24 heures.</p></div>';
+      gsap.to(wrap, { opacity: 0, y: -16, duration: 0.3, ease: 'power2.in', onComplete: () => {
+        wrap.innerHTML = '<div class="form-success"><p class="form-success-title">Merci.</p><p class="form-success-sub">Nous vous répondons dans les 24 heures.</p></div>';
+        gsap.fromTo(wrap, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' });
+      }});
     }
   });
 });
 
-// Legacy support for old form id
+// Legacy form
 const legacyForm = document.getElementById('contact-form');
 if (legacyForm && !legacyForm.classList.contains('contact-form')) {
   legacyForm.addEventListener('submit', function (e) {
     e.preventDefault();
     const wrap = document.getElementById('form-wrap');
-    if (wrap) {
-      wrap.innerHTML = '<div class="form-success"><p class="form-success-title">Merci.</p><p class="form-success-sub">Nous vous répondons dans les 24 heures.</p></div>';
-    }
+    if (wrap) wrap.innerHTML = '<div class="form-success"><p class="form-success-title">Merci.</p><p class="form-success-sub">Nous vous répondons dans les 24 heures.</p></div>';
   });
 }
 
-// === FAQ ACCORDION ===
+// ── FAQ ACCORDION ─────────────────────────────────────────────
 document.querySelectorAll('.faq-item').forEach(item => {
   item.addEventListener('click', () => {
     const wasOpen = item.classList.contains('open');
     document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-    if (!wasOpen) item.classList.add('open');
+    if (!wasOpen) {
+      item.classList.add('open');
+      const answer = item.querySelector('.faq-answer');
+      if (answer) gsap.fromTo(answer, { y: -8, opacity: 0.6 }, { y: 0, opacity: 1, duration: 0.35, ease: 'power2.out' });
+    }
   });
 });
+
+// ── SCROLL PROGRESS BAR ───────────────────────────────────────
+const progressBar = document.createElement('div');
+progressBar.style.cssText = 'position:fixed;top:0;left:0;height:2px;background:var(--accent);z-index:9999;width:0%;transition:none;pointer-events:none;';
+document.body.appendChild(progressBar);
+window.addEventListener('scroll', () => {
+  const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+  progressBar.style.width = Math.min(scrolled, 100) + '%';
+}, { passive: true });
