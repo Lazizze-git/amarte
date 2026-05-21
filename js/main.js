@@ -93,7 +93,10 @@ if (heroLines.length) {
 // ── SCROLL REVEALS — VARIÉS ───────────────────────────────────
 
 // 1. gs-reveal : fade + translateY léger (par défaut)
-document.querySelectorAll('.gs-reveal').forEach((el, i) => {
+// Skip elements managed by dedicated container staggers defined below
+const STAGGER_CONTAINERS = '.corpo-offers-grid';
+document.querySelectorAll('.gs-reveal').forEach((el) => {
+  if (el.closest(STAGGER_CONTAINERS)) return;
   gsap.fromTo(el,
     { y: 44, opacity: 0 },
     { y: 0, opacity: 1, duration: 0.85, ease: 'power3.out',
@@ -205,27 +208,29 @@ document.querySelectorAll('.corpo-stat-val').forEach(el => {
   );
 });
 
-// 9. Trust strip items — slide depuis bas avec décalage
-document.querySelectorAll('.trust-item').forEach((el, i) => {
-  gsap.fromTo(el,
+// 9. Trust strip items — container stagger
+const trustItems = document.querySelectorAll('.trust-item');
+if (trustItems.length) {
+  gsap.fromTo(Array.from(trustItems),
     { y: 24, opacity: 0 },
     { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out',
-      scrollTrigger: { trigger: el, start: 'top 93%' },
-      delay: i * 0.1
+      stagger: { amount: 0.4, from: 'start' },
+      scrollTrigger: { trigger: trustItems[0].parentElement, start: 'top 90%' }
     }
   );
-});
+}
 
-// 10. Tarifs illimité cards — slide depuis gauche/droite alterné
-document.querySelectorAll('.tarifs-illimite-card').forEach((el, i) => {
-  gsap.fromTo(el,
-    { x: i % 2 === 0 ? -30 : 30, opacity: 0 },
-    { x: 0, opacity: 1, duration: 0.75, ease: 'power3.out',
-      scrollTrigger: { trigger: el, start: 'top 90%' },
-      delay: i * 0.06
+// 10. Tarifs illimité cards — container stagger
+const tarifCards = document.querySelectorAll('.tarifs-illimite-card');
+if (tarifCards.length) {
+  gsap.fromTo(Array.from(tarifCards),
+    { y: 28, opacity: 0 },
+    { y: 0, opacity: 1, duration: 0.75, ease: 'power3.out',
+      stagger: { amount: 0.3, from: 'start' },
+      scrollTrigger: { trigger: tarifCards[0].parentElement, start: 'top 88%' }
     }
   );
-});
+}
 
 // 11. Pack offre déco — scale depuis le centre
 document.querySelectorAll('.pf-pack-price-block, .tarifs-decouverte-price-block').forEach(el => {
@@ -246,27 +251,29 @@ document.querySelectorAll('.pf-hero-img, .cours-hero-img-wrap img, .about-img').
   });
 });
 
-// 13. Corpo offer cards — fade-scale stagger
-document.querySelectorAll('.corpo-offer-card').forEach((el, i) => {
-  gsap.fromTo(el,
-    { y: 32, opacity: 0, scale: 0.97 },
-    { y: 0, opacity: 1, scale: 1, duration: 0.7, ease: 'power3.out',
-      scrollTrigger: { trigger: el, start: 'top 92%' },
-      delay: i * 0.07
+// 13. Corpo offer cards — container stagger
+const corpoOfferCards = document.querySelectorAll('.corpo-offer-card');
+if (corpoOfferCards.length) {
+  gsap.fromTo(Array.from(corpoOfferCards),
+    { y: 32, opacity: 0 },
+    { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out',
+      stagger: { amount: 0.3, from: 'start' },
+      scrollTrigger: { trigger: corpoOfferCards[0].parentElement, start: 'top 85%' }
     }
   );
-});
+}
 
-// 14. Process steps corpo — slide from bottom avec delay progressif
-document.querySelectorAll('.corpo-step').forEach((el, i) => {
-  gsap.fromTo(el,
+// 14. Process steps corpo — container stagger (skip if parent already .gs-stagger)
+const corpoSteps = document.querySelectorAll('.corpo-step');
+if (corpoSteps.length && !corpoSteps[0].parentElement.classList.contains('gs-stagger')) {
+  gsap.fromTo(Array.from(corpoSteps),
     { y: 36, opacity: 0 },
     { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out',
-      scrollTrigger: { trigger: el, start: 'top 91%' },
-      delay: i * 0.12
+      stagger: { amount: 0.4, from: 'start' },
+      scrollTrigger: { trigger: corpoSteps[0].parentElement, start: 'top 88%' }
     }
   );
-});
+}
 
 // 15. Testimonial quote — clip-path + fade
 const quoteEl = document.getElementById('testi-quote');
