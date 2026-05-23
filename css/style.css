@@ -99,6 +99,23 @@ em { font-style: italic; }
   backdrop-filter: blur(8px);
   box-shadow: 0 1px 0 var(--border);
 }
+
+/* Nav par-dessus un hero sombre : logo + burger en blanc avant scroll */
+#nav-header.nav-on-dark:not(.scrolled) .nav-logo-main { color: var(--white); }
+#nav-header.nav-on-dark:not(.scrolled) .nav-logo-sub { color: rgba(255,255,255,0.7); }
+#nav-header.nav-on-dark:not(.scrolled) .burger span { background: var(--white); }
+#nav-header.nav-on-dark:not(.scrolled) .nav-links a { color: rgba(255,255,255,0.82); }
+#nav-header.nav-on-dark:not(.scrolled) .nav-links a:hover,
+#nav-header.nav-on-dark:not(.scrolled) .nav-links a[aria-current="page"] { color: var(--white); }
+#nav-header.nav-on-dark:not(.scrolled) .nav-cta {
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.28);
+  backdrop-filter: blur(6px);
+}
+#nav-header.nav-on-dark:not(.scrolled) .nav-cta:hover {
+  background: rgba(255,255,255,0.22);
+}
+
 .nav-inner {
   display: grid;
   grid-template-columns: auto 1fr auto;
