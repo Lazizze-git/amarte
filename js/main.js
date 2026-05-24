@@ -317,10 +317,12 @@ const testimonials = [
 
 if (quoteEl) {
   let currentTesti = 0;
-  const authorEl  = document.getElementById('testi-author');
-  const detailEl  = document.getElementById('testi-detail');
-  const counterEl = document.getElementById('testi-counter');
-  const dotsEl    = document.getElementById('testi-dots');
+  const authorEl   = document.getElementById('testi-author');
+  const detailEl   = document.getElementById('testi-detail');
+  const counterEl  = document.getElementById('testi-counter');
+  const dotsEl     = document.getElementById('testi-dots');
+  const mobileTrack = document.getElementById('testi-mobile-track');
+  const mobileMQ   = window.matchMedia('(max-width: 768px)');
 
   function renderTesti(index, dir = 1) {
     const t = testimonials[index];
@@ -331,24 +333,119 @@ if (quoteEl) {
       if (counterEl) counterEl.textContent = (index + 1) + ' / ' + testimonials.length;
       gsap.fromTo(quoteEl, { opacity: 0, x: dir * 20 }, { opacity: 1, x: 0, duration: 0.45, ease: 'power3.out' });
     }});
-    if (dotsEl) dotsEl.querySelectorAll('.testi-dot').forEach((d, i) => d.classList.toggle('active', i === index));
+    syncDots(index);
   }
 
+  function syncDots(index) {
+    if (!dotsEl) return;
+    dotsEl.querySelectorAll('.testi-dot').forEach((d, i) => d.classList.toggle('active', i === index));
+    if (counterEl) counterEl.textContent = (index + 1) + ' / ' + testimonials.length;
+  }
+
+  // ─── Rendu cartes mobiles (scroll horizontal natif) ───
+  if (mobileTrack) {
+    testimonials.forEach((t) => {
+      const card = document.createElement('article');
+      card.className = 'testi-mobile-card';
+      card.innerHTML =
+        '<blockquote class="testi-mobile-quote">“' + t.text + '”</blockquote>' +
+        '<div class="testi-mobile-author">' +
+          '<p class="testi-mobile-name"></p>' +
+          '<p class="testi-mobile-detail"></p>' +
+        '</div>';
+      card.querySelector('.testi-mobile-name').textContent = t.author;
+      card.querySelector('.testi-mobile-detail').innerHTML = t.detail;
+      mobileTrack.appendChild(card);
+    });
+  }
+
+  // ─── Points (dots) cliquables — pilote desktop ET mobile ───
   if (dotsEl) {
     testimonials.forEach((_, i) => {
       const btn = document.createElement('button');
       btn.className = 'testi-dot' + (i === 0 ? ' active' : '');
       btn.setAttribute('aria-label', 'Témoignage ' + (i + 1));
-      btn.addEventListener('click', () => { const dir = i > currentTesti ? 1 : -1; currentTesti = i; renderTesti(i, dir); });
+      btn.addEventListener('click', () => {
+        goTo(i, i > currentTesti ? 1 : -1);
+        resetAutoRotate();
+      });
       dotsEl.appendChild(btn);
     });
+  }
+
+  function goTo(index, dir = 1) {
+    currentTesti = index;
+    if (mobileMQ.matches && mobileTrack) {
+      const cards = mobileTrack.querySelectorAll('.testi-mobile-card');
+      if (cards[index]) mobileTrack.scrollTo({ left: cards[index].offsetLeft - mobileTrack.offsetLeft, behavior: 'smooth' });
+      syncDots(index);
+    } else {
+      renderTesti(index, dir);
+    }
   }
 
   renderTesti(0);
   const prevBtn = document.getElementById('testi-prev');
   const nextBtn = document.getElementById('testi-next');
-  if (prevBtn) prevBtn.addEventListener('click', () => { const prev = currentTesti === 0 ? testimonials.length - 1 : currentTesti - 1; currentTesti = prev; renderTesti(prev, -1); });
-  if (nextBtn) nextBtn.addEventListener('click', () => { const next = currentTesti === testimonials.length - 1 ? 0 : currentTesti + 1; currentTesti = next; renderTesti(next, 1); });
+  if (prevBtn) prevBtn.addEventListener('click', () => {
+    const prev = currentTesti === 0 ? testimonials.length - 1 : currentTesti - 1;
+    goTo(prev, -1); resetAutoRotate();
+  });
+  if (nextBtn) nextBtn.addEventListener('click', () => {
+    const next = currentTesti === testimonials.length - 1 ? 0 : currentTesti + 1;
+    goTo(next, 1); resetAutoRotate();
+  });
+
+  // ─── Sync points sur scroll mobile (utilisateur swipe) ───
+  if (mobileTrack && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
+          const cards = Array.from(mobileTrack.querySelectorAll('.testi-mobile-card'));
+          const idx = cards.indexOf(entry.target);
+          if (idx !== -1 && idx !== currentTesti) {
+            currentTesti = idx;
+            syncDots(idx);
+          }
+        }
+      });
+    }, { root: mobileTrack, threshold: 0.6 });
+    mobileTrack.querySelectorAll('.testi-mobile-card').forEach((c) => io.observe(c));
+
+    // L'utilisateur a touché le carrousel : on rétablit le timer après son geste
+    let touchTimer;
+    ['touchstart', 'pointerdown'].forEach((ev) => {
+      mobileTrack.addEventListener(ev, () => { pauseAutoRotate(); clearTimeout(touchTimer); }, { passive: true });
+    });
+    ['touchend', 'pointerup', 'pointercancel'].forEach((ev) => {
+      mobileTrack.addEventListener(ev, () => { clearTimeout(touchTimer); touchTimer = setTimeout(resetAutoRotate, 1200); }, { passive: true });
+    });
+  }
+
+  // ─── Auto-rotation toutes les 6 secondes (desktop + mobile) ───
+  const AUTO_DELAY = 6000;
+  let autoTimer = null;
+  function startAutoRotate() {
+    if (autoTimer) return;
+    autoTimer = setInterval(() => {
+      const next = (currentTesti + 1) % testimonials.length;
+      goTo(next, 1);
+    }, AUTO_DELAY);
+  }
+  function pauseAutoRotate() {
+    if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+  }
+  function resetAutoRotate() {
+    pauseAutoRotate();
+    startAutoRotate();
+  }
+
+  // Pause quand l'onglet est inactif, reprise au retour
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) pauseAutoRotate(); else startAutoRotate();
+  });
+
+  startAutoRotate();
 }
 
 // ── CONTACT FORMS ─────────────────────────────────────────────
@@ -396,3 +493,4 @@ window.addEventListener('scroll', () => {
   const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
   progressBar.style.width = Math.min(scrolled, 100) + '%';
 }, { passive: true });
+

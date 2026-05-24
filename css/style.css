@@ -612,7 +612,7 @@ em { font-style: italic; }
   overflow: hidden;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  background: var(--bg-warm);
+  background: var(--bg);
   padding: 1rem 0;
 }
 .marquee-track {
@@ -873,10 +873,52 @@ em { font-style: italic; }
 .testi-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border-md); transition: background 0.25s; cursor: pointer; border: none; }
 .testi-dot.active { background: var(--accent); }
 
+/* Mobile : scroll horizontal natif, pas de flèches */
+.testi-mobile-track { display: none; }
+@media (max-width: 768px) {
+  .testi-nav { display: none; }
+  .testi-desktop { display: none; }
+  .testi-mobile-track {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    margin: 0 calc(-1 * var(--gutter));
+    padding: 0 var(--gutter) 0.5rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .testi-mobile-track::-webkit-scrollbar { display: none; }
+  .testi-mobile-card {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .testi-mobile-quote {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.55;
+    color: var(--text);
+    padding-left: 1.25rem;
+    border-left: 2px solid var(--accent);
+    margin: 0;
+  }
+  .testi-mobile-author { padding-left: 1.25rem; }
+  .testi-mobile-name { font-size: 0.875rem; font-weight: 700; color: var(--text); letter-spacing: 0.04em; }
+  .testi-mobile-detail { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; }
+  .testi-dots { padding-left: 1.25rem; margin-top: 1.25rem; }
+}
+
 /* ── FAQ ─────────────────────────────────────────────────── */
 .faq-section-light {
   padding: var(--sec-v) var(--gutter);
-  background: var(--bg-soft);
+  background: var(--bg);
 }
 .faq-section-light-inner { max-width: 76rem; margin: 0 auto; }
 .faq-item { border-bottom: 1px solid var(--border); }
@@ -899,7 +941,7 @@ em { font-style: italic; }
 .booking-cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
 
 /* ── TARIFS ──────────────────────────────────────────────── */
-.tarifs-argument { padding: clamp(3rem,6vw,5rem) var(--gutter); background: var(--bg); border-bottom: 1px solid var(--border); }
+.tarifs-argument { padding: clamp(3rem,6vw,5rem) var(--gutter); background: var(--bg-warm); border-bottom: 1px solid var(--border); }
 .tarifs-argument-inner { max-width: 76rem; margin: 0 auto; text-align: center; }
 .tarifs-argument-title { font-family: var(--font-serif); font-size: clamp(2rem, 4.5vw, 3.75rem); font-weight: 400; line-height: 1.1; color: var(--text); margin-bottom: 1rem; }
 .tarifs-argument-title em { color: var(--accent-dk); }
@@ -981,7 +1023,7 @@ em { font-style: italic; }
 .tarifs-main-cta { display: flex; flex-direction: column; align-items: center; gap: 1rem; padding-top: 1.5rem; }
 .tarifs-main-note { font-size: 0.75rem; color: var(--text-muted); font-weight: 300; }
 
-.tarifs-app { padding: var(--sec-v) var(--gutter); background: var(--bg-soft); }
+.tarifs-app { padding: var(--sec-v) var(--gutter); background: var(--bg-warm); }
 .tarifs-app-inner { max-width: var(--max-w); margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(3rem, 6vw, 6rem); align-items: center; }
 .tarifs-app-title { font-family: var(--font-serif); font-size: clamp(1.75rem, 3.5vw, 2.75rem); font-weight: 400; line-height: 1.1; color: var(--text); margin-bottom: 1rem; }
 .tarifs-app-title em { color: var(--accent-dk); }
@@ -1067,20 +1109,20 @@ em { font-style: italic; }
 .pf-expect-card-title { font-family: var(--font-serif); font-size: 1.375rem; color: var(--text); margin-bottom: 0.75rem; }
 .pf-expect-card-text { font-size: 0.875rem; color: var(--text-muted); line-height: 1.8; }
 
-.pf-faq { padding: var(--sec-v) var(--gutter); background: var(--bg-soft); }
+.pf-faq { padding: var(--sec-v) var(--gutter); background: var(--bg); }
 .pf-faq-inner { max-width: 76rem; margin: 0 auto; }
 .pf-faq-head { margin-bottom: 3rem; }
 .pf-faq-title { font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 3.25rem); font-weight: 400; line-height: 1.1; color: var(--text); margin-top: 0.5rem; }
 .pf-faq-title em { color: var(--accent-dk); }
 
-.pf-calendar { padding: var(--sec-v) var(--gutter); background: var(--bg); text-align: center; }
+.pf-calendar { padding: var(--sec-v) var(--gutter); background: var(--bg-warm); text-align: center; }
 .pf-calendar-inner { max-width: 44rem; margin: 0 auto; }
 .pf-calendar-title { font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 3rem); font-weight: 400; line-height: 1.1; color: var(--text); margin-bottom: 1rem; }
 .pf-calendar-title em { color: var(--accent-dk); }
 .pf-calendar-text { font-size: 0.9375rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 2rem; }
 
 /* ── PACK DÉCOUVERTE — section dédiée première-fois ── */
-.pf-pack { background: var(--bg-warm); padding: clamp(4rem, 8vw, 7rem) var(--gutter); }
+.pf-pack { background: var(--bg); padding: clamp(4rem, 8vw, 7rem) var(--gutter); }
 .pf-pack-inner { max-width: var(--max-w); margin: 0 auto; display: grid; grid-template-columns: 1fr 420px; gap: clamp(3rem, 6vw, 6rem); align-items: center; }
 .pf-pack-title { font-family: var(--font-serif); font-size: clamp(2.25rem, 5vw, 3.75rem); font-weight: 400; color: var(--text); line-height: 1.05; margin-bottom: 1.25rem; margin-top: 0.5rem; }
 .pf-pack-title em { font-style: italic; color: var(--accent-dk); }
@@ -1256,7 +1298,7 @@ em { font-style: italic; }
 .cours-item-link:hover { color: var(--accent-blue); }
 
 /* ── CALENDRIER ──────────────────────────────────────────── */
-.cal-booking { padding: var(--sec-v) var(--gutter); background: var(--bg); }
+.cal-booking { padding: var(--sec-v) var(--gutter); background: var(--bg-warm); }
 .cal-booking-inner { max-width: var(--max-w); margin: 0 auto; }
 .cal-booking-header { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; margin-bottom: 3rem; flex-wrap: wrap; }
 .cal-booking-title { font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 3.25rem); font-weight: 400; line-height: 1.1; color: var(--text); }
@@ -1274,9 +1316,9 @@ em { font-style: italic; }
 .slot-dur { font-size: 0.6875rem; color: var(--text-muted); font-weight: 300; }
 .schedule-note { font-size: 0.75rem; color: var(--text-muted); font-weight: 300; margin-top: 1.5rem; font-style: italic; }
 
-.cal-info { padding: var(--sec-v) var(--gutter); background: var(--bg-warm); }
+.cal-info { padding: var(--sec-v) var(--gutter); background: var(--bg); }
 .cal-info-inner { max-width: var(--max-w); margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; background: var(--border); }
-.cal-info-card { background: var(--bg-warm); padding: 2.5rem 2rem; }
+.cal-info-card { background: var(--bg); padding: 2.5rem 2rem; }
 .cal-info-icon { font-family: var(--font-serif); font-size: 2.5rem; color: var(--accent); line-height: 1; margin-bottom: 1.25rem; }
 .cal-info-title { font-family: var(--font-serif); font-size: 1.375rem; color: var(--text); margin-bottom: 0.75rem; }
 .cal-info-text { font-size: 0.875rem; color: var(--text-muted); line-height: 1.8; }
@@ -1325,14 +1367,14 @@ em { font-style: italic; }
 .location-equipment-val { font-family: var(--font-serif); font-size: 3.25rem; color: var(--text); line-height: 1; margin-bottom: 0.5rem; }
 .location-equipment-label { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
 
-.location-pricing { padding: var(--sec-v) var(--gutter); background: var(--bg-soft); }
+.location-pricing { padding: var(--sec-v) var(--gutter); background: var(--bg); }
 .location-pricing-inner { max-width: var(--max-w); margin: 0 auto; }
 .location-pricing-head { margin-bottom: 3rem; }
 .location-pricing-title { font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 3rem); font-weight: 400; color: var(--text); margin-top: 0.5rem; }
 .location-pricing-title em { color: var(--accent-dk); }
 .location-pricing-note { font-size: 0.875rem; color: var(--text-muted); margin-top: 0.75rem; font-weight: 300; }
 .location-pricing-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5px; background: var(--border); margin-bottom: 1.5rem; }
-.location-pricing-cell { background: var(--bg-soft); padding: 1.875rem 1.5rem; text-align: center; transition: background 0.2s; }
+.location-pricing-cell { background: var(--bg); padding: 1.875rem 1.5rem; text-align: center; transition: background 0.2s; }
 .location-pricing-cell:hover { background: var(--bg-warm); }
 .location-pricing-cell--dark { background: var(--accent); }
 .location-pricing-cell--dark:hover { background: var(--accent-dk); }
@@ -1344,7 +1386,7 @@ em { font-style: italic; }
 .location-pricing-currency { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
 .location-pricing-footer { font-size: 0.75rem; color: var(--text-muted); font-weight: 300; font-style: italic; }
 
-.location-booking { padding: var(--sec-v) var(--gutter); background: var(--bg); }
+.location-booking { padding: var(--sec-v) var(--gutter); background: var(--bg-warm); }
 .location-booking-inner { max-width: var(--max-w); margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(3rem, 6vw, 6rem); }
 .location-booking-title { font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 3rem); font-weight: 400; color: var(--text); margin-bottom: 1rem; }
 .location-booking-title em { color: var(--accent-dk); }
@@ -1354,7 +1396,7 @@ em { font-style: italic; }
 .location-booking-dash { color: var(--accent); font-weight: 300; }
 
 /* ── CONTACT ─────────────────────────────────────────────── */
-.contact-page-section { padding: var(--sec-v) var(--gutter); background: var(--bg); }
+.contact-page-section { padding: var(--sec-v) var(--gutter); background: var(--bg-warm); }
 .contact-page-inner { max-width: var(--max-w); margin: 0 auto; display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(3rem, 6vw, 6rem); align-items: start; }
 .contact-title { font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 3rem); font-weight: 400; color: var(--text); margin-bottom: 2.5rem; line-height: 1.1; }
 .contact-title em { color: var(--accent-dk); }
@@ -1373,13 +1415,13 @@ em { font-style: italic; }
 .contact-social { display: flex; gap: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); margin-top: 1rem; }
 .contact-social a { font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.06em; color: var(--text-muted); text-transform: uppercase; transition: color 0.2s; }
 .contact-social a:hover { color: var(--accent); }
-.contact-map-section { padding: var(--sec-v) var(--gutter); background: var(--bg-warm); }
+.contact-map-section { padding: var(--sec-v) var(--gutter); background: var(--bg); }
 .contact-map-ph { max-width: var(--max-w); margin: 0 auto; background: var(--bg-soft); min-height: 260px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; border: 1px solid var(--border); text-align: center; padding: 3rem; }
 .contact-map-label { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); }
 .contact-map-address { font-family: var(--font-serif); font-size: 1.625rem; color: var(--text); line-height: 1.4; }
 
 /* ── CORPO ───────────────────────────────────────────────── */
-.corpo-why { padding: var(--sec-v) var(--gutter); background: var(--bg); }
+.corpo-why { padding: var(--sec-v) var(--gutter); background: var(--bg-warm); }
 .corpo-why-inner { max-width: var(--max-w); margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(3rem, 6vw, 6rem); }
 .corpo-why-title { font-family: var(--font-serif); font-size: clamp(1.75rem, 3.5vw, 2.75rem); font-weight: 400; line-height: 1.1; color: var(--text); margin-bottom: 2rem; }
 .corpo-why-title em { color: var(--accent-dk); }
@@ -1391,14 +1433,14 @@ em { font-style: italic; }
 .corpo-stat-label { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
 .corpo-why-text { display: flex; flex-direction: column; gap: 1.25rem; font-size: 0.9375rem; color: var(--text-muted); line-height: 1.8; }
 
-.corpo-offers { padding: var(--sec-v) var(--gutter); background: var(--bg-warm); }
+.corpo-offers { padding: var(--sec-v) var(--gutter); background: var(--bg); }
 .corpo-offers-inner { max-width: var(--max-w); margin: 0 auto; }
 .corpo-offers-head { margin-bottom: 3rem; }
 .corpo-offers-title { font-family: var(--font-serif); font-size: clamp(2rem,5vw,3.5rem); line-height: 1.08; font-weight: 400; color: var(--text); margin-top: 0.5rem; }
 .corpo-offers-title em { font-style: italic; color: var(--accent-dk); }
 .corpo-offers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; background: var(--border); }
-.corpo-offer-card { background: var(--bg-warm); padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 0.5rem; transition: background 0.25s; }
-.corpo-offer-card:hover { background: var(--bg-soft); }
+.corpo-offer-card { background: var(--bg); padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 0.5rem; transition: background 0.25s; }
+.corpo-offer-card:hover { background: var(--bg-warm); }
 .corpo-offer-num { font-family: var(--font-serif); font-size: 0.875rem; color: var(--accent); letter-spacing: 0.1em; margin-bottom: 0.5rem; }
 .corpo-offer-title { font-family: var(--font-serif); font-size: 1.5rem; color: var(--text); line-height: 1.15; }
 .corpo-offer-sub { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
@@ -1418,7 +1460,7 @@ em { font-style: italic; }
 .corpo-step-title { font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text); margin-bottom: 0.75rem; }
 .corpo-step-text { font-size: 0.875rem; color: var(--text-muted); line-height: 1.75; font-weight: 300; }
 
-.corpo-cta-section { padding: var(--sec-v) var(--gutter); background: var(--bg-soft); }
+.corpo-cta-section { padding: var(--sec-v) var(--gutter); background: var(--bg); }
 .corpo-cta-inner { max-width: 60rem; margin: 0 auto; text-align: center; }
 .corpo-cta-title { font-family: var(--font-serif); font-size: clamp(2rem, 4.5vw, 3.5rem); font-weight: 400; color: var(--text); margin-bottom: 1.25rem; line-height: 1.1; }
 .corpo-cta-title em { color: var(--accent-dk); }
@@ -1439,8 +1481,8 @@ em { font-style: italic; }
 .form-submit:hover { background: var(--accent-blue-dk); transform: translateY(-1px); }
 
 /* ── FOOTER ──────────────────────────────────────────────── */
-footer { background: var(--bg-soft); }
-.footer-main { padding: clamp(4rem, 8vw, 6rem) var(--gutter) 3rem; }
+footer { background: var(--bg-warm); }
+.footer-main { padding: clamp(4rem, 8vw, 6rem) var(--gutter) 3rem; border-top: 1px solid var(--border); }
 .footer-inner { max-width: var(--max-w); margin: 0 auto; display: grid; grid-template-columns: 1fr 2fr; gap: 4rem; align-items: start; }
 .footer-tagline { font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 3rem); font-weight: 400; line-height: 1.08; color: var(--text); }
 .footer-tagline em { color: var(--accent-dk); }
@@ -1517,10 +1559,9 @@ footer { background: var(--bg-soft); }
 
   /* Manifesto */
   .manifesto-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-  .manifesto-stats { grid-template-columns: 1fr; }
-  .stat-item { border-right: none; border-bottom: 1px solid var(--border); padding: 1.25rem 0; }
-  .stat-item:last-child { border-bottom: none; }
-  .stat-value { font-size: 2.25rem; }
+  .manifesto-stats { grid-template-columns: repeat(3, 1fr); }
+  .stat-item { padding: 1rem 0.75rem; }
+  .stat-value { font-size: 1.75rem; }
 
   /* Trust strip */
   .trust-strip-inner { flex-direction: column; }
@@ -1682,8 +1723,10 @@ footer { background: var(--bg-soft); }
   .class-card { padding: 1.5rem 1rem; }
 
   /* Stats */
-  .manifesto-stats { grid-template-columns: 1fr 1fr; }
-  .stat-item { padding: 1rem 0.5rem; }
+  .manifesto-stats { grid-template-columns: repeat(3, 1fr); }
+  .stat-item { padding: 0.875rem 0.4rem; }
+  .stat-value { font-size: 1.5rem; }
+  .stat-label { font-size: 0.625rem; letter-spacing: 0.08em; }
 
   /* Tarifs tabs — chaque tab prend toute la largeur si nécessaire */
   .tarifs-calc-tab { flex: 1 1 calc(50% - 0.25rem); font-size: 0.75rem; }
@@ -1755,3 +1798,133 @@ footer { background: var(--bg-soft); }
   .hero-title { font-size: clamp(1.75rem, 5vw, 2.75rem); }
   :root { --sec-v: 2.5rem; }
 }
+
+/* ════════════════════════════════════════════════════════════
+   SECTION TRANSITIONS — fondu doux entre les blocs
+   Alternance stricte : var(--bg) ivoire ↔ var(--bg-warm) crème.
+   Un dégradé de 140px en haut de chaque section assure le
+   passage progressif depuis la couleur de la section précédente.
+   ═══════════════════════════════════════════════════════════ */
+
+#manifesto, #a-propos, #cours, #temoignages,
+.faq-section-light, .booking-cta-block,
+.tarifs-argument, .tarifs-main-section, .tarifs-app, .tarifs-private,
+.pf-proof, .pf-expect, .pf-faq, .pf-calendar, .pf-pack,
+.cours-page-section, .cours-section, .cours-list-section, .cours-info-strip,
+.cal-booking, .cal-info, .cal-app,
+.location-equipment, .location-pricing, .location-booking,
+.contact-page-section, .contact-map-section,
+.corpo-why, .corpo-offers, .corpo-process, .corpo-cta-section {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Fondu DEPUIS CRÈME — pour les sections fond IVOIRE
+   (précédées d'une section crème dans l'alternance) */
+#cours::before,
+.faq-section-light::before,
+.tarifs-main-section::before,
+.tarifs-private::before,
+.pf-faq::before,
+.pf-pack::before,
+.cal-info::before,
+.location-pricing::before,
+.contact-map-section::before,
+.corpo-offers::before,
+.corpo-cta-section::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: clamp(80px, 12vw, 140px);
+  background: linear-gradient(to bottom, var(--bg-warm) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Fondu DEPUIS IVOIRE — pour les sections fond CRÈME
+   (précédées d'une section ivoire dans l'alternance) */
+#a-propos::before,
+#temoignages::before,
+.booking-cta-block::before,
+.tarifs-argument::before,
+.tarifs-app::before,
+.pf-expect::before,
+.pf-calendar::before,
+.cal-booking::before,
+.cal-app::before,
+.location-equipment::before,
+.location-booking::before,
+.contact-page-section::before,
+.corpo-why::before,
+.corpo-process::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: clamp(80px, 12vw, 140px);
+  background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Petite ligne décorative centrée en haut de chaque section :
+   marque le changement de bloc d'information sans couper le rythme. */
+#manifesto::after,
+#a-propos::after,
+#cours::after,
+#temoignages::after,
+.faq-section-light::after,
+.booking-cta-block::after,
+.tarifs-argument::after,
+.tarifs-main-section::after,
+.tarifs-app::after,
+.tarifs-private::after,
+.pf-proof::after,
+.pf-expect::after,
+.pf-faq::after,
+.pf-calendar::after,
+.pf-pack::after,
+.cours-list-section::after,
+.cours-section::after,
+.cours-info-strip::after,
+.cal-booking::after,
+.cal-info::after,
+.cal-app::after,
+.location-equipment::after,
+.location-pricing::after,
+.location-booking::after,
+.contact-page-section::after,
+.contact-map-section::after,
+.corpo-why::after,
+.corpo-offers::after,
+.corpo-process::after,
+.corpo-cta-section::after {
+  content: '';
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(44px, 5vw, 56px);
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.5;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Espacement en haut de section :
+   24px → ligne → 24px → puis l'espace vertical normal (--sec-v)
+   pour aérer le titre par rapport au sommet de la section. */
+#manifesto, #a-propos, #cours, #temoignages,
+.faq-section-light, .booking-cta-block,
+.tarifs-argument, .tarifs-main-section, .tarifs-app, .tarifs-private,
+.pf-proof, .pf-expect, .pf-faq, .pf-calendar, .pf-pack,
+.cours-list-section, .cours-section, .cours-info-strip,
+.cal-booking, .cal-info, .cal-app,
+.location-equipment, .location-pricing, .location-booking,
+.contact-page-section, .contact-map-section,
+.corpo-why, .corpo-offers, .corpo-process, .corpo-cta-section {
+  padding-top: calc(var(--sec-v) + 49px);
+}
+
+/* Footer — séparation discrète : filet horizontal + écart visuel,
+   sans gradient (la section précédente varie selon la page). */
