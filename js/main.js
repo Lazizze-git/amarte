@@ -97,10 +97,11 @@ if (heroLines.length) {
 const STAGGER_CONTAINERS = '.corpo-offers-grid';
 document.querySelectorAll('.gs-reveal').forEach((el) => {
   if (el.closest(STAGGER_CONTAINERS)) return;
+  if (el.closest('.gs-stagger')) return;   // parent stagger handles it
   gsap.fromTo(el,
     { y: 44, opacity: 0 },
     { y: 0, opacity: 1, duration: 0.85, ease: 'power3.out',
-      scrollTrigger: { trigger: el, start: 'top 91%' } }
+      scrollTrigger: { trigger: el, start: 'top 91%', once: true } }
   );
 });
 
@@ -108,9 +109,9 @@ document.querySelectorAll('.gs-reveal').forEach((el) => {
 document.querySelectorAll('.gs-stagger').forEach(el => {
   const children = Array.from(el.children).filter(c => c.tagName !== 'BR');
   gsap.fromTo(children,
-    { y: 36, opacity: 0, scale: 0.98 },
-    { y: 0, opacity: 1, scale: 1, duration: 0.78, ease: 'power3.out', stagger: 0.1,
-      scrollTrigger: { trigger: el, start: 'top 88%' } }
+    { y: 36, opacity: 0 },
+    { y: 0, opacity: 1, duration: 0.78, ease: 'power3.out', stagger: 0.1,
+      scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
   );
 });
 
@@ -119,7 +120,7 @@ document.querySelectorAll('.section-label').forEach(el => {
   gsap.fromTo(el,
     { x: -20, opacity: 0 },
     { x: 0, opacity: 1, duration: 0.7, ease: 'power2.out',
-      scrollTrigger: { trigger: el, start: 'top 92%' } }
+      scrollTrigger: { trigger: el, start: 'top 92%', once: true } }
   );
 });
 
@@ -128,38 +129,40 @@ document.querySelectorAll('h1.page-hero-title, h2.pf-hero-title').forEach(el => 
   gsap.fromTo(el,
     { clipPath: 'inset(0 0 100% 0)', y: 18 },
     { clipPath: 'inset(0 0 0% 0)', y: 0, duration: 1.05, ease: 'power4.out',
-      scrollTrigger: { trigger: el, start: 'top 88%' } }
+      scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
   );
 });
 
 // h2 généraux — fade + légère montée
 document.querySelectorAll('h2:not(.pf-hero-title):not(.booking-cta-title)').forEach(el => {
+  if (el.closest('.gs-stagger')) return;   // parent stagger gère déjà cet élément
   gsap.fromTo(el,
     { y: 28, opacity: 0 },
     { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
-      scrollTrigger: { trigger: el, start: 'top 90%' } }
+      scrollTrigger: { trigger: el, start: 'top 90%', once: true } }
   );
 });
 
 // booking-cta-title — scale-in depuis légèrement plus grand
-document.querySelectorAll('.booking-cta-title, .pf-pack-title, .corps-why-title, .corpo-cta-title').forEach(el => {
+document.querySelectorAll('.booking-cta-title, .pf-pack-title, .corpo-cta-title').forEach(el => {
   gsap.fromTo(el,
     { scale: 1.03, opacity: 0, y: 12 },
     { scale: 1, opacity: 1, y: 0, duration: 1.0, ease: 'power3.out',
-      scrollTrigger: { trigger: el, start: 'top 88%' } }
+      scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
   );
 });
 
-// 5. Images — clip-path reveal + scale intérieure
+// 5. Images — clip-path reveal + scale intérieure (timeline synchronisée)
 document.querySelectorAll('.gs-img-reveal').forEach(wrap => {
   const inner = wrap.querySelector('.gs-img-inner');
-  gsap.fromTo(wrap,
+  const tl = gsap.timeline({
+    scrollTrigger: { trigger: wrap, start: 'top 85%', once: true }
+  });
+  tl.fromTo(wrap,
     { clipPath: 'inset(100% 0% 0% 0%)' },
-    { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.3, ease: 'power4.inOut',
-      scrollTrigger: { trigger: wrap, start: 'top 85%' } }
+    { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.3, ease: 'power4.inOut' }
   );
-  if (inner) gsap.fromTo(inner, { scale: 1.18 }, { scale: 1, duration: 1.3, ease: 'power4.inOut',
-    scrollTrigger: { trigger: wrap, start: 'top 85%' } });
+  if (inner) tl.fromTo(inner, { scale: 1.18 }, { scale: 1, duration: 1.3, ease: 'power4.inOut' }, 0);
 });
 
 // 6. Cours item cards — stagger par rangée (trigger sur la grille)
@@ -170,20 +173,20 @@ if (coursGrid) {
     { y: 36, opacity: 0 },
     { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out',
       stagger: { amount: 0.45, from: 'start' },
-      scrollTrigger: { trigger: coursGrid, start: 'top 88%' }
+      scrollTrigger: { trigger: coursGrid, start: 'top 88%', once: true }
     }
   );
 }
 
 // 7. Cards classes (homepage) — stagger sur le conteneur, fluide
-const classSection = document.querySelector('.classes-grid, .classes-list, [class*="classes"]');
+const classSection = document.querySelector('.classes-grid');
 if (classSection) {
   const cards = classSection.querySelectorAll('.class-card');
   gsap.fromTo(cards,
     { y: 32, opacity: 0 },
     { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out',
       stagger: { amount: 0.35, from: 'start' },
-      scrollTrigger: { trigger: classSection, start: 'top 86%' }
+      scrollTrigger: { trigger: classSection, start: 'top 86%', once: true }
     }
   );
 } else {
@@ -192,7 +195,7 @@ if (classSection) {
     gsap.fromTo(el,
       { y: 28, opacity: 0 },
       { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out',
-        scrollTrigger: { trigger: el, start: 'top 91%' },
+        scrollTrigger: { trigger: el, start: 'top 91%', once: true },
         delay: Math.min(i * 0.06, 0.3)
       }
     );
@@ -202,9 +205,9 @@ if (classSection) {
 // 8. Stats corpo — count-up + bounce
 document.querySelectorAll('.corpo-stat-val').forEach(el => {
   gsap.fromTo(el,
-    { y: 40, opacity: 0, scale: 0.85 },
-    { y: 0, opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(1.8)',
-      scrollTrigger: { trigger: el, start: 'top 88%' } }
+    { y: 32, opacity: 0, scale: 0.9 },
+    { y: 0, opacity: 1, scale: 1, duration: 0.75, ease: 'back.out(1.2)',
+      scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
   );
 });
 
@@ -215,7 +218,7 @@ if (trustItems.length) {
     { y: 24, opacity: 0 },
     { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out',
       stagger: { amount: 0.4, from: 'start' },
-      scrollTrigger: { trigger: trustItems[0].parentElement, start: 'top 90%' }
+      scrollTrigger: { trigger: trustItems[0].parentElement, start: 'top 90%', once: true }
     }
   );
 }
@@ -227,7 +230,7 @@ if (tarifCards.length) {
     { y: 28, opacity: 0 },
     { y: 0, opacity: 1, duration: 0.75, ease: 'power3.out',
       stagger: { amount: 0.3, from: 'start' },
-      scrollTrigger: { trigger: tarifCards[0].parentElement, start: 'top 88%' }
+      scrollTrigger: { trigger: tarifCards[0].parentElement, start: 'top 88%', once: true }
     }
   );
 }
@@ -235,14 +238,14 @@ if (tarifCards.length) {
 // 11. Pack offre déco — scale depuis le centre
 document.querySelectorAll('.pf-pack-price-block, .tarifs-decouverte-price-block').forEach(el => {
   gsap.fromTo(el,
-    { scale: 0.88, opacity: 0 },
-    { scale: 1, opacity: 1, duration: 0.9, ease: 'back.out(1.4)',
-      scrollTrigger: { trigger: el, start: 'top 88%' } }
+    { scale: 0.92, opacity: 0 },
+    { scale: 1, opacity: 1, duration: 0.85, ease: 'back.out(1.1)',
+      scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
   );
 });
 
 // 12. Image parallax — sur toutes les images hero
-document.querySelectorAll('.pf-hero-img, .cours-hero-img-wrap img, .about-img').forEach(img => {
+document.querySelectorAll('.pf-hero-img, .cours-hero-img-wrap img').forEach(img => {
   const section = img.closest('section') || img.parentElement;
   gsap.to(img, {
     yPercent: -10,
@@ -258,7 +261,7 @@ if (corpoOfferCards.length) {
     { y: 32, opacity: 0 },
     { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out',
       stagger: { amount: 0.3, from: 'start' },
-      scrollTrigger: { trigger: corpoOfferCards[0].parentElement, start: 'top 85%' }
+      scrollTrigger: { trigger: corpoOfferCards[0].parentElement, start: 'top 85%', once: true }
     }
   );
 }
@@ -270,18 +273,19 @@ if (corpoSteps.length && !corpoSteps[0].parentElement.classList.contains('gs-sta
     { y: 36, opacity: 0 },
     { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out',
       stagger: { amount: 0.4, from: 'start' },
-      scrollTrigger: { trigger: corpoSteps[0].parentElement, start: 'top 88%' }
+      scrollTrigger: { trigger: corpoSteps[0].parentElement, start: 'top 88%', once: true }
     }
   );
 }
 
-// 15. Testimonial quote — clip-path + fade
+// 15. Testimonial — reveal de la section entière (pas du quote seul, géré par le carousel)
 const quoteEl = document.getElementById('testi-quote');
-if (quoteEl) {
-  gsap.fromTo(quoteEl,
-    { clipPath: 'inset(0 100% 0 0)', opacity: 0 },
-    { clipPath: 'inset(0 0% 0 0)', opacity: 1, duration: 1.1, ease: 'power3.out',
-      scrollTrigger: { trigger: quoteEl, start: 'top 88%' } }
+const testiSection = quoteEl && (quoteEl.closest('section') || quoteEl.closest('.testi-wrap'));
+if (testiSection) {
+  gsap.fromTo(testiSection,
+    { opacity: 0, y: 24 },
+    { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: { trigger: testiSection, start: 'top 88%', once: true } }
   );
 }
 
@@ -300,10 +304,10 @@ document.querySelectorAll('.btn-pill, .btn-rect, .pf-pack-cta, .pf-hero-cta').fo
     const rect = btn.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
-    gsap.to(btn, { x: x * 0.18, y: y * 0.18, duration: 0.3, ease: 'power2.out' });
+    gsap.to(btn, { x: x * 0.18, y: y * 0.18, duration: 0.3, ease: 'power2.out', overwrite: 'auto' });
   });
   btn.addEventListener('mouseleave', () => {
-    gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
+    gsap.to(btn, { x: 0, y: 0, duration: 0.55, ease: 'power3.out', overwrite: 'auto' });
   });
 });
 
@@ -462,16 +466,6 @@ document.querySelectorAll('.contact-form').forEach(form => {
   });
 });
 
-// Legacy form
-const legacyForm = document.getElementById('contact-form');
-if (legacyForm && !legacyForm.classList.contains('contact-form')) {
-  legacyForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const wrap = document.getElementById('form-wrap');
-    if (wrap) wrap.innerHTML = '<div class="form-success"><p class="form-success-title">Merci.</p><p class="form-success-sub">Nous vous répondons dans les 24 heures.</p></div>';
-  });
-}
-
 // ── FAQ ACCORDION ─────────────────────────────────────────────
 document.querySelectorAll('.faq-item').forEach(item => {
   item.addEventListener('click', () => {
@@ -493,4 +487,240 @@ window.addEventListener('scroll', () => {
   const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
   progressBar.style.width = Math.min(scrolled, 100) + '%';
 }, { passive: true });
+
+// ── FIL CONDUCTEUR — chemin scroll-driven propre à chaque page ──
+(function initFilConducteur() {
+  // Seulement sur les pages "expérience" — pas sur calendrier / contact / tarifs
+  const rawPage = location.pathname.split('/').pop().replace(/^$/, 'index');
+  const page = rawPage.endsWith('.html') ? rawPage : rawPage + '.html';
+  const FIL_PAGES = ['index.html', 'premiere-fois.html', 'corpo.html', 'location.html'];
+  if (!FIL_PAGES.includes(page)) return;
+
+  const NS  = 'http://www.w3.org/2000/svg';
+
+  // body doit être position:relative pour les enfants absolus
+  // SVG position:fixed — toujours rendu au-dessus des fonds de section
+  // trick : on le translate de -scrollY pour qu'il suive la page comme un absolu
+  const svg = document.createElementNS(NS, 'svg');
+  svg.id = 'fil-conducteur-svg';
+  svg.style.cssText = [
+    'position:fixed',
+    'top:0',
+    'left:0',
+    'width:100%',
+    'height:100vh',
+    'pointer-events:none',
+    'z-index:4',          // au-dessus des sections, sous la nav
+    'overflow:visible',
+    'will-change:transform',
+  ].join(';');
+  document.body.appendChild(svg);
+
+  // Ancrage page : compenser le scroll pour que le SVG se comporte en "absolu"
+  window.addEventListener('scroll', () => {
+    svg.style.transform = `translateY(${-window.scrollY}px)`;
+  }, { passive: true });
+
+  // MASK SVG — pour cacher le trait au-dessus des images
+  const defs = document.createElementNS(NS, 'defs');
+  const mask = document.createElementNS(NS, 'mask');
+  mask.setAttribute('id', 'fil-conducteur-mask');
+  defs.appendChild(mask);
+  svg.appendChild(defs);
+
+  // Groupe principal du fil (recevra le masque)
+  const filGroup = document.createElementNS(NS, 'g');
+  filGroup.setAttribute('mask', 'url(#fil-conducteur-mask)');
+  svg.appendChild(filGroup);
+
+  // HALO BLANC sous le trait — visibilité sur tout fond
+  const lineHalo = document.createElementNS(NS, 'path');
+  lineHalo.setAttribute('fill',            'none');
+  lineHalo.setAttribute('stroke',          '#ffffff');
+  lineHalo.setAttribute('stroke-width',    '4');
+  lineHalo.setAttribute('stroke-linecap',  'round');
+  lineHalo.setAttribute('stroke-linejoin', 'round');
+  lineHalo.style.opacity = '0.5';
+  filGroup.appendChild(lineHalo);
+
+  // TRAIT — se dessine progressivement avec le scroll
+  const linePath = document.createElementNS(NS, 'path');
+  linePath.setAttribute('fill',            'none');
+  linePath.setAttribute('stroke',          '#22353f');
+  linePath.setAttribute('stroke-width',    '1.5');
+  linePath.setAttribute('stroke-linecap',  'round');
+  linePath.setAttribute('stroke-linejoin', 'round');
+  linePath.style.opacity = '0.75';
+  filGroup.appendChild(linePath);
+
+  let stInstance = null;
+
+  /* ── Point d'arrivée : centre du AMARTE du footer ── */
+  function getEndPoint(W, pageH) {
+    const target = document.querySelector('.footer-deco-text')
+                || document.querySelector('.footer-deco')
+                || document.querySelector('footer');
+    if (!target) return { x: W * 0.5, y: pageH - 60 };
+    const r = target.getBoundingClientRect();
+    return {
+      x: r.left + r.width  * 0.5,
+      y: r.top  + r.height * 0.5 + window.scrollY
+    };
+  }
+
+  /* ── Chemin propre à chaque page : suit les sections du haut au footer ── */
+  function buildPath(W, pageH) {
+    const end = getEndPoint(W, pageH);
+
+    const allSections = Array.from(document.querySelectorAll('section'));
+    const margin  = Math.min(W * 0.18, 160);
+    const leftX   = margin;
+    const rightX  = W - margin;
+    const centerX = W * 0.5;
+
+    // Départ : juste sous la nav (80px)
+    const startY = 80;
+    const pts = [{ x: centerX, y: startY }];
+
+    let toggle = false;
+    allSections.forEach(sec => {
+      const r      = sec.getBoundingClientRect();
+      const secTop = r.top + window.scrollY;
+      const secH   = r.height;
+      if (secH < 80) return;
+      if (secTop < 120) return;        // ignorer les hero qui commencent en haut
+      const y = secTop + secH * 0.40;
+      if (y <= startY + 100) return;   // waypoint trop près du départ = boucle bézier
+      if (y >= end.y - 120) return;    // ne pas dépasser le footer
+      const x = toggle ? leftX : rightX;
+      toggle = !toggle;
+      pts.push({ x, y });
+    });
+
+    pts.push({ x: end.x, y: end.y });
+
+    let d = `M ${f(pts[0].x)},${f(pts[0].y)}`;
+    const tension = 0.32;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[Math.max(0, i - 1)];
+      const p1 = pts[i];
+      const p2 = pts[i + 1];
+      const p3 = pts[Math.min(pts.length - 1, i + 2)];
+      const c1x = p1.x + (p2.x - p0.x) * tension;
+      const c1y = p1.y + (p2.y - p0.y) * tension;
+      const c2x = p2.x - (p3.x - p1.x) * tension;
+      const c2y = p2.y - (p3.y - p1.y) * tension;
+      d += ` C ${f(c1x)},${f(c1y)} ${f(c2x)},${f(c2y)} ${f(p2.x)},${f(p2.y)}`;
+    }
+    return d;
+  }
+
+  function f(n) { return n.toFixed(1); }
+
+  /* ── Masque : caché sur images + titres uniquement ── */
+  const MASK_SELECTOR = 'img, video';
+
+  function rebuildMask(pageH, W) {
+    while (mask.firstChild) mask.removeChild(mask.firstChild);
+
+    const white = document.createElementNS(NS, 'rect');
+    white.setAttribute('x', '0');
+    white.setAttribute('y', '0');
+    white.setAttribute('width',  W);
+    white.setAttribute('height', pageH);
+    white.setAttribute('fill',   'white');
+    mask.appendChild(white);
+
+    document.querySelectorAll(MASK_SELECTOR).forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.width < 30 || r.height < 16) return;
+      const yTop = r.top + window.scrollY;
+      const black = document.createElementNS(NS, 'rect');
+      black.setAttribute('x',      f(r.left  - 6));
+      black.setAttribute('y',      f(yTop    - 6));
+      black.setAttribute('width',  f(r.width + 12));
+      black.setAttribute('height', f(r.height + 12));
+      black.setAttribute('fill',   'black');
+      mask.appendChild(black);
+    });
+  }
+
+  function build() {
+    if (stInstance) { window.removeEventListener('scroll', stInstance); stInstance = null; }
+
+    const pageH = document.documentElement.scrollHeight;
+    const W     = window.innerWidth;
+    svg.setAttribute('width',  W);
+    svg.setAttribute('height', '1');
+    svg.removeAttribute('viewBox');
+
+    const dStr = buildPath(W, pageH);
+    lineHalo.setAttribute('d', dStr);
+    linePath.setAttribute('d', dStr);
+
+    rebuildMask(pageH, W);
+
+    const len = linePath.getTotalLength();
+
+    lineHalo.setAttribute('stroke-dasharray',  len);
+    linePath.setAttribute('stroke-dasharray',  len);
+    lineHalo.setAttribute('stroke-dashoffset', len);
+    linePath.setAttribute('stroke-dashoffset', len);
+
+    // Lookup table : position y sur la page → longueur de chemin parcourue
+    // Garantit que la pointe du fil suit le viewport, peu importe la distribution des waypoints
+    const STEPS = 600;
+    const lookup = [];
+    for (let i = 0; i <= STEPS; i++) {
+      const l  = (i / STEPS) * len;
+      const pt = linePath.getPointAtLength(l);
+      lookup.push({ y: pt.y, l });
+    }
+
+    function pathLenAtY(y) {
+      let lo = 0, hi = lookup.length - 1;
+      while (lo < hi - 1) {
+        const mid = (lo + hi) >> 1;
+        if (lookup[mid].y <= y) lo = mid; else hi = mid;
+      }
+      if (y <= lookup[0].y)  return 0;
+      if (y >= lookup[hi].y) return lookup[hi].l;
+      const span = lookup[hi].y - lookup[lo].y;
+      const t    = span > 0 ? (y - lookup[lo].y) / span : 0;
+      return lookup[lo].l + t * (lookup[hi].l - lookup[lo].l);
+    }
+
+    const endY    = lookup[lookup.length - 1].y;   // y du point final (AMARTE)
+    const scrollH = pageH - window.innerHeight;
+    const startY  = 80;  // même valeur que dans buildPath — portée accessible par updateFil
+
+    function updateFil() {
+      // scrollY=0 → rien de dessiné ; scroll max → fil complet jusqu'à AMARTE
+      const scrollProg = scrollH > 0 ? window.scrollY / scrollH : 0;
+      const viewY  = startY + (endY - startY) * scrollProg;
+      const drawn  = pathLenAtY(viewY);
+      const off    = Math.max(0, len - drawn);
+      lineHalo.setAttribute('stroke-dashoffset', off);
+      linePath.setAttribute('stroke-dashoffset', off);
+    }
+
+    // Listener scroll direct — plus fiable que ScrollTrigger sans tween attaché
+    if (stInstance) { stInstance(); stInstance = null; } // remove previous listener
+    stInstance = updateFil;
+    window.addEventListener('scroll', updateFil, { passive: true });
+    updateFil();
+  }
+
+  if (document.readyState === 'complete') {
+    build();
+  } else {
+    window.addEventListener('load', build, { once: true });
+  }
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(build, 400);
+  }, { passive: true });
+})();
 
