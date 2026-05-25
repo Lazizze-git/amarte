@@ -381,7 +381,11 @@ if (quoteEl) {
     currentTesti = index;
     if (mobileMQ.matches && mobileTrack) {
       const cards = mobileTrack.querySelectorAll('.testi-mobile-card');
-      if (cards[index]) mobileTrack.scrollTo({ left: cards[index].offsetLeft - mobileTrack.offsetLeft, behavior: 'smooth' });
+      if (cards[index]) {
+        const gap = parseFloat(getComputedStyle(mobileTrack).gap) || 0;
+        const cardW = cards[0].offsetWidth;
+        mobileTrack.scrollTo({ left: index * (cardW + gap), behavior: 'smooth' });
+      }
       syncDots(index);
     } else {
       renderTesti(index, dir);
