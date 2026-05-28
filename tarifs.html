@@ -338,6 +338,31 @@
     </div>
   </section>
 
+  <!-- ===== GLOFOX — ACHAT ABONNEMENT ===== -->
+  <section class="glofox-section" style="background:var(--bg-warm)">
+    <div class="glofox-section-inner">
+      <div class="glofox-header gs-stagger">
+        <span class="section-label">Paiement sécurisé</span>
+        <h2>Choisissez votre <em>abonnement.</em></h2>
+        <p style="font-size:0.9375rem;color:var(--text-muted);margin-top:0.75rem;max-width:42rem;line-height:1.7">
+          Sélectionnez votre formule ci-dessous et finalisez votre inscription en quelques secondes.
+          Aucun renouvellement automatique.
+        </p>
+      </div>
+      <div class="glofox-embed-wrap gs-reveal">
+        <iframe
+          id="glofox-memberships"
+          src="https://app.glofox.com/portal/#/branch/66cca39faa7ce5d29003a6e3/memberships?header=memberships"
+          title="Acheter un abonnement — Amarte Studio"
+          loading="lazy"
+          scrolling="auto"
+          allow="payment https://app.glofox.com"
+          sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation"
+        ></iframe>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== CTA FINAL ===== -->
   <section class="booking-cta-block">
     <div class="booking-cta-inner gs-stagger">
@@ -388,6 +413,7 @@
 </footer>
 
 <script src="js/main.js"></script>
+<script src="js/cms.js" defer></script>
 <script src="js/tracking.js" defer></script>
 <script>
 (function() {

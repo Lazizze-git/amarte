@@ -1925,5 +1925,73 @@ footer { background: var(--bg-warm); }
   padding-top: calc(var(--sec-v) + 49px);
 }
 
+/* ── GLOFOX EMBED ────────────────────────────────────────────── */
+.glofox-section {
+  padding: var(--sec-v) var(--gutter);
+  background: var(--bg);
+}
+.glofox-section-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+.glofox-header {
+  margin-bottom: 2.5rem;
+}
+.glofox-header h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 400;
+  color: var(--text);
+  line-height: 1.1;
+  margin-top: 0.5rem;
+}
+.glofox-header h2 em { color: var(--accent-dk); }
+
+/* Wrapper iframe — frame harmonisé charte Amarte */
+.glofox-embed-wrap {
+  position: relative;
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--bg-warm);
+  overflow: hidden;
+}
+
+/* Loader visible pendant le chargement de l'iframe */
+.glofox-embed-wrap::before {
+  content: 'Chargement…';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--bg-warm);
+  z-index: 0;
+}
+.glofox-embed-wrap iframe {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 720px;
+  border: none;
+  background: transparent;
+}
+
+@media (max-width: 768px) {
+  .glofox-embed-wrap iframe { height: 580px; }
+}
+@media (max-width: 480px) {
+  .glofox-embed-wrap iframe { height: 500px; }
+}
+
+/* ── SANITY CMS — états de chargement ───────────────────────── */
+[data-cms-field] { transition: opacity 0.3s ease; }
+[data-cms-loading] { opacity: 0.5; pointer-events: none; }
+
 /* Footer — séparation discrète : filet horizontal + écart visuel,
    sans gradient (la section précédente varie selon la page). */
