@@ -160,12 +160,14 @@
       <div class="glofox-embed-wrap gs-reveal">
         <iframe
           id="glofox-calendar"
-          src="https://app.glofox.com/portal/#/branch/66cca39faa7ce5d29003a6e3/classes?gt=GTM-K4MSN7T3"
+          class="glofox-iframe"
+          src="https://app.glofox.com/portal/#/branch/66cca39faa7ce5d29003a6e3/classes-week-view?header=classes&gt=GTM-K4MSN7T3"
           title="Réserver un cours — Amarte Studio"
-          loading="eager"
-          scrolling="auto"
+          width="100%"
+          height="0"
+          scrolling="no"
+          frameborder="0"
           allow="payment https://app.glofox.com"
-          sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation"
         ></iframe>
       </div>
     </div>
@@ -287,6 +289,21 @@
   <div class="footer-deco"><p class="footer-deco-text">amarte</p></div>
 </footer>
 
+<script src="js/iframe-resizer.min.js"></script>
+<script>
+  // Auto-dimensionnement de l'iframe Glofox (croissance à la hauteur du contenu,
+  // sans scroll interne ni hauteur figée). Glofox charge le script companion
+  // iframe-resizer côté portail via le paramètre ?gt=GTM-K4MSN7T3.
+  iFrameResize({
+    log: false,
+    checkOrigin: false,
+    tolerance: 10,
+    sizeHeight: true,
+    heightCalculationMethod: 'lowestElement',
+    minHeight: 300,
+    scrolling: 'auto'
+  }, '#glofox-calendar');
+</script>
 <script src="js/main.js"></script>
 <script src="js/cms.js" defer></script>
 <script src="js/tracking.js" defer></script>
