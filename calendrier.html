@@ -39,12 +39,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
   <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-K4MSN7T3');</script>
   <!-- End Google Tag Manager -->
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4MSN7T3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
 <!-- ===== NAVIGATION ===== -->
@@ -111,7 +111,7 @@
           <p class="section-label">Planning indicatif</p>
           <h2 class="cal-booking-title">Vos horaires <em>cette semaine.</em></h2>
         </div>
-        <a href="https://amarte.zenitoo.ch/fr/calendar" target="_blank" rel="noopener noreferrer" class="btn-rect">Réserver en ligne</a>
+        <a href="#reserver" class="btn-rect">Réserver en ligne</a>
       </div>
       <div class="schedule-scroll gs-reveal">
         <div class="schedule-grid">
@@ -151,7 +151,7 @@
   </section>
 
   <!-- ===== GLOFOX — RÉSERVATION EN LIGNE ===== -->
-  <section class="glofox-section">
+  <section class="glofox-section" id="reserver">
     <div class="glofox-section-inner">
       <div class="glofox-header gs-stagger">
         <span class="section-label">Réservation en ligne</span>
@@ -160,9 +160,9 @@
       <div class="glofox-embed-wrap gs-reveal">
         <iframe
           id="glofox-calendar"
-          src="https://app.glofox.com/portal/#/branch/66cca39faa7ce5d29003a6e3/classes"
+          src="https://app.glofox.com/portal/#/branch/66cca39faa7ce5d29003a6e3/classes?gt=GTM-K4MSN7T3"
           title="Réserver un cours — Amarte Studio"
-          loading="lazy"
+          loading="eager"
           scrolling="auto"
           allow="payment https://app.glofox.com"
           sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation"
@@ -200,15 +200,15 @@
         <h2 class="cal-app-title">L'application Amarte — <em>toujours avec vous.</em></h2>
         <p class="cal-app-text">Disponibilités, réservations et crédits depuis votre téléphone. iOS &amp; Android, gratuit.</p>
         <div class="cal-app-stores">
-          <a href="#" class="cal-app-store" aria-label="Télécharger sur l'App Store">
-            <span class="cal-app-store-mini">Disponible sur</span>
+          <span class="cal-app-store is-soon" aria-disabled="true" aria-label="App Store — bientôt disponible">
+            <span class="cal-app-store-mini">Bientôt sur</span>
             <span class="cal-app-store-name">App Store</span>
-          </a>
-          <a href="#" class="cal-app-store" aria-label="Télécharger sur Google Play">
-            <span class="cal-app-store-mini">Disponible sur</span>
+          </span>
+          <span class="cal-app-store is-soon" aria-disabled="true" aria-label="Google Play — bientôt disponible">
+            <span class="cal-app-store-mini">Bientôt sur</span>
             <span class="cal-app-store-name">Google Play</span>
-          </a>
-          <a href="https://app.glofox.com/portal/#/branch/66cca39faa7ce5d29003a6e3/memberships?header=memberships" target="_blank" rel="noopener" class="cal-app-store" aria-label="Réserver en ligne" data-cta="acheter-abonnement-calendrier">
+          </span>
+          <a href="https://app.glofox.com/portal/#/branch/66cca39faa7ce5d29003a6e3/memberships?header=memberships&gt=GTM-K4MSN7T3" target="_blank" rel="noopener" class="cal-app-store" aria-label="Réserver en ligne" data-cta="acheter-abonnement-calendrier">
             <span class="cal-app-store-mini">Aussi disponible</span>
             <span class="cal-app-store-name">Réserver en ligne</span>
           </a>

@@ -109,12 +109,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
   <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-K4MSN7T3');</script>
   <!-- End Google Tag Manager -->
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4MSN7T3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
 <!-- ===== NAVIGATION ===== -->
@@ -204,7 +204,10 @@
         <span class="hero-line-wrap"><span class="hero-line" id="hl2">S'épanouir.</span></span>
       </h1>
       <p class="hero-sub" id="hero-sub">Centre de bien-être · Épalinges, Vaud</p>
-      <a href="tarifs.html" class="hero-btn" id="hero-btn" data-cta="hero-primary">Découvrir nos offres</a>
+      <div class="hero-btns" id="hero-btn">
+        <a href="calendrier.html" class="hero-btn" data-cta="hero-primary">Réserver maintenant</a>
+        <a href="premiere-fois.html" class="hero-btn hero-btn--ghost" data-cta="hero-secondary">Première fois ici ?</a>
+      </div>
     </div>
   </section>
 
@@ -270,32 +273,37 @@
     </div>
   </div>
 
-  <!-- ===== ABOUT ===== -->
-  <section id="a-propos">
-    <div class="about-inner">
-      <div class="about-img-wrap gs-img-reveal">
-        <img src="public/images/about.jpg" alt="Session au Studio Amarte" class="gs-img-inner" />
-        <div class="about-badge">
-          <p class="about-badge-year">2023</p>
-          <p class="about-badge-sub">Fondé à Épalinges</p>
-        </div>
+  <!-- ===== BÉNÉFICES ===== -->
+  <section id="benefices">
+    <div class="benefices-inner">
+      <div class="benefices-header gs-stagger">
+        <p class="section-label">Pourquoi Amarte</p>
+        <h2 class="benefices-title">Un studio pensé pour <em>vous ressourcer.</em></h2>
       </div>
-      <div class="about-content gs-stagger">
-        <p class="section-label">À propos</p>
-        <h2 class="about-title">Un espace pensé pour <em>prendre soin de vous.</em></h2>
-        <div class="about-body">
-          <p>Amarte est né d'une conviction simple : le mouvement conscient transforme. Pas seulement le corps — mais l'état d'esprit, l'énergie, la relation à soi.</p>
+      <div class="benefices-grid">
+        <div class="benefice-card gs-reveal">
+          <span class="benefice-num">01</span>
+          <h3 class="benefice-title">Un corps qui se libère</h3>
+          <p class="benefice-desc">Mobilité, force, souplesse — sans forcer. Le corps retrouve ce qu'il sait déjà faire.</p>
         </div>
-        <div class="about-grid">
-          <div><p class="about-grid-label">Cours collectifs</p><p class="about-grid-val">Yoga, Pilates, Méditation</p></div>
-          <div><p class="about-grid-label">Tous niveaux</p><p class="about-grid-val">Débutants bienvenus</p></div>
-          <div><p class="about-grid-label">Parking gratuit</p><p class="about-grid-val">Souterrain + extérieur</p></div>
-          <div><p class="about-grid-label">Bus Girarde</p><p class="about-grid-val">À 20 mètres</p></div>
+        <div class="benefice-card gs-reveal">
+          <span class="benefice-num">02</span>
+          <h3 class="benefice-title">Un esprit qui respire</h3>
+          <p class="benefice-desc">Chaque cours est une parenthèse. Vous ressortez différent de comment vous êtes entré.</p>
+        </div>
+        <div class="benefice-card gs-reveal">
+          <span class="benefice-num">03</span>
+          <h3 class="benefice-title">Une pratique pour tous</h3>
+          <p class="benefice-desc">Débutants bienvenus, tous niveaux, toutes morphologies. Pas besoin d'être en forme pour commencer.</p>
+        </div>
+        <div class="benefice-card gs-reveal">
+          <span class="benefice-num">04</span>
+          <h3 class="benefice-title">Un espace qui vous ressemble</h3>
+          <p class="benefice-desc">Studio intime, instructeurs certifiés, groupe à taille humaine. Vous n'êtes pas un numéro.</p>
         </div>
       </div>
     </div>
   </section>
-
 
   <!-- ===== CLASSES ===== -->
   <section id="cours">
@@ -344,10 +352,10 @@
             </div>
           </div>
           <div>
-            <h3 class="class-title">Yin Yoga</h3>
-            <p class="class-subtitle">Profond &amp; Méditatif</p>
+            <h3 class="class-title">Yogilates</h3>
+            <p class="class-subtitle">Fusion &amp; Équilibre</p>
           </div>
-          <p class="class-desc">Postures longues pour relâcher fascias et système nerveux.</p>
+          <p class="class-desc">Alliance du yoga et du pilates pour tonifier le corps en douceur.</p>
           <a href="cours.html" class="class-link">Voir les cours <span class="class-link-arrow">→</span></a>
         </div>
 
@@ -359,10 +367,10 @@
             </div>
           </div>
           <div>
-            <h3 class="class-title">Bien-être</h3>
-            <p class="class-subtitle">Holistique &amp; Doux</p>
+            <h3 class="class-title">Kundalini</h3>
+            <p class="class-subtitle">Énergie &amp; Éveil</p>
           </div>
-          <p class="class-desc">Mouvements thérapeutiques, étirements et relaxation guidée.</p>
+          <p class="class-desc">Pratique ancestrale pour éveiller l'énergie vitale et la conscience.</p>
           <a href="cours.html" class="class-link">Voir les cours <span class="class-link-arrow">→</span></a>
         </div>
 
@@ -373,99 +381,113 @@
     </div>
   </section>
 
-  <!-- ===== CTA BANNER ===== -->
+  <!-- ===== OFFRES PREMIÈRE FOIS ===== -->
+  <section id="offres-premiere-fois">
+    <div class="opf-inner">
+      <div class="opf-header gs-stagger">
+        <p class="section-label">Nouvelle chez Amarte ?</p>
+        <h2 class="opf-title">Deux façons de <em>commencer.</em></h2>
+        <p class="opf-subtitle">Des offres sans engagement, pensées pour les nouvelles venues.</p>
+      </div>
+      <div class="opf-grid">
+
+        <article class="opf-card gs-reveal">
+          <div class="opf-card-body">
+            <p class="opf-card-label">Pack Découverte</p>
+            <h3 class="opf-card-title">3 cours à vivre <em>à votre rythme.</em></h3>
+            <ul class="opf-card-list">
+              <li>3 crédits cours valables 2 mois</li>
+              <li>Accès à tous les styles de cours</li>
+              <li>Réservé aux nouveaux membres</li>
+              <li>Sans renouvellement automatique</li>
+            </ul>
+          </div>
+          <div class="opf-card-price-block">
+            <p class="opf-card-price"><span class="opf-card-currency">CHF</span>60</p>
+            <a href="premiere-fois.html" class="btn-outline" data-cta="opf-decouverte">Essayer maintenant</a>
+          </div>
+        </article>
+
+        <article class="opf-card opf-card--featured gs-reveal">
+          <span class="opf-card-badge">Recommandé</span>
+          <div class="opf-card-body">
+            <p class="opf-card-label">Pass Immersion</p>
+            <h3 class="opf-card-title">Illimité <em>2 semaines.</em></h3>
+            <ul class="opf-card-list">
+              <li>Cours illimités pendant 14 jours</li>
+              <li>Accès à tout le programme</li>
+              <li>Réservé aux nouveaux membres</li>
+              <li>Sans renouvellement automatique</li>
+            </ul>
+          </div>
+          <div class="opf-card-price-block">
+            <p class="opf-card-price"><span class="opf-card-currency">CHF</span>79</p>
+            <a href="premiere-fois.html" class="btn-dark" data-cta="opf-immersion">Commencer maintenant</a>
+          </div>
+        </article>
+
+      </div>
+      <p class="opf-note gs-reveal">Ces offres sont exclusivement réservées aux nouveaux membres. <a href="premiere-fois.html">En savoir plus →</a></p>
+    </div>
+  </section>
+
+  <!-- ===== TESTIMONIALS ===== -->
+  <section id="temoignages">
+    <div class="testi-inner">
+      <div class="testi-header gs-stagger">
+        <p class="section-label">Témoignages</p>
+        <h2 class="testi-title">Ce qu'ils disent <em>d'Amarte.</em></h2>
+      </div>
+      <div class="testi-grid">
+        <article class="testi-card gs-reveal">
+          <div class="testi-card-stars" role="img" aria-label="Note 5 sur 5">★★★★★</div>
+          <blockquote class="testi-card-quote">« Une expérience fantastique. L'accueil est chaleureux, l'espace est spacieux et les installations sont entièrement neuves. Je me sens vraiment chez moi. »</blockquote>
+          <footer class="testi-card-footer">
+            <p class="testi-card-name">Sophie M.</p>
+            <p class="testi-card-detail">Membre depuis 6 mois · Yoga Flow</p>
+          </footer>
+        </article>
+        <article class="testi-card gs-reveal">
+          <div class="testi-card-stars" role="img" aria-label="Note 5 sur 5">★★★★★</div>
+          <blockquote class="testi-card-quote">« J'avais peur de ne pas être au niveau. Mais les enseignants proposent toujours des adaptations. Pour la première fois, j'ai trouvé un cours vraiment accessible. »</blockquote>
+          <footer class="testi-card-footer">
+            <p class="testi-card-name">Laurent D.</p>
+            <p class="testi-card-detail">Membre depuis 3 mois · Pilates</p>
+          </footer>
+        </article>
+        <article class="testi-card gs-reveal">
+          <div class="testi-card-stars" role="img" aria-label="Note 5 sur 5">★★★★★</div>
+          <blockquote class="testi-card-quote">« Ce que j'apprécie chez Amarte, c'est l'absence de compétition. On vient pour soi, pas pour performer. Cette ambiance est rare. »</blockquote>
+          <footer class="testi-card-footer">
+            <p class="testi-card-name">Nathalie R.</p>
+            <p class="testi-card-detail">Membre depuis 1 an · Tous cours</p>
+          </footer>
+        </article>
+        <article class="testi-card gs-reveal">
+          <div class="testi-card-stars" role="img" aria-label="Note 5 sur 5">★★★★★</div>
+          <blockquote class="testi-card-quote">« J'ai commencé avec le pack Découverte. Deux semaines plus tard, j'ai pris l'abonnement mensuel. Amarte m'a redonné le goût du mouvement. »</blockquote>
+          <footer class="testi-card-footer">
+            <p class="testi-card-name">Isabelle C.</p>
+            <p class="testi-card-detail">Membre depuis 8 mois · Yoga &amp; Bien-être</p>
+          </footer>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA FINAL ===== -->
   <div id="cta-banner" class="gs-img-reveal">
     <img id="cta-img" src="public/images/cta-banner.jpg" alt="Cours collectif au Studio Amarte" class="gs-img-inner" />
     <div class="cta-overlay"></div>
     <div class="cta-content gs-stagger">
       <p class="cta-label">Commencez votre parcours</p>
       <h2 class="cta-title">Votre première séance <em>vous attend.</em></h2>
-      <a href="premiere-fois.html" class="cta-btn">Découvrir le Pack Découverte</a>
+      <div class="cta-btns">
+        <a href="calendrier.html" class="cta-btn" data-cta="cta-final-primary">Réserver un cours</a>
+        <a href="premiere-fois.html" class="cta-btn cta-btn--ghost" data-cta="cta-final-secondary">Première fois chez Amarte ?</a>
+      </div>
     </div>
   </div>
-
-  <!-- ===== TESTIMONIALS ===== -->
-  <section id="temoignages">
-    <div class="testi-inner gs-reveal">
-      <div class="testi-header">
-        <div>
-          <p class="section-label">Témoignages</p>
-          <h2 class="testi-title">Ce qu'ils disent <em>d'Amarte.</em></h2>
-        </div>
-        <div class="testi-nav">
-          <button class="testi-btn" id="testi-prev" aria-label="Précédent">←</button>
-          <span class="testi-counter" id="testi-counter">1 / 4</span>
-          <button class="testi-btn" id="testi-next" aria-label="Suivant">→</button>
-        </div>
-      </div>
-      <div class="testi-desktop">
-        <blockquote class="testi-quote" id="testi-quote"></blockquote>
-        <div class="testi-author">
-          <p class="testi-name" id="testi-author"></p>
-          <p class="testi-detail" id="testi-detail"></p>
-        </div>
-      </div>
-      <div class="testi-mobile-track" id="testi-mobile-track" aria-label="Témoignages — faire glisser pour parcourir"></div>
-      <div class="testi-dots" id="testi-dots"></div>
-    </div>
-  </section>
-
-  <!-- ===== FAQ ===== -->
-  <section class="faq-section-light">
-    <div class="faq-section-light-inner">
-      <div class="gs-stagger" style="margin-bottom:3rem">
-        <p class="section-label">Questions fréquentes</p>
-        <h2 style="font-family:var(--font-serif);font-size:clamp(2rem,5vw,3rem);line-height:1.1;color:var(--text)">Ce que vous <em>voulez savoir.</em></h2>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question">
-          <span class="faq-question-text">Puis-je utiliser mes crédits pour tous les cours ?</span>
-          <span class="faq-toggle">+</span>
-        </div>
-        <p class="faq-answer">Oui. Un crédit donne accès à n'importe quel cours collectif au programme. Certains ateliers spéciaux peuvent demander un crédit supplémentaire.</p>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question">
-          <span class="faq-question-text">Comment fonctionne l'annulation d'un cours ?</span>
-          <span class="faq-toggle">+</span>
-        </div>
-        <p class="faq-answer">Annulation gratuite jusqu'à 2h avant le cours via l'application — crédit re-crédité. En dessous, le crédit est consommé.</p>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question">
-          <span class="faq-question-text">Comment réserver un cours ?</span>
-          <span class="faq-toggle">+</span>
-        </div>
-        <p class="faq-answer">Via l'application Amarte (iOS &amp; Android) ou notre site, depuis le <a href="calendrier.html" style="text-decoration:underline;text-underline-offset:2px">calendrier</a>.</p>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question">
-          <span class="faq-question-text">Les cours sont-ils adaptés aux débutants ?</span>
-          <span class="faq-toggle">+</span>
-        </div>
-        <p class="faq-answer">Oui. Tous nos cours accueillent tous les niveaux et les enseignants proposent systématiquement des adaptations.</p>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question">
-          <span class="faq-question-text">Existe-t-il un tarif entreprise ou groupe ?</span>
-          <span class="faq-toggle">+</span>
-        </div>
-        <p class="faq-answer">Oui — consultez notre <a href="corpo.html" style="text-decoration:underline;text-underline-offset:2px">page Corpo B2B</a> pour un devis personnalisé.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="booking-cta-block">
-    <div class="booking-cta-inner gs-stagger">
-      <p class="section-label">Prêt à commencer ?</p>
-      <h2 class="booking-cta-title">Rejoignez <em>Amarte.</em></h2>
-      <p class="booking-cta-sub">Aucun renouvellement automatique. Vous reprenez quand vous voulez.</p>
-      <div class="booking-cta-btns">
-        <a href="tarifs.html" class="btn-pill btn-pill--light">Voir les tarifs</a>
-        <a href="premiere-fois.html" class="btn-pill btn-pill--ghost">Première fois chez Amarte ?</a>
-      </div>
-    </div>
-  </section>
 
 </main>
 

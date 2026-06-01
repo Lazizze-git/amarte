@@ -483,6 +483,25 @@ document.querySelectorAll('.faq-item').forEach(item => {
   });
 });
 
+// ── GLOFOX IFRAME — FADE DU LOADER ───────────────────────────
+// Le portail Glofox (cross-origin) ne communique pas sa hauteur :
+// on garde donc un cadre à hauteur fixe avec scroll interne, et on
+// masque simplement le voile crème + spinner une fois l'iframe chargée.
+(function () {
+  var gfIframes = document.querySelectorAll('.glofox-embed-wrap iframe[src*="app.glofox.com"]');
+  if (!gfIframes.length) return;
+
+  gfIframes.forEach(function (iframe) {
+    var wrap = iframe.closest('.glofox-embed-wrap');
+    if (!wrap) return;
+    iframe.addEventListener('load', function () {
+      setTimeout(function () { wrap.classList.add('loaded'); }, 900);
+    });
+    // Fallback : on ne laisse jamais le voile bloqué (ex. load déjà passé)
+    setTimeout(function () { wrap.classList.add('loaded'); }, 4000);
+  });
+})();
+
 // ── SCROLL PROGRESS BAR ───────────────────────────────────────
 const progressBar = document.createElement('div');
 progressBar.style.cssText = 'position:fixed;top:0;left:0;height:2px;background:var(--accent);z-index:9999;width:0%;transition:none;pointer-events:none;';
