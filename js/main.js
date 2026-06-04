@@ -178,31 +178,7 @@ if (coursGrid) {
   );
 }
 
-// 7. Cards classes (homepage) — stagger sur le conteneur, fluide
-const classSection = document.querySelector('.classes-grid');
-if (classSection) {
-  const cards = classSection.querySelectorAll('.class-card');
-  gsap.fromTo(cards,
-    { y: 32, opacity: 0 },
-    { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out',
-      stagger: { amount: 0.35, from: 'start' },
-      scrollTrigger: { trigger: classSection, start: 'top 86%', once: true }
-    }
-  );
-} else {
-  // Fallback si pas de conteneur commun
-  document.querySelectorAll('.class-card').forEach((el, i) => {
-    gsap.fromTo(el,
-      { y: 28, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out',
-        scrollTrigger: { trigger: el, start: 'top 91%', once: true },
-        delay: Math.min(i * 0.06, 0.3)
-      }
-    );
-  });
-}
-
-// 8. Stats corpo — count-up + bounce
+// 7. Stats corpo — count-up + bounce
 document.querySelectorAll('.corpo-stat-val').forEach(el => {
   gsap.fromTo(el,
     { y: 32, opacity: 0, scale: 0.9 },
@@ -211,19 +187,7 @@ document.querySelectorAll('.corpo-stat-val').forEach(el => {
   );
 });
 
-// 9. Trust strip items — container stagger
-const trustItems = document.querySelectorAll('.trust-item');
-if (trustItems.length) {
-  gsap.fromTo(Array.from(trustItems),
-    { y: 24, opacity: 0 },
-    { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out',
-      stagger: { amount: 0.4, from: 'start' },
-      scrollTrigger: { trigger: trustItems[0].parentElement, start: 'top 90%', once: true }
-    }
-  );
-}
-
-// 10. Tarifs illimité cards — container stagger
+// 9. Tarifs illimité cards — container stagger
 const tarifCards = document.querySelectorAll('.tarifs-illimite-card');
 if (tarifCards.length) {
   gsap.fromTo(Array.from(tarifCards),

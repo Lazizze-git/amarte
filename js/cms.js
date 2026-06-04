@@ -36,13 +36,6 @@
     return (await res.json()).result;
   }
 
-  // ── IMAGE URL ─────────────────────────────────────────────────
-  function imageUrl(ref, w = 800) {
-    if (!ref) return null;
-    const [, id, dim, fmt] = ref.split('-');
-    return `https://cdn.sanity.io/images/${SANITY_PROJECT_ID}/${SANITY_DATASET}/${id}-${dim}.${fmt}?w=${w}&auto=format&fit=crop`;
-  }
-
   // ── HELPERS ───────────────────────────────────────────────────
   // Échappe le HTML pour éviter toute casse de la mise en page.
   const esc = (s) => String(s == null ? '' : s)
