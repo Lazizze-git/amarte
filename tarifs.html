@@ -417,42 +417,49 @@
 <script src="js/tracking.js" defer></script>
 <script>
 (function() {
-  const plans = { 1: 180, 3: 460, 6: 840, 12: 1490 };
-  let currentMonths = 3;
   let currentFreq = 3;
 
+  const calcEl     = document.getElementById('tarifs-calculator');
   const freqSlider = document.getElementById('freq-slider');
   const freqVal    = document.getElementById('freq-value');
   const calcCost   = document.getElementById('calc-cost');
   const calcSaving = document.getElementById('calc-saving');
   const calcTotal  = document.getElementById('calc-total');
 
+  // Lit les valeurs en direct depuis le DOM : ainsi le calculateur
+  // suit automatiquement les prix mis à jour par le CMS (cms.js).
+  function activeTab() {
+    return document.querySelector('.tarifs-calc-tab.active')
+        || document.querySelector('.tarifs-calc-tab');
+  }
+
   function update() {
-    const price     = plans[currentMonths];
-    const totalSessions = Math.round(currentFreq * 4.33 * currentMonths);
+    const tab = activeTab();
+    if (!tab) return;
+    const price        = parseFloat(tab.dataset.price);
+    const months       = parseInt(tab.dataset.months);
+    const unitPrice    = parseFloat(calcEl && calcEl.dataset.unitPrice) || 30;
+    const totalSessions  = Math.round(currentFreq * 4.33 * months);
     const costPerSession = price / totalSessions;
-    const saving = 30 - costPerSession;
+    const saving = unitPrice - costPerSession;
 
     calcCost.textContent   = 'CHF ' + costPerSession.toFixed(2);
     calcTotal.textContent  = '~' + totalSessions + ' cours';
-    if (saving > 0) {
-      calcSaving.textContent = '–CHF ' + saving.toFixed(2) + ' / cours';
-    } else {
-      calcSaving.textContent = '—';
-    }
+    calcSaving.textContent = saving > 0
+      ? '–CHF ' + saving.toFixed(2) + ' / cours'
+      : '—';
   }
 
-  // Plan tabs
+  // Onglets de plan
   document.querySelectorAll('.tarifs-calc-tab').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.tarifs-calc-tab').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      currentMonths = parseInt(btn.dataset.months);
       update();
     });
   });
 
-  // Frequency slider
+  // Curseur de fréquence
   if (freqSlider) {
     freqSlider.addEventListener('input', () => {
       currentFreq = parseInt(freqSlider.value);
@@ -461,6 +468,8 @@
     });
   }
 
+  // Exposé pour que cms.js puisse rafraîchir après mise à jour des prix
+  window.amarteCalc = { update };
   update();
 })();
 </script>

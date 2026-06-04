@@ -50,7 +50,7 @@ export const tarif = {
       description: 'Laisser vide pour utiliser l\'URL par défaut',
     },
     {
-      name: 'ordre', title: 'Ordre d'affichage', type: 'number',
+      name: 'ordre', title: "Ordre d'affichage", type: 'number',
       initialValue: 99,
     },
     {

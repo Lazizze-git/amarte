@@ -57,7 +57,7 @@ export const cours = {
       name: 'instructeur', title: 'Instructeur·trice', type: 'string',
     },
     {
-      name: 'ordre', title: 'Ordre d'affichage', type: 'number',
+      name: 'ordre', title: "Ordre d'affichage", type: 'number',
       initialValue: 99,
     },
     {

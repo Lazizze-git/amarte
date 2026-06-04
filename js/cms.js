@@ -13,7 +13,7 @@
   'use strict';
 
   // ── CONFIG ────────────────────────────────────────────────────
-  const SANITY_PROJECT_ID  = 'VOTRE_PROJECT_ID';  // ← à remplacer
+  const SANITY_PROJECT_ID  = 'pvvt7no0';
   const SANITY_DATASET     = 'production';
   const SANITY_API_VERSION = '2024-01-01';
   const SANITY_CDN         = true;
@@ -40,6 +40,19 @@
     const [, id, dim, fmt] = ref.split('-');
     return `https://cdn.sanity.io/images/${SANITY_PROJECT_ID}/${SANITY_DATASET}/${id}-${dim}.${fmt}?w=${w}&auto=format&fit=crop`;
   }
+
+  // ── HELPERS ───────────────────────────────────────────────────
+  // Échappe le HTML pour éviter toute casse de la mise en page.
+  const esc = (s) => String(s == null ? '' : s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  // Format suisse des montants : 1490 → "1'490"
+  const chf = (n) => Number(n).toLocaleString('de-CH');
+
+  // Libellés de catégorie
+  const CAT = { yoga: 'Yoga', pilates: 'Pilates', bienetre: 'Bien-être' };
 
   // ── DÉTECTION DE PAGE ─────────────────────────────────────────
   const raw  = location.pathname.split('/').pop().replace(/^$/, 'index');
@@ -100,27 +113,57 @@
   function renderTemoignages(temoignages) {
     if (!temoignages || temoignages.length === 0) return;
 
-    // Remplace le tableau hardcodé dans main.js
-    // main.js lit window.amarteTemoignages s'il existe
-    window.amarteTemoignages = temoignages.map(t => ({
-      text:   t.texte,
-      author: t.auteur,
-      detail: t.detail || '',
-    }));
+    // La section témoignages est une grille masonry (.testi-masonry).
+    // On remplace les cartes statiques par le contenu du CMS.
+    const grid = document.querySelector('.testi-masonry');
+    if (!grid) return;
 
-    // Si le carousel est déjà initialisé, mettre à jour silencieusement
-    const quoteEl = document.getElementById('testi-quote');
-    if (quoteEl && window.amarteTemoignagesLoaded) {
-      // Re-déclenche le premier témoignage avec les données CMS
-      const first = window.amarteTemoignages[0];
-      if (first) {
-        quoteEl.textContent = `"${first.text}"`;
-        const authorEl = document.getElementById('testi-author');
-        const detailEl = document.getElementById('testi-detail');
-        if (authorEl) authorEl.textContent = first.author;
-        if (detailEl) detailEl.innerHTML   = first.detail;
-      }
-    }
+    grid.innerHTML = temoignages.map(t => `
+        <article class="testi-card">
+          <div class="testi-card-stars" role="img" aria-label="Note 5 sur 5">★★★★★</div>
+          <blockquote class="testi-card-quote">« ${esc(t.texte)} »</blockquote>
+          <footer class="testi-card-footer">
+            <p class="testi-card-name">${esc(t.auteur)}</p>
+            ${t.detail ? `<p class="testi-card-detail">${esc(t.detail)}</p>` : ''}
+          </footer>
+        </article>`).join('');
+  }
+
+  // ── COURS (cours.html) ────────────────────────────────────────
+  if (page === 'cours.html') {
+    query(`*[_type == "cours" && actif == true] | order(ordre asc) {
+      titre, sousTitre, categorie, description, niveau, joursHoraires, tags
+    }`).then(renderCours).catch(() => {/* garder le HTML statique */});
+  }
+
+  function renderCours(cours) {
+    if (!cours || cours.length === 0) return;
+
+    const grid = document.getElementById('cours-grid');
+    if (!grid) return;
+
+    grid.innerHTML = cours.map(c => {
+      const tags = (c.tags || [])
+        .map(t => `<span class="cours-item-tag">${esc(t)}</span>`)
+        .join('');
+      return `
+        <article class="cours-item gs-reveal visible" data-cat="${esc(c.categorie)}">
+          <div class="cours-item-head">
+            <span class="cours-item-cat ${esc(c.categorie)}">${CAT[c.categorie] || ''}</span>
+            <span class="cours-item-schedule">${esc(c.joursHoraires || '')}</span>
+          </div>
+          <h3 class="cours-item-title">${esc(c.titre)}</h3>
+          <p class="cours-item-sub">${esc(c.sousTitre || '')}</p>
+          <p class="cours-item-desc">${esc(c.description || '')}</p>
+          <div class="cours-item-footer">
+            ${tags}
+            <a href="calendrier.html" class="cours-item-link">Voir les horaires →</a>
+          </div>
+        </article>`;
+    }).join('');
+
+    // Les filtres (script inline de cours.html) re-interrogent le DOM
+    // à chaque clic, ils prennent donc en compte ces nouvelles cartes.
   }
 
   // ── TARIFS (tarifs.html) ──────────────────────────────────────
@@ -134,37 +177,98 @@
   function renderTarifs(tarifs) {
     if (!tarifs || tarifs.length === 0) return;
 
-    const BRANCH = '66cca39faa7ce5d29003a6e3';
-    const DEFAULT_URL = `https://app.glofox.com/portal/#/branch/${BRANCH}/memberships?header=memberships`;
+    const illimites  = tarifs.filter(t => t.type === 'illimite');
+    const packs      = tarifs.filter(t => t.type === 'pack');
+    const decouverte = tarifs.find(t => t.type === 'decouverte');
 
-    // Mettre à jour les cartes illimitées existantes
-    const illimites = tarifs.filter(t => t.type === 'illimite');
+    // 1) ── Cartes "Abonnements illimités" ──────────────────────
     const cards = document.querySelectorAll('.tarifs-illimite-card');
-
     illimites.forEach((tarif, i) => {
       const card = cards[i];
       if (!card) return;
-
-      const nomEl   = card.querySelector('.tarifs-illimite-name');
-      const baseEl  = card.querySelector('.tarifs-illimite-baseline');
-      const prixEl  = card.querySelector('.tarifs-illimite-price');
-      const rateEl  = card.querySelector('.tarifs-illimite-rate');
-      const badgeEl = card.querySelector('.tarifs-illimite-badge');
-      const cta     = card.querySelector('a[data-cta]');
-
-      if (nomEl)  nomEl.textContent  = tarif.nom;
-      if (baseEl) baseEl.textContent = tarif.sousTitre || '';
-      if (prixEl) prixEl.textContent = `CHF ${tarif.prix}`;
-      if (rateEl && tarif.prixParCours) rateEl.textContent = `≈ CHF ${tarif.prixParCours}/cours`;
-      if (badgeEl) badgeEl.style.display = tarif.recommande ? '' : 'none';
-      if (cta) cta.href = tarif.glofoxUrl || DEFAULT_URL;
-
-      // Badge "Aucun renouvellement automatique"
-      const noteEl = card.querySelector('.tarifs-illimite-note');
-      if (noteEl && tarif.aucunRenouvellement) {
-        noteEl.textContent = 'Aucun renouvellement automatique';
-      }
+      const set = (sel, val) => { const el = card.querySelector(sel); if (el) el.textContent = val; };
+      set('.tarifs-illimite-name', tarif.nom);
+      set('.tarifs-illimite-baseline', tarif.sousTitre || '');
+      set('.tarifs-illimite-price', `CHF ${chf(tarif.prix)}`);
+      if (tarif.prixParCours) set('.tarifs-illimite-rate', `CHF ${chf(tarif.prixParCours)} / mois`);
+      const badge = card.querySelector('.tarifs-illimite-badge');
+      if (badge) badge.style.display = tarif.recommande ? '' : 'none';
     });
+
+    // 2) ── Calculateur de rentabilité (tabs synchronisés) ──────
+    const tabs = document.querySelectorAll('#calc-plan-tabs .tarifs-calc-tab');
+    illimites.forEach((tarif, i) => {
+      const tab = tabs[i];
+      if (!tab) return;
+      tab.dataset.price = tarif.prix;
+      const span = tab.querySelector('span');
+      if (span) span.textContent = `CHF ${chf(tarif.prix)}`;
+    });
+    // Prix de référence "cours unique" pour le calcul d'économie
+    const calcEl = document.getElementById('tarifs-calculator');
+    const coursUnique = packs.find(p => /unique/i.test(p.nom)) || packs[0];
+    if (calcEl && coursUnique) calcEl.dataset.unitPrice = coursUnique.prix;
+    // Recalcule l'affichage avec les nouveaux prix
+    if (window.amarteCalc && typeof window.amarteCalc.update === 'function') {
+      window.amarteCalc.update();
+    }
+
+    // 3) ── Pack Découverte ─────────────────────────────────────
+    if (decouverte) {
+      const dPrice = document.querySelector('.tarifs-decouverte-price');
+      const dSub   = document.querySelector('.tarifs-decouverte-price-sub');
+      if (dPrice) dPrice.textContent = `CHF ${chf(decouverte.prix)}`;
+      if (dSub && decouverte.sousTitre) dSub.textContent = decouverte.sousTitre;
+    }
+
+    // 4) ── Packs de cours ──────────────────────────────────────
+    const rows = document.querySelectorAll('.tarifs-row-v2');
+    packs.forEach((pack, i) => {
+      const row = rows[i];
+      if (!row) return;
+      const nom   = row.querySelector('.tarifs-row-v2-name');
+      const sub   = row.querySelector('.tarifs-row-v2-sub');
+      const price = row.querySelector('.tarifs-row-v2-price');
+      if (nom)   nom.textContent   = pack.nom;
+      if (sub)   sub.textContent   = pack.sousTitre || '';
+      if (price) price.textContent = `CHF ${chf(pack.prix)}`;
+    });
+  }
+
+  // ── PARAMÈTRES DU SITE (toutes les pages : footer, contacts) ──
+  query(`*[_id == "siteSettings"][0]{
+    adresse, telephone, email, instagram, facebook
+  }`).then(renderSettings).catch(() => {/* garder le HTML statique */});
+
+  function renderSettings(s) {
+    if (!s) return;
+
+    // Email — liens mailto + texte affiché
+    if (s.email) {
+      document.querySelectorAll('a[href^="mailto:"]').forEach(a => {
+        a.href = `mailto:${s.email}`;
+        if (/@/.test(a.textContent)) a.textContent = s.email;
+      });
+    }
+    // Téléphone — liens tel + texte affiché
+    if (s.telephone) {
+      const telHref = s.telephone.replace(/[^\d+]/g, '');
+      document.querySelectorAll('a[href^="tel:"]').forEach(a => {
+        a.href = `tel:${telHref}`;
+        if (/[\d]/.test(a.textContent)) a.textContent = s.telephone;
+      });
+    }
+    // Réseaux sociaux
+    if (s.instagram) {
+      document.querySelectorAll('a[href*="instagram.com"]').forEach(a => { a.href = s.instagram; });
+    }
+    if (s.facebook) {
+      document.querySelectorAll('a[href*="facebook.com"]').forEach(a => { a.href = s.facebook; });
+    }
+    // Adresse (pied de page)
+    if (s.adresse) {
+      document.querySelectorAll('.footer-addr').forEach(el => { el.textContent = s.adresse; });
+    }
   }
 
 })();

@@ -19,7 +19,7 @@ export const temoignage = {
       description: 'Ex: Membre depuis 6 mois · Yoga Flow',
     },
     {
-      name: 'ordre', title: 'Ordre d'affichage', type: 'number',
+      name: 'ordre', title: "Ordre d'affichage", type: 'number',
       initialValue: 99,
     },
     {

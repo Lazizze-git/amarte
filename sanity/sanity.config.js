@@ -14,7 +14,7 @@ export default defineConfig({
   name:      'amarte',
   title:     'Amarte Studio — CMS',
 
-  projectId: 'VOTRE_PROJECT_ID',   // ← à remplacer (ex: "ab12cd34")
+  projectId: 'pvvt7no0',
   dataset:   'production',
 
   plugins: [

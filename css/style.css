@@ -724,7 +724,7 @@ h1, h2, h3,
 /* ── CLASSES SECTION (homepage) ──────────────────────────── */
 #cours {
   padding: var(--sec-v) var(--gutter);
-  background: var(--bg-warm);
+  background: var(--bg);
 }
 .classes-inner { max-width: var(--max-w); margin: 0 auto; }
 .classes-header {
@@ -756,25 +756,46 @@ h1, h2, h3,
 }
 .classes-link:hover { gap: 0.7rem; }
 
-.classes-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5px;
-  background: var(--border);
-}
-.class-card {
-  background: var(--bg);
-  padding: 2.5rem 2rem;
+.disc-rows {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  transition: transform 0.3s var(--ease-out), box-shadow 0.3s, background 0.25s;
+  gap: clamp(3rem, 6vw, 6rem);
 }
-.class-card:hover { background: var(--bg-warm); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(43,27,27,0.1); }
-.class-num { font-family: var(--font-serif); font-size: 0.875rem; color: var(--accent); letter-spacing: 0.1em; }
-.class-title { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 400; color: var(--text); line-height: 1.15; }
-.class-subtitle { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
-.class-desc { font-size: 0.875rem; color: var(--text-muted); line-height: 1.75; flex: 1; }
+.disc-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+}
+.disc-row--reverse .disc-media { order: 2; }
+.disc-media {
+  position: relative;
+  aspect-ratio: 4/5;
+  overflow: hidden;
+}
+.disc-media img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s var(--ease-out);
+}
+.disc-row:hover .disc-media img { transform: scale(1.04); }
+.disc-index {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  color: var(--white);
+  background: rgba(34,53,63,0.55);
+  backdrop-filter: blur(6px);
+  padding: 0.4rem 0.85rem;
+}
+.disc-body { display: flex; flex-direction: column; gap: 0.75rem; }
+.disc-body .class-tags { margin-bottom: 0.25rem; }
+.disc-title { font-family: var(--font-serif); font-size: clamp(1.75rem, 3.2vw, 2.5rem); font-weight: 400; color: var(--text); line-height: 1.1; }
+.disc-subtitle { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+.disc-desc { font-size: 0.9375rem; color: var(--text-muted); line-height: 1.8; max-width: 42ch; }
 .class-tags { display: flex; flex-wrap: wrap; gap: 0.375rem; }
 .class-tag { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.06em; color: var(--text-body); background: var(--bg-soft); padding: 0.25rem 0.625rem; border-radius: 50px; }
 .class-link { font-size: 0.8125rem; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 0.4rem; margin-top: 0.5rem; transition: gap 0.2s; }
@@ -1343,6 +1364,14 @@ h1, h2, h3,
 .cal-app-mockup-name { font-size: 0.875rem; font-weight: 700; color: var(--text); }
 .cal-app-mockup-btn { font-size: 0.625rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--white); background: var(--accent-blue); padding: 0.35rem 0.625rem; border-radius: 50px; white-space: nowrap; border: none; cursor: pointer; }
 
+/* Variante sombre — bloc « app » mis en avant (premiere-fois) */
+.cal-app--dark { background: var(--accent-blue); }
+.cal-app--dark::before { display: none; }
+.cal-app--dark .section-label { color: rgba(168,149,126,0.85); }
+.cal-app--dark .cal-app-title { color: var(--white); }
+.cal-app--dark .cal-app-title em { color: rgba(255,255,255,0.58); }
+.cal-app--dark .cal-app-text { color: rgba(255,255,255,0.7); }
+
 /* ── LOCATION ────────────────────────────────────────────── */
 .location-space { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
 .location-space-img { aspect-ratio: 4/5; overflow: hidden; min-height: 500px; }
@@ -1512,7 +1541,6 @@ footer { background: var(--bg-warm); }
 /* ── 1024px — Tablette ───────────────────────────────────── */
 @media (max-width: 1024px) {
   /* Layout grids */
-  .classes-grid { grid-template-columns: repeat(2, 1fr); }
   .manifesto-inner { grid-template-columns: 1fr; gap: 3rem; }
   .about-inner { grid-template-columns: 1fr; }
   .about-img-wrap { aspect-ratio: 16/9; max-height: 480px; }
@@ -1530,7 +1558,6 @@ footer { background: var(--bg-warm); }
   .location-equipment-grid { grid-template-columns: repeat(4, 1fr); }
 
   /* Spacing */
-  .class-card { padding: 2rem 1.5rem; }
   .pf-expect-grid { grid-template-columns: repeat(2, 1fr); }
 
   /* Bénéfices */
@@ -1576,9 +1603,10 @@ footer { background: var(--bg-warm); }
   .stat-item { padding: 1rem 0.75rem; }
   .stat-value { font-size: 1.75rem; }
 
-  /* Classes grid */
-  .classes-grid { grid-template-columns: 1fr; }
-  .class-card { padding: 1.75rem 1.25rem; }
+  /* Disciplines — empilement mobile */
+  .disc-row, .disc-row--reverse { grid-template-columns: 1fr; gap: 1.5rem; }
+  .disc-row--reverse .disc-media { order: 0; }
+  .disc-media { aspect-ratio: 16/10; max-height: 420px; }
   .classes-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
 
   /* CTA banner */
@@ -1607,8 +1635,8 @@ footer { background: var(--bg-warm); }
   .benefice-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 2rem 1.25rem; }
   .benefice-card:last-child { border-bottom: none; }
 
-  /* Testimonials grid */
-  .testi-grid { grid-template-columns: 1fr; }
+  /* Testimonials masonry */
+  .testi-masonry { grid-template-columns: 1fr; }
   .testi-card { padding: 2rem 1.5rem; }
 
   /* Offres première fois */
@@ -1889,6 +1917,13 @@ footer { background: var(--bg-warm); }
   z-index: 0;
 }
 
+/* Accueil — démarcation nette entre les blocs (pas de fondu) :
+   #cours ivoire → #offres blanc → #temoignages crème. */
+#offres-premiere-fois::before,
+#temoignages::before {
+  display: none;
+}
+
 /* Petite ligne décorative centrée en haut de chaque section :
    marque le changement de bloc d'information sans couper le rythme. */
 #manifesto::after,
@@ -2093,42 +2128,51 @@ footer { background: var(--bg-warm); }
   line-height: 1.75;
 }
 
-/* ── TESTIMONIALS GRID ───────────────────────────────────────── */
-.testi-grid {
+/* ── TÉMOIGNAGES — grille 3 colonnes, cartes à hauteur égale ──
+   Toutes les cartes visibles d'un coup (effet de volume / preuve sociale,
+   brief V2), mais hauteurs uniformes pour un rendu net et premium.
+   grid-auto-rows: 1fr → toutes les cartes ont exactement la même taille. */
+.testi-masonry {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5px;
-  background: var(--border);
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 1.5rem;
 }
 .testi-card {
-  background: var(--bg-warm);
-  padding: 3rem 2.5rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 2rem 1.75rem;
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
-  transition: background 0.25s;
+  gap: 1.1rem;
+  transition: box-shadow 0.35s var(--ease-out), transform 0.35s var(--ease-out);
 }
-.testi-card:hover { background: var(--bg-soft); }
+.testi-card:hover {
+  box-shadow: 0 16px 36px -18px rgba(34, 53, 63, 0.22);
+  transform: translateY(-3px);
+}
 .testi-card-stars {
   color: var(--accent);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   letter-spacing: 0.18em;
   line-height: 1;
 }
 .testi-card-quote {
   font-family: var(--font-serif);
-  font-size: clamp(1.0625rem, 1.8vw, 1.375rem);
+  font-size: 1.0625rem;
   font-weight: 400;
   font-style: italic;
-  line-height: 1.6;
+  line-height: 1.65;
   color: var(--text);
-  padding-left: 1.75rem;
+  padding-left: 1.25rem;
   border-left: 2px solid var(--accent);
-  flex: 1;
+  flex: 1; /* pousse le pied de carte en bas → alignement uniforme */
 }
-.testi-card-footer { padding-left: 1.75rem; }
+/* background: transparent → annule la règle générique « footer { background } »
+   qui colorait le bas des cartes en beige. */
+.testi-card-footer { margin-top: 0.15rem; background: transparent; }
 .testi-card-name {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 700;
   color: var(--text);
   letter-spacing: 0.04em;
@@ -2144,7 +2188,7 @@ footer { background: var(--bg-warm); }
   padding-bottom: var(--sec-v);
   padding-left: var(--gutter);
   padding-right: var(--gutter);
-  background: var(--bg);
+  background: var(--white);
 }
 .opf-inner { max-width: var(--max-w); margin: 0 auto; }
 .opf-header {
@@ -2281,6 +2325,7 @@ footer { background: var(--bg-warm); }
 /* ── RESPONSIVE — nouvelles sections ────────────────────────── */
 @media (max-width: 1024px) {
   .benefices-grid { grid-template-columns: repeat(2, 1fr); }
+  .testi-masonry { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 768px) {
@@ -2293,8 +2338,8 @@ footer { background: var(--bg-warm); }
   }
   .benefice-card:last-child { border-bottom: none; }
 
-  /* Témoignages grid */
-  .testi-grid { grid-template-columns: 1fr; }
+  /* Témoignages masonry */
+  .testi-masonry { grid-template-columns: 1fr; }
   .testi-card { padding: 2rem 1.5rem; }
 
   /* Offres première fois */
