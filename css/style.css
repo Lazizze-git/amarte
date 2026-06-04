@@ -1384,6 +1384,7 @@ footer { background: var(--bg-warm); }
 
   /* Tarifs */
   .tarifs-illimite-card { flex-direction: column; align-items: flex-start; gap: 1rem; padding: 1.5rem 1.25rem; }
+  .tarifs-illimite-badge { position: static; align-self: flex-start; margin-bottom: 0.25rem; }
   .tarifs-illimite-right { text-align: left; }
   .tarifs-illimite-price { font-size: 1.625rem; }
   .tarifs-calc-tab { flex: 1 1 calc(50% - 0.25rem); padding: 0.75rem 0.5rem; min-height: 44px; }
@@ -1673,7 +1674,7 @@ footer { background: var(--bg-warm); }
 .location-equipment, .location-pricing, .location-booking,
 .contact-page-section, .contact-map-section,
 .corpo-why, .corpo-offers, .corpo-process, .corpo-cta-section {
-  padding-top: calc(var(--sec-v) + 49px);
+  padding-top: calc(var(--sec-v) + var(--sec-deco, 49px));
 }
 
 /* ── GLOFOX EMBED ────────────────────────────────────────────── */
@@ -2115,4 +2116,23 @@ footer { background: var(--bg-warm); }
   .gs-reveal, .gs-stagger > * { opacity: 1 !important; transform: none !important; }
   .gs-img-reveal .gs-img-inner { transform: none !important; }
   .testi-viewport.is-fading { opacity: 1 !important; transform: none !important; }
+}
+
+/* ── MOBILE — pensé pour le téléphone : rythme + confort de lecture ── */
+@media (max-width: 600px) {
+  /* Rythme vertical resserré (moins de vide « desktop ») */
+  :root { --sec-v: clamp(3.25rem, 9vw, 4.5rem); --sec-deco: 24px; }
+
+  /* Texte de lecture à 16px (confort) au lieu de 15/14px */
+  .disc-desc,
+  .cours-item-desc, .cours-section-desc,
+  .booking-cta-sub,
+  .tarifs-argument-sub, .tarifs-decouverte-text, .tarifs-private-text, .tarifs-app-text,
+  .pf-proof-text, .pf-calendar-text, .pf-expect-card-text,
+  .cal-app-text,
+  .location-space-desc, .location-booking-sub,
+  .corpo-why-text, .corpo-offer-desc, .corpo-step-text {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
 }
