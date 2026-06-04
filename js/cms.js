@@ -79,6 +79,17 @@
       byDay[h.jour].push(h);
     });
 
+    // Tri chronologique à l'intérieur de chaque jour, par l'heure réelle
+    // (indépendant de l'ordre Sanity / du champ jourOrdre) : un créneau
+    // ajouté se range automatiquement au bon endroit. Gère 09:30 et 9h30.
+    const toMin = (hh) => {
+      const m = /(\d{1,2})\s*[:hH]\s*(\d{2})/.exec(hh || '');
+      return m ? (+m[1]) * 60 + (+m[2]) : 9999;
+    };
+    Object.values(byDay).forEach(slots =>
+      slots.sort((a, b) => toMin(a.heure) - toMin(b.heure))
+    );
+
     const catColor = {
       yoga:     'var(--accent)',
       pilates:  'var(--text)',
