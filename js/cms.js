@@ -16,7 +16,9 @@
   const SANITY_PROJECT_ID  = 'pvvt7no0';
   const SANITY_DATASET     = 'production';
   const SANITY_API_VERSION = '2024-01-01';
-  const SANITY_CDN         = true;
+  // false = API directe (contenu toujours frais) → tes modifs publiées
+  // apparaissent immédiatement, sans attendre le cache du CDN.
+  const SANITY_CDN         = false;
 
   // Ne rien faire si le project ID n'est pas configuré
   if (SANITY_PROJECT_ID === 'VOTRE_PROJECT_ID') return;
@@ -124,20 +126,11 @@
   function renderTemoignages(temoignages) {
     if (!temoignages || temoignages.length === 0) return;
 
-    // La section témoignages est une grille masonry (.testi-masonry).
-    // On remplace les cartes statiques par le contenu du CMS.
-    const grid = document.querySelector('.testi-masonry');
-    if (!grid) return;
-
-    grid.innerHTML = temoignages.map(t => `
-        <article class="testi-card">
-          <div class="testi-card-stars" role="img" aria-label="Note 5 sur 5">★★★★★</div>
-          <blockquote class="testi-card-quote">« ${esc(t.texte)} »</blockquote>
-          <footer class="testi-card-footer">
-            <p class="testi-card-name">${esc(t.auteur)}</p>
-            ${t.detail ? `<p class="testi-card-detail">${esc(t.detail)}</p>` : ''}
-          </footer>
-        </article>`).join('');
+    // Le carrousel est piloté par main.js (window.amarteInitTesti).
+    // On le ré-initialise avec les données Sanity (textContent = sûr).
+    if (typeof window.amarteInitTesti === 'function') {
+      window.amarteInitTesti(temoignages);
+    }
   }
 
   // ── COURS (cours.html) ────────────────────────────────────────
@@ -192,36 +185,47 @@
     const packs      = tarifs.filter(t => t.type === 'pack');
     const decouverte = tarifs.find(t => t.type === 'decouverte');
 
-    // 1) ── Cartes "Abonnements illimités" ──────────────────────
-    const cards = document.querySelectorAll('.tarifs-illimite-card');
-    illimites.forEach((tarif, i) => {
-      const card = cards[i];
-      if (!card) return;
-      const set = (sel, val) => { const el = card.querySelector(sel); if (el) el.textContent = val; };
-      set('.tarifs-illimite-name', tarif.nom);
-      set('.tarifs-illimite-baseline', tarif.sousTitre || '');
-      set('.tarifs-illimite-price', `CHF ${chf(tarif.prix)}`);
-      if (tarif.prixParCours) set('.tarifs-illimite-rate', `CHF ${chf(tarif.prixParCours)} / mois`);
-      const badge = card.querySelector('.tarifs-illimite-badge');
-      if (badge) badge.style.display = tarif.recommande ? '' : 'none';
-    });
+    // 1) ── Cartes "Abonnements illimités" — génération complète ──
+    //    (on remplace tout le bloc → ajout/suppression dans Sanity reflétés)
+    const illimiteWrap = document.querySelector('.tarifs-illimite-card')?.closest('.tarifs-block-rows');
+    if (illimiteWrap && illimites.length) {
+      illimiteWrap.innerHTML = illimites.map(t => {
+        const featured = t.recommande ? ' tarifs-illimite-featured' : '';
+        const badge    = t.recommande ? `<span class="tarifs-illimite-badge">Recommandé</span>` : '';
+        const note     = t.aucunRenouvellement ? `<p class="tarifs-illimite-note">Aucun renouvellement automatique</p>` : '';
+        const rate     = t.prixParCours ? `<p class="tarifs-illimite-rate">CHF ${chf(t.prixParCours)} / mois</p>` : '';
+        return `
+          <div class="tarifs-illimite-card${featured}">
+            ${badge}
+            <div class="tarifs-illimite-left">
+              <p class="tarifs-illimite-name">${esc(t.nom)}</p>
+              <p class="tarifs-illimite-baseline">${esc(t.sousTitre || '')}</p>
+              ${note}
+            </div>
+            <div class="tarifs-illimite-right">
+              <p class="tarifs-illimite-price">CHF ${chf(t.prix)}</p>
+              ${rate}
+            </div>
+          </div>`;
+      }).join('');
+    }
 
-    // 2) ── Calculateur de rentabilité (tabs synchronisés) ──────
-    const tabs = document.querySelectorAll('#calc-plan-tabs .tarifs-calc-tab');
-    illimites.forEach((tarif, i) => {
-      const tab = tabs[i];
-      if (!tab) return;
-      tab.dataset.price = tarif.prix;
-      const span = tab.querySelector('span');
-      if (span) span.textContent = `CHF ${chf(tarif.prix)}`;
-    });
-    // Prix de référence "cours unique" pour le calcul d'économie
-    const calcEl = document.getElementById('tarifs-calculator');
-    const coursUnique = packs.find(p => /unique/i.test(p.nom)) || packs[0];
-    if (calcEl && coursUnique) calcEl.dataset.unitPrice = coursUnique.prix;
-    // Recalcule l'affichage avec les nouveaux prix
-    if (window.amarteCalc && typeof window.amarteCalc.update === 'function') {
-      window.amarteCalc.update();
+    // 2) ── Calculateur — régénère les onglets depuis les illimités ──
+    //    Le script inline de tarifs.html écoute par délégation, donc les
+    //    onglets régénérés restent cliquables.
+    const tabsWrap = document.getElementById('calc-plan-tabs');
+    if (tabsWrap && illimites.length) {
+      const moisDe = (nom) => {
+        const n = nom || '';
+        const num = (/(\d+)/.exec(n) || [])[1];
+        return /an/i.test(n) ? (num ? +num * 12 : 12) : (num ? +num : 1);
+      };
+      const labelDe = (nom) => (nom || '').replace(/illimit[ée]s?/ig, '').trim();
+      const reco = illimites.some(t => t.recommande);
+      tabsWrap.innerHTML = illimites.map((t, idx) => {
+        const active = (t.recommande || (!reco && idx === 0)) ? ' active' : '';
+        return `<button class="tarifs-calc-tab${active}" type="button" data-price="${t.prix}" data-months="${moisDe(t.nom)}">${esc(labelDe(t.nom))}<br><span>CHF ${chf(t.prix)}</span></button>`;
+      }).join('');
     }
 
     // 3) ── Pack Découverte ─────────────────────────────────────
@@ -232,18 +236,26 @@
       if (dSub && decouverte.sousTitre) dSub.textContent = decouverte.sousTitre;
     }
 
-    // 4) ── Packs de cours ──────────────────────────────────────
-    const rows = document.querySelectorAll('.tarifs-row-v2');
-    packs.forEach((pack, i) => {
-      const row = rows[i];
-      if (!row) return;
-      const nom   = row.querySelector('.tarifs-row-v2-name');
-      const sub   = row.querySelector('.tarifs-row-v2-sub');
-      const price = row.querySelector('.tarifs-row-v2-price');
-      if (nom)   nom.textContent   = pack.nom;
-      if (sub)   sub.textContent   = pack.sousTitre || '';
-      if (price) price.textContent = `CHF ${chf(pack.prix)}`;
-    });
+    // 4) ── Packs de cours — génération complète ────────────────
+    const packsWrap = document.querySelector('.tarifs-row-v2')?.closest('.tarifs-block-rows');
+    if (packsWrap && packs.length) {
+      packsWrap.innerHTML = packs.map(p => `
+        <div class="tarifs-row-v2">
+          <div class="tarifs-row-v2-left">
+            <p class="tarifs-row-v2-name">${esc(p.nom)}</p>
+            <p class="tarifs-row-v2-sub">${esc(p.sousTitre || '')}</p>
+          </div>
+          <p class="tarifs-row-v2-price">CHF ${chf(p.prix)}</p>
+        </div>`).join('');
+    }
+
+    // 5) ── Recalcul du calculateur avec les nouveaux prix ──────
+    const calcEl = document.getElementById('tarifs-calculator');
+    const coursUnique = packs.find(p => /unique/i.test(p.nom)) || packs[0];
+    if (calcEl && coursUnique) calcEl.dataset.unitPrice = coursUnique.prix;
+    if (window.amarteCalc && typeof window.amarteCalc.update === 'function') {
+      window.amarteCalc.update();
+    }
   }
 
   // ── PARAMÈTRES DU SITE (toutes les pages : footer, contacts) ──

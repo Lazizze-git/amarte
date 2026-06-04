@@ -302,6 +302,80 @@ document.querySelectorAll('.btn-pill, .btn-rect, .pf-pack-cta, .pf-hero-cta').fo
 });
 
 
+// ── TÉMOIGNAGES — carrousel (homepage) ────────────────────────
+// Contrôleur ré-initialisable : main.js l'initialise avec les données
+// statiques de secours ; cms.js le rappelle ensuite avec les données Sanity.
+window.amarteInitTesti = function (list) {
+  const root = document.getElementById('testi-carousel');
+  if (!root || !Array.isArray(list) || list.length === 0) return;
+
+  const quoteEl  = root.querySelector('.testi-quote-big');
+  const authorEl = root.querySelector('.testi-author');
+  const detailEl = root.querySelector('.testi-detail');
+  const viewport = root.querySelector('.testi-viewport');
+  const curEl    = root.querySelector('.testi-current');
+  const totEl    = root.querySelector('.testi-total');
+  const dotsEl   = root.querySelector('.testi-dots');
+  const prevBtn  = root.querySelector('.testi-prev');
+  const nextBtn  = root.querySelector('.testi-next');
+  if (!quoteEl) return;
+
+  const pad = (n) => String(n).padStart(2, '0');
+  let i = 0;
+  let timer = null;
+
+  totEl.textContent = pad(list.length);
+  dotsEl.innerHTML = list
+    .map((_, k) => `<button class="testi-dot" type="button" aria-label="Témoignage ${k + 1}"></button>`)
+    .join('');
+  const dots = Array.from(dotsEl.children);
+
+  // Un seul créneau = pas de navigation
+  const single = list.length <= 1;
+  [prevBtn, nextBtn].forEach(b => { if (b) b.style.display = single ? 'none' : ''; });
+  dotsEl.style.display = single ? 'none' : '';
+
+  function paint() {
+    const t = list[i];
+    quoteEl.textContent  = t.texte  || t.text   || '';
+    authorEl.textContent = t.auteur || t.author || '';
+    detailEl.textContent = t.detail || '';
+    curEl.textContent    = pad(i + 1);
+    dots.forEach((d, k) => d.classList.toggle('is-active', k === i));
+  }
+
+  function go(n) {
+    i = (n + list.length) % list.length;
+    viewport.classList.add('is-fading');
+    setTimeout(() => { paint(); viewport.classList.remove('is-fading'); }, 240);
+  }
+
+  function restartAuto() {
+    if (single) return;
+    clearInterval(timer);
+    timer = setInterval(() => go(i + 1), 7000);
+  }
+
+  if (prevBtn) prevBtn.onclick = () => { go(i - 1); restartAuto(); };
+  if (nextBtn) nextBtn.onclick = () => { go(i + 1); restartAuto(); };
+  dots.forEach((d, k) => { d.onclick = () => { go(k); restartAuto(); }; });
+  root.onmouseenter = () => clearInterval(timer);
+  root.onmouseleave = restartAuto;
+
+  paint();
+  restartAuto();
+};
+
+// Initialisation avec les données de secours (remplacées ensuite par Sanity)
+(function () {
+  const dataEl = document.getElementById('testi-data');
+  if (!dataEl) return;
+  try {
+    const list = JSON.parse(dataEl.textContent);
+    window.amarteInitTesti(list);
+  } catch (e) { /* on garde le 1er témoignage statique */ }
+})();
+
 // ── CONTACT FORMS ─────────────────────────────────────────────
 document.querySelectorAll('.contact-form').forEach(form => {
   form.addEventListener('submit', function (e) {

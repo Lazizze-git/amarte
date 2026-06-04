@@ -384,40 +384,38 @@
         <p class="section-label">Témoignages</p>
         <h2 class="testi-title">Ce qu'ils disent <em>d'Amarte.</em></h2>
       </div>
-      <div class="testi-masonry">
-        <article class="testi-card">
-          <div class="testi-card-stars" role="img" aria-label="Note 5 sur 5">★★★★★</div>
-          <blockquote class="testi-card-quote">« Une expérience fantastique. L'accueil est chaleureux, l'espace est spacieux et les installations sont entièrement neuves. Je me sens vraiment chez moi. »</blockquote>
-          <footer class="testi-card-footer">
-            <p class="testi-card-name">Sophie M.</p>
-            <p class="testi-card-detail">Membre depuis 6 mois · Yoga Flow</p>
-          </footer>
-        </article>
-        <article class="testi-card">
-          <div class="testi-card-stars" role="img" aria-label="Note 5 sur 5">★★★★★</div>
-          <blockquote class="testi-card-quote">« J'avais peur de ne pas être au niveau. Mais les enseignants proposent toujours des adaptations. Pour la première fois, j'ai trouvé un cours vraiment accessible. »</blockquote>
-          <footer class="testi-card-footer">
-            <p class="testi-card-name">Laurent D.</p>
-            <p class="testi-card-detail">Membre depuis 3 mois · Pilates</p>
-          </footer>
-        </article>
-        <article class="testi-card">
-          <div class="testi-card-stars" role="img" aria-label="Note 5 sur 5">★★★★★</div>
-          <blockquote class="testi-card-quote">« Ce que j'apprécie chez Amarte, c'est l'absence de compétition. On vient pour soi, pas pour performer. Cette ambiance est rare. »</blockquote>
-          <footer class="testi-card-footer">
-            <p class="testi-card-name">Nathalie R.</p>
-            <p class="testi-card-detail">Membre depuis 1 an · Tous cours</p>
-          </footer>
-        </article>
-        <article class="testi-card">
-          <div class="testi-card-stars" role="img" aria-label="Note 5 sur 5">★★★★★</div>
-          <blockquote class="testi-card-quote">« J'ai commencé avec le pack Découverte. Deux semaines plus tard, j'ai pris l'abonnement mensuel. Amarte m'a redonné le goût du mouvement. »</blockquote>
-          <footer class="testi-card-footer">
-            <p class="testi-card-name">Isabelle C.</p>
-            <p class="testi-card-detail">Membre depuis 8 mois · Yoga &amp; Bien-être</p>
-          </footer>
-        </article>
+      <div class="testi-carousel" id="testi-carousel">
+        <p class="testi-counter">
+          <span class="testi-current">01</span>
+          <span class="testi-counter-sep"></span>
+          <span class="testi-total">04</span>
+        </p>
+
+        <div class="testi-viewport">
+          <div class="testi-stars" aria-hidden="true">★★★★★</div>
+          <blockquote class="testi-quote-big">Une expérience fantastique. L'accueil est chaleureux, l'espace est spacieux et les installations sont entièrement neuves. Je me sens vraiment chez moi.</blockquote>
+          <p class="testi-author">Sophie M.</p>
+          <p class="testi-detail">Membre depuis 6 mois · Yoga Flow</p>
+        </div>
+
+        <div class="testi-controls">
+          <button class="testi-arrow testi-prev" type="button" aria-label="Témoignage précédent">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="testi-dots"></div>
+          <button class="testi-arrow testi-next" type="button" aria-label="Témoignage suivant">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
       </div>
+
+      <!-- Données de secours (remplacées par Sanity au runtime) -->
+      <script type="application/json" id="testi-data">[
+        {"texte":"Une expérience fantastique. L'accueil est chaleureux, l'espace est spacieux et les installations sont entièrement neuves. Je me sens vraiment chez moi.","auteur":"Sophie M.","detail":"Membre depuis 6 mois · Yoga Flow"},
+        {"texte":"J'avais peur de ne pas être au niveau. Mais les enseignants proposent toujours des adaptations. Pour la première fois, j'ai trouvé un cours vraiment accessible.","auteur":"Laurent D.","detail":"Membre depuis 3 mois · Pilates"},
+        {"texte":"Ce que j'apprécie chez Amarte, c'est l'absence de compétition. On vient pour soi, pas pour performer. Cette ambiance est rare.","auteur":"Nathalie R.","detail":"Membre depuis 1 an · Tous cours"},
+        {"texte":"J'ai commencé avec le pack Découverte. Deux semaines plus tard, j'ai pris l'abonnement mensuel. Amarte m'a redonné le goût du mouvement.","auteur":"Isabelle C.","detail":"Membre depuis 8 mois · Yoga & Bien-être"}
+      ]</script>
     </div>
   </section>
 

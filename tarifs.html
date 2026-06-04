@@ -450,14 +450,18 @@
       : '—';
   }
 
-  // Onglets de plan
-  document.querySelectorAll('.tarifs-calc-tab').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.tarifs-calc-tab').forEach(b => b.classList.remove('active'));
+  // Onglets de plan — délégation d'événement sur le conteneur, pour que
+  // les onglets régénérés par le CMS (cms.js) restent cliquables.
+  const tabsWrap = document.getElementById('calc-plan-tabs');
+  if (tabsWrap) {
+    tabsWrap.addEventListener('click', (e) => {
+      const btn = e.target.closest('.tarifs-calc-tab');
+      if (!btn) return;
+      tabsWrap.querySelectorAll('.tarifs-calc-tab').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       update();
     });
-  });
+  }
 
   // Curseur de fréquence
   if (freqSlider) {

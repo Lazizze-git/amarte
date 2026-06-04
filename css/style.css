@@ -1635,10 +1635,6 @@ footer { background: var(--bg-warm); }
   .benefice-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 2rem 1.25rem; }
   .benefice-card:last-child { border-bottom: none; }
 
-  /* Testimonials masonry */
-  .testi-masonry { grid-template-columns: 1fr; }
-  .testi-card { padding: 2rem 1.5rem; }
-
   /* Offres première fois */
   .opf-grid { grid-template-columns: 1fr; }
   .opf-card { padding: 2rem 1.5rem; }
@@ -2128,60 +2124,110 @@ footer { background: var(--bg-warm); }
   line-height: 1.75;
 }
 
-/* ── TÉMOIGNAGES — grille 3 colonnes, cartes à hauteur égale ──
-   Toutes les cartes visibles d'un coup (effet de volume / preuve sociale,
-   brief V2), mais hauteurs uniformes pour un rendu net et premium.
-   grid-auto-rows: 1fr → toutes les cartes ont exactement la même taille. */
-.testi-masonry {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: 1fr;
-  gap: 1.5rem;
+/* ── TÉMOIGNAGES — carrousel épuré (un avis à la fois) ──────────
+   Rendu sobre et premium : compteur fin, citation serif centrée,
+   flèches rondes, points de navigation. Piloté par Sanity. */
+.testi-carousel {
+  max-width: 54rem;
+  margin: 0 auto;
+  text-align: center;
 }
-.testi-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  padding: 2rem 1.75rem;
+.testi-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 2.75rem;
+}
+.testi-counter .testi-current { color: var(--accent-dk); font-weight: 600; }
+.testi-counter-sep {
+  width: 2.25rem; height: 1px;
+  background: var(--border);
+  display: inline-block;
+}
+.testi-viewport {
+  min-height: 15rem;
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
-  transition: box-shadow 0.35s var(--ease-out), transform 0.35s var(--ease-out);
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.28s var(--ease-out), transform 0.28s var(--ease-out);
 }
-.testi-card:hover {
-  box-shadow: 0 16px 36px -18px rgba(34, 53, 63, 0.22);
-  transform: translateY(-3px);
-}
-.testi-card-stars {
+.testi-viewport.is-fading { opacity: 0; transform: translateY(10px); }
+.testi-stars {
   color: var(--accent);
-  font-size: 0.85rem;
-  letter-spacing: 0.18em;
-  line-height: 1;
+  letter-spacing: 0.32em;
+  font-size: 0.78rem;
+  margin-bottom: 1.85rem;
 }
-.testi-card-quote {
+.testi-quote-big {
   font-family: var(--font-serif);
-  font-size: 1.0625rem;
-  font-weight: 400;
   font-style: italic;
-  line-height: 1.65;
+  font-weight: 400;
+  font-size: clamp(1.3rem, 2.5vw, 1.95rem);
+  line-height: 1.5;
   color: var(--text);
-  padding-left: 1.25rem;
-  border-left: 2px solid var(--accent);
-  flex: 1; /* pousse le pied de carte en bas → alignement uniforme */
+  max-width: 48rem;
 }
-/* background: transparent → annule la règle générique « footer { background } »
-   qui colorait le bas des cartes en beige. */
-.testi-card-footer { margin-top: 0.15rem; background: transparent; }
-.testi-card-name {
-  font-size: 0.8125rem;
-  font-weight: 700;
+.testi-quote-big::before { content: '« '; color: var(--accent); }
+.testi-quote-big::after  { content: ' »'; color: var(--accent); }
+.testi-author {
+  margin-top: 2.1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
   color: var(--text);
-  letter-spacing: 0.04em;
 }
-.testi-card-detail {
-  font-size: 0.75rem;
+.testi-detail {
+  margin-top: 0.45rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
-  margin-top: 0.25rem;
 }
+.testi-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+.testi-arrow {
+  width: 3rem; height: 3rem;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.3s var(--ease-out), color 0.3s var(--ease-out),
+              border-color 0.3s var(--ease-out), transform 0.3s var(--ease-out);
+}
+.testi-arrow:hover {
+  background: var(--accent-blue);
+  border-color: var(--accent-blue);
+  color: #fff;
+  transform: translateY(-2px);
+}
+.testi-arrow svg { width: 1.15rem; height: 1.15rem; }
+.testi-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 0.5rem;
+}
+.testi-dot {
+  width: 7px; height: 7px;
+  padding: 0; border: none;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+  transition: background 0.3s var(--ease-out), transform 0.3s var(--ease-out);
+}
+.testi-dot.is-active { background: var(--accent); transform: scale(1.35); }
 
 /* ── OFFRES PREMIÈRE FOIS (homepage) ─────────────────────────── */
 #offres-premiere-fois {
@@ -2325,7 +2371,6 @@ footer { background: var(--bg-warm); }
 /* ── RESPONSIVE — nouvelles sections ────────────────────────── */
 @media (max-width: 1024px) {
   .benefices-grid { grid-template-columns: repeat(2, 1fr); }
-  .testi-masonry { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 768px) {
@@ -2338,9 +2383,10 @@ footer { background: var(--bg-warm); }
   }
   .benefice-card:last-child { border-bottom: none; }
 
-  /* Témoignages masonry */
-  .testi-masonry { grid-template-columns: 1fr; }
-  .testi-card { padding: 2rem 1.5rem; }
+  /* Témoignages — carrousel compact sur mobile */
+  .testi-arrow { width: 2.75rem; height: 2.75rem; }
+  .testi-controls { gap: 1.1rem; margin-top: 2.25rem; }
+  .testi-counter { margin-bottom: 2rem; }
 
   /* Offres première fois */
   .opf-grid { grid-template-columns: 1fr; }
