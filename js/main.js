@@ -1,5 +1,12 @@
 gsap.registerPlugin(ScrollTrigger);
 
+// Respecte la préférence système « réduire les animations » :
+// on accélère fortement la timeline → les éléments arrivent à leur état
+// final quasi instantanément (le contenu reste visible, sans mouvement).
+if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  gsap.globalTimeline.timeScale(200);
+}
+
 /* ============================================================
    AMARTE — Animations
    Inspiré Core Atelier : reveals variés, parallaxe, counters
