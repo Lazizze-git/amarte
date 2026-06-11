@@ -3,6 +3,22 @@
    Inspired by Core Atelier · Amarte brand palette
    ========================================================== */
 
+/* ── FONTS ───────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Romie Trial';
+  src: url('../public/fonts/RomieTrial-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Romie Trial';
+  src: url('../public/fonts/RomieTrial-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ── TOKENS ─────────────────────────────────────────────── */
 :root {
   --bg:        #f7f3ee;
@@ -21,8 +37,8 @@
   --border:    rgba(168,149,126,0.22);
   --border-md: rgba(168,149,126,0.4);
 
-  --font-serif: 'Cormorant Garamond', Georgia, serif;
-  --font-sans:  'Nunito Sans', system-ui, sans-serif;
+  --font-serif: 'Romie Trial', Georgia, serif;
+  --font-sans:  'Nunito', system-ui, sans-serif;
 
   --sec-v: clamp(5rem, 10vw, 8rem);
   --max-w: 1240px;
@@ -124,7 +140,6 @@ h1, h2, h3,
 
 /* Menu en clair par-dessus un hero bleu (tant qu'on n'a pas défilé).
    Une fois défilé, le fond ivoire reprend → le menu redevient foncé. */
-body.hero-blue #nav-header:not(.scrolled) .nav-logo-main { color: var(--white); }
 body.hero-blue #nav-header:not(.scrolled) .nav-links a { color: rgba(255,255,255,0.78); }
 body.hero-blue #nav-header:not(.scrolled) .nav-links a:hover,
 body.hero-blue #nav-header:not(.scrolled) .nav-links a[aria-current="page"] { color: var(--white); }
@@ -134,8 +149,12 @@ body.hero-blue #nav-header:not(.scrolled) .nav-cta {
 }
 body.hero-blue #nav-header:not(.scrolled) .nav-cta:hover { background: rgba(255,255,255,0.88); }
 body.hero-blue #nav-header:not(.scrolled) .burger span { background: var(--white); }
-/* Menu mobile ouvert (fond ivoire) → logo et burger redeviennent foncés */
-body.hero-blue:has(.burger.open) #nav-header:not(.scrolled) .nav-logo-main { color: var(--text); }
+/* Logo swap: logo-dark masqué sur fond sombre, logo-light visible */
+body.hero-blue #nav-header:not(.scrolled) .nav-logo-img-dark { display: none; }
+body.hero-blue #nav-header:not(.scrolled) .nav-logo-img-light { display: block; }
+/* Menu mobile ouvert (fond ivoire) → logos redeviennent normaux */
+body.hero-blue:has(.burger.open) #nav-header:not(.scrolled) .nav-logo-img-dark { display: block; }
+body.hero-blue:has(.burger.open) #nav-header:not(.scrolled) .nav-logo-img-light { display: none; }
 body.hero-blue:has(.burger.open) #nav-header:not(.scrolled) .burger span { background: var(--text); }
 
 .nav-inner {
@@ -149,28 +168,17 @@ body.hero-blue:has(.burger.open) #nav-header:not(.scrolled) .burger span { backg
 /* Logo */
 .nav-logo {
   display: flex;
-  flex-direction: column;
-  line-height: 1;
-  gap: 0.15rem;
   justify-self: start;
   align-self: center;
   grid-column: 1;
 }
-.nav-logo-main {
-  font-family: var(--font-serif);
-  font-size: 1.375rem;
-  font-weight: 400;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--text);
+.nav-logo-img-dark,
+.nav-logo-img-light {
+  height: 48px;
+  width: auto;
+  display: block;
 }
-.nav-logo-sub {
-  font-size: 0.625rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--accent);
-  font-weight: 600;
-}
+.nav-logo-img-light { display: none; }
 
 /* Desktop nav links */
 .nav-links {
