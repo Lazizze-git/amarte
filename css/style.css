@@ -129,12 +129,23 @@ h1, h2, h3,
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 900;
-  transition: background 0.35s ease, box-shadow 0.35s ease;
-  background: transparent;
+  transition: background 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  /* Verre dépoli par défaut (au-dessus de la photo) — page d'accueil, texte foncé */
+  background: rgba(247,243,238,0.34);
+  backdrop-filter: blur(16px) saturate(135%);
+  -webkit-backdrop-filter: blur(16px) saturate(135%);
+  border-bottom: 1px solid rgba(255,255,255,0.28);
+}
+/* Verre dépoli teinté foncé pour les pages à hero sombre (texte blanc) */
+body.hero-blue #nav-header:not(.scrolled) {
+  background: rgba(34,53,63,0.28);
+  border-bottom: 1px solid rgba(255,255,255,0.16);
 }
 #nav-header.scrolled {
   background: rgba(247,243,238,0.96);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
   box-shadow: 0 1px 0 var(--border);
 }
 
@@ -469,9 +480,9 @@ body.hero-blue:has(.burger.open) #nav-header:not(.scrolled) .burger span { backg
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(34,53,63,0.08) 0%,
-    rgba(34,53,63,0.35) 45%,
-    rgba(34,53,63,0.72) 100%
+    rgba(34,53,63,0.04) 0%,
+    rgba(34,53,63,0.16) 45%,
+    rgba(34,53,63,0.42) 100%
   );
 }
 .hero-content {
@@ -491,14 +502,25 @@ body.hero-blue:has(.burger.open) #nav-header:not(.scrolled) .burger span { backg
   margin-bottom: 1.5rem;
   display: block;
 }
+.hero-glass {
+  display: block;
+  max-width: 40rem;
+  padding: clamp(1.6rem, 3.4vw, 2.75rem) clamp(1.6rem, 3.4vw, 2.9rem);
+  background: rgba(34,53,63,0.26);
+  backdrop-filter: blur(18px) saturate(135%);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 24px;
+  box-shadow: 0 18px 50px rgba(20,30,36,0.28);
+}
 .hero-title {
   font-family: var(--font-serif);
-  font-size: clamp(3rem, 7.5vw, 7.5rem);
+  font-size: clamp(2.6rem, 6vw, 5.5rem);
   font-weight: 400;
-  line-height: 0.95;
+  line-height: 0.96;
   color: var(--white);
-  margin-bottom: 1.75rem;
-  text-shadow: 0 2px 32px rgba(0,0,0,0.2);
+  margin-bottom: 1.35rem;
+  text-shadow: 0 2px 18px rgba(0,0,0,0.18);
 }
 .hero-title em {
   font-style: italic;
@@ -643,7 +665,7 @@ body.hero-blue:has(.burger.open) #nav-header:not(.scrolled) .burger span { backg
 .cta-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(247,243,238,0.88) 0%, rgba(247,243,238,0.45) 100%);
+  background: linear-gradient(135deg, rgba(247,243,238,0.42) 0%, rgba(247,243,238,0.12) 100%);
 }
 .cta-content {
   position: relative;
@@ -652,6 +674,17 @@ body.hero-blue:has(.burger.open) #nav-header:not(.scrolled) .burger span { backg
   width: 100%;
   margin: 0 auto;
   padding: 0 var(--gutter);
+}
+.cta-glass {
+  display: block;
+  max-width: 40rem;
+  padding: clamp(1.6rem, 3.4vw, 2.75rem) clamp(1.6rem, 3.4vw, 2.9rem);
+  background: rgba(247,243,238,0.42);
+  backdrop-filter: blur(18px) saturate(135%);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  border: 1px solid rgba(255,255,255,0.55);
+  border-radius: 24px;
+  box-shadow: 0 18px 50px rgba(20,30,36,0.16);
 }
 .cta-label { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-dk); margin-bottom: 1.25rem; display: block; }
 .cta-title { font-family: var(--font-serif); font-size: clamp(2.25rem, 5vw, 4rem); font-weight: 400; line-height: 1.08; color: var(--text); margin-bottom: 2rem; text-shadow: 0 2px 24px rgba(247,243,238,0.5); }
@@ -835,26 +868,31 @@ body.hero-blue:has(.burger.open) #nav-header:not(.scrolled) .burger span { backg
   background: var(--accent-blue);
 }
 .page-hero-inner { position: relative; z-index: 0; max-width: var(--max-w); margin: 0 auto; }
-/* Silhouette décorative (yoga, rose) — à droite du titre, derrière le texte.
-   Ancrée sur le bloc contenu pour rester bornée à l'écran. */
+/* Titre + silhouette décorative côte à côte, la silhouette alignée sur le bas du titre.
+   Disposition flex → jamais de chevauchement avec le texte. */
+.page-hero-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(1rem, 4vw, 3rem);
+  margin-bottom: 1.5rem;
+}
+.page-hero-head-text { min-width: 0; }
+.page-hero-head .page-hero-title { margin-bottom: 0; }
 .page-hero-figure {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  height: clamp(180px, 26vw, 300px);
+  flex: 0 0 auto;
+  align-self: flex-end;
+  height: clamp(120px, 16vw, 200px);
   width: auto;
   pointer-events: none;
   user-select: none;
-  z-index: -1;
 }
 @media (max-width: 860px) {
-  .page-hero-figure {
-    height: clamp(88px, 22vw, 116px);
-    bottom: auto;
-    top: 2.75rem;
-    right: clamp(0.75rem, 4vw, 1.75rem);
-    opacity: 0.95;
-  }
+  .page-hero-figure { height: clamp(72px, 14vw, 104px); opacity: 0.95; }
+  .page-hero-head { gap: clamp(0.4rem, 2vw, 0.9rem); margin-bottom: 1.25rem; }
+}
+@media (max-width: 560px) {
+  .page-hero-figure { height: clamp(54px, 15vw, 80px); }
 }
 .page-hero-breadcrumb { display: flex; gap: 0.5rem; align-items: center; font-size: 0.75rem; color: rgba(255,255,255,0.55); margin-bottom: 1.5rem; }
 .page-hero-breadcrumb a { transition: color 0.2s; }
@@ -1055,26 +1093,21 @@ body.hero-blue:has(.burger.open) #nav-header:not(.scrolled) .burger span { backg
   padding: clamp(7rem, 14vw, 11rem) var(--gutter) clamp(2.5rem, 5vw, 4rem);
 }
 .cours-hero-content { position: relative; z-index: 0; max-width: var(--max-w); margin: 0 auto; }
-/* Illustration décorative — posture du guerrier, à droite du titre.
-   Ancrée sur le bloc contenu (borné à l'écran) et placée derrière le texte. */
+/* Illustration décorative — posture du guerrier, alignée sur le bas du titre. */
 .cours-hero-figure {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  height: clamp(180px, 26vw, 300px);
+  flex: 0 0 auto;
+  align-self: flex-end;
+  height: clamp(120px, 16vw, 200px);
   width: auto;
   pointer-events: none;
   user-select: none;
-  z-index: -1;
 }
+.page-hero-head .cours-hero-title { margin-bottom: 0; }
 @media (max-width: 860px) {
-  .cours-hero-figure {
-    height: clamp(88px, 22vw, 116px);
-    bottom: auto;
-    top: 1.25rem;
-    right: clamp(0.75rem, 4vw, 1.75rem);
-    opacity: 0.95;
-  }
+  .cours-hero-figure { height: clamp(72px, 14vw, 104px); opacity: 0.95; }
+}
+@media (max-width: 560px) {
+  .cours-hero-figure { height: clamp(54px, 15vw, 80px); }
 }
 .cours-hero-content .page-hero-breadcrumb { color: rgba(255,255,255,0.55); margin-bottom: 1.25rem; }
 .cours-hero-content .page-hero-breadcrumb a { color: rgba(255,255,255,0.55); transition: color 0.2s; }
@@ -1392,9 +1425,10 @@ footer { background: var(--bg-warm); }
 
   /* Hero — homepage */
   #hero { min-height: 560px; padding-bottom: clamp(2.5rem, 6vw, 4rem); }
-  .hero-title { font-size: clamp(2.4rem, 10vw, 4.5rem); }
-  .hero-sub { font-size: 0.9375rem; margin-bottom: 2rem; }
-  .hero-btns { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+  .hero-glass { padding: 1.4rem 1.4rem 1.6rem; border-radius: 20px; }
+  .hero-title { font-size: clamp(2.2rem, 9.5vw, 4rem); }
+  .hero-sub { font-size: 0.9375rem; margin-bottom: 1.75rem; }
+  .hero-btns { flex-direction: column; align-items: stretch; gap: 0.75rem; }
   .hero-btn { width: 100%; justify-content: center; text-align: center; }
   .hero-btn, .btn-dark, .btn-outline, .btn-accent, .btn-light, .btn-ghost-light, .btn-rect { min-height: 44px; }
 
@@ -1412,8 +1446,13 @@ footer { background: var(--bg-warm); }
   .classes-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
 
   /* CTA banner */
-  #cta-banner { height: clamp(300px, 65vw, 460px); }
-  .cta-title { font-size: clamp(1.875rem, 7vw, 3rem); }
+  #cta-banner { height: clamp(420px, 105vw, 540px); }
+  .cta-overlay { background: linear-gradient(135deg, rgba(247,243,238,0.18) 0%, rgba(247,243,238,0.02) 100%); }
+  .cta-glass { max-width: 20rem; padding: 1rem 1.1rem 1.15rem; border-radius: 18px; }
+  .cta-label { margin-bottom: 0.55rem; }
+  .cta-title { font-size: clamp(1.4rem, 5.6vw, 2rem); margin-bottom: 1rem; }
+  .cta-btns { flex-direction: column; align-items: stretch; gap: 0.55rem; }
+  .cta-btn { justify-content: center; text-align: center; padding: 0.65rem 1.4rem; }
 
   /* Testimonials */
   .testi-header { flex-direction: column; gap: 1.5rem; }
@@ -1793,23 +1832,9 @@ footer { background: var(--bg-warm); }
   max-width: var(--max-w);
   margin: 0 auto;
 }
-/* Silhouette décorative (rose) dans les blocs bleus — en haut à droite,
-   dans la bande d'en-tête, derrière le contenu. */
-.block-figure {
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: clamp(120px, 16vw, 200px);
-  width: auto;
-  z-index: -1;
-  pointer-events: none;
-  user-select: none;
-}
-.defi-offer .block-figure { top: auto; bottom: 0; left: 0; right: auto; height: clamp(120px, 15vw, 200px); opacity: 0.9; }
-@media (max-width: 860px) {
-  .block-figure { height: clamp(84px, 20vw, 120px); opacity: 0.95; }
-  .defi-offer .block-figure { top: 0; bottom: auto; left: auto; right: 0; }
-}
+/* Personnage décoratif retiré sur l'accueil et la page Première fois
+   (block-figure n'est utilisé que sur ces deux pages). */
+.block-figure { display: none; }
 .benefices-header {
   margin-bottom: clamp(2.5rem, 5vw, 4rem);
 }
