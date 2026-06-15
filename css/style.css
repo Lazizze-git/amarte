@@ -1419,9 +1419,12 @@ footer { background: var(--bg-warm); }
   /* Éléments à masquer sur mobile */
   .hidden-sm { display: none !important; }
 
-  /* Nav */
+  /* Nav — barre plus fine sur mobile */
   .nav-links { display: none; }
   .burger { display: flex; min-width: 44px; min-height: 44px; align-items: center; justify-content: flex-end; }
+  .nav-inner { padding: 0.875rem var(--gutter); }
+  .nav-logo-img-dark,
+  .nav-logo-img-light { height: 38px; }
 
   /* Hero — homepage */
   #hero { min-height: 560px; padding-bottom: clamp(2.5rem, 6vw, 4rem); }
@@ -1654,7 +1657,7 @@ footer { background: var(--bg-warm); }
   .tarifs-calc-tab span { font-size: 0.875rem; }
   .pf-pack-price { font-size: clamp(2.5rem, 12vw, 3.5rem); }
   .corps-stat-val { font-size: 2.25rem; }
-  .nav-inner { padding: 1rem var(--gutter); }
+  .nav-inner { padding: 0.75rem var(--gutter); }
 }
 
 /* ── Landscape — téléphone horizontal ───────────────────── */
