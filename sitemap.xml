@@ -58,4 +58,11 @@
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr-CH" href="https://amarte.ch/contact.html" />
   </url>
+  <url>
+    <loc>https://amarte.ch/apropos.html</loc>
+    <lastmod>2026-06-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.55</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://amarte.ch/apropos.html" />
+  </url>
 </urlset>

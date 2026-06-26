@@ -79,39 +79,54 @@
 <!-- ===== NAVIGATION ===== -->
 <header id="nav-header">
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo">
+    <span class="nav-side nav-side--left" aria-hidden="true"></span>
+    <a href="index.html" class="nav-logo" aria-label="Amarte Studio — accueil">
       <img src="public/images/amarte_logo_dark.svg" alt="Amarte Studio" class="nav-logo-img-dark" /><img src="public/images/amarte_logo_light.svg" alt="Amarte Studio" class="nav-logo-img-light" />
     </a>
-    <nav class="nav-links" aria-label="Navigation principale">
-      <a href="premiere-fois.html" class="nav-link">Première fois</a>
-      <a href="cours.html" class="nav-link">Cours</a>
-      <a href="calendrier.html" class="nav-link">Calendrier</a>
-      <a href="tarifs.html" class="nav-link">Tarifs</a>
-      <a href="location.html" class="nav-link">Location</a>
-      <a href="corpo.html" class="nav-link">Corpo</a>
-      <a href="contact.html" class="nav-link" aria-current="page">Contact</a>
-    </nav>
-    <button class="burger" id="burger-btn" aria-label="Menu">
-      <span class="b1"></span><span class="b2"></span><span class="b3"></span>
-    </button>
+    <div class="nav-side nav-side--right">
+      <a class="nav-login" href="https://app.glofox.com/portal/#/branch/66cca39faa7ce5d29003a6e3/memberships?login" target="_blank" rel="noopener" data-cta="nav-login">Se connecter</a>
+      <button class="burger" id="burger-btn" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-menu">
+        <span class="b1"></span>
+        <span class="b2"></span>
+        <span class="b3"></span>
+      </button>
+    </div>
   </div>
 </header>
 
 <div id="nav-menu">
-  
-  <nav class="nav-menu-links">
-    <a href="index.html" class="nav-menu-link"><span class="nav-menu-num">01</span><span class="nav-menu-label-wrap">Accueil</span><span class="nav-menu-arrow">→</span></a>
-    <a href="premiere-fois.html" class="nav-menu-link"><span class="nav-menu-num">02</span><span class="nav-menu-label-wrap">Première fois</span><span class="nav-menu-arrow">→</span></a>
-    <a href="cours.html" class="nav-menu-link"><span class="nav-menu-num">03</span><span class="nav-menu-label-wrap">Cours</span><span class="nav-menu-arrow">→</span></a>
-    <a href="calendrier.html" class="nav-menu-link"><span class="nav-menu-num">04</span><span class="nav-menu-label-wrap">Calendrier</span><span class="nav-menu-arrow">→</span></a>
-    <a href="tarifs.html" class="nav-menu-link"><span class="nav-menu-num">05</span><span class="nav-menu-label-wrap">Tarifs</span><span class="nav-menu-arrow">→</span></a>
-    <a href="location.html" class="nav-menu-link"><span class="nav-menu-num">06</span><span class="nav-menu-label-wrap">Location</span><span class="nav-menu-arrow">→</span></a>
-    <a href="corpo.html" class="nav-menu-link"><span class="nav-menu-num">07</span><span class="nav-menu-label-wrap">Corpo B2B</span><span class="nav-menu-arrow">→</span></a>
-    <a href="contact.html" class="nav-menu-link" aria-current="page"><span class="nav-menu-num">08</span><span class="nav-menu-label-wrap">Contact</span><span class="nav-menu-arrow">→</span></a>
+  <nav class="nav-menu-links" aria-label="Navigation principale">
+    <a href="index.html" class="nav-menu-link">
+      <span class="nav-menu-label-wrap">Accueil</span>
+      <span class="nav-menu-arrow">→</span>
+    </a>
+    <a href="premiere-fois.html" class="nav-menu-link">
+      <span class="nav-menu-label-wrap">Première fois</span>
+      <span class="nav-menu-arrow">→</span>
+    </a>
+    <a href="cours.html" class="nav-menu-link">
+      <span class="nav-menu-label-wrap">Cours</span>
+      <span class="nav-menu-arrow">→</span>
+    </a>
+    <a href="calendrier.html" class="nav-menu-link">
+      <span class="nav-menu-label-wrap">Calendrier</span>
+      <span class="nav-menu-arrow">→</span>
+    </a>
+    <a href="tarifs.html" class="nav-menu-link">
+      <span class="nav-menu-label-wrap">Tarifs</span>
+      <span class="nav-menu-arrow">→</span>
+    </a>
+    <a href="contact.html" class="nav-menu-link" aria-current="page">
+      <span class="nav-menu-label-wrap">Contact</span>
+      <span class="nav-menu-arrow">→</span>
+    </a>
   </nav>
   <div class="nav-menu-bottom">
-    <a href="tarifs.html" class="nav-menu-cta">Voir les tarifs</a>
-    <span class="nav-menu-contact">+41 79 462 17 47 · info@amarte.ch</span>
+    <a href="https://app.glofox.com/portal/#/branch/66cca39faa7ce5d29003a6e3/memberships?login" target="_blank" rel="noopener" class="nav-menu-cta" data-cta="menu-login">Se connecter</a>
+    <div class="nav-menu-contact-row">
+      <a href="https://wa.me/41794621747" target="_blank" rel="noopener">WhatsApp · +41 79 462 17 47</a>
+      <a href="mailto:info@amarte.ch">info@amarte.ch</a>
+    </div>
   </div>
 </div>
 
@@ -251,34 +266,47 @@
 <footer>
   <div class="footer-main">
     <div class="footer-inner">
-      <p class="footer-tagline">Bouger.<br>Respirer.<br><em>S'épanouir.</em></p>
+      <p class="footer-tagline">Bouger. Respirer. <em>S'épanouir.</em></p>
       <div class="footer-links">
-        <ul class="footer-col">
-          <li><a href="premiere-fois.html">Première fois</a></li>
-          <li><a href="cours.html">Cours</a></li>
-          <li><a href="calendrier.html">Calendrier</a></li>
-          <li><a href="tarifs.html">Tarifs</a></li>
-          <li><a href="location.html">Location</a></li>
-        </ul>
-        <ul class="footer-col">
-          <li><a href="corpo.html">Corpo B2B</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          <li><a href="https://instagram.com/amarte_epalinges" target="_blank" rel="noopener">Instagram</a></li>
-          <li><a href="https://facebook.com/AmarteEpalinges" target="_blank" rel="noopener">Facebook</a></li>
-        </ul>
-        <ul class="footer-col">
-          <li><a href="tarifs.html">Voir les tarifs</a></li>
-          <li><a href="mailto:info@amarte.ch">info@amarte.ch</a></li>
-          <li><a href="tel:+41794621747">+41 79 462 17 47</a></li>
-        </ul>
+        <div class="footer-col">
+          <p class="footer-col-head">Navigation</p>
+          <ul>
+            <li><a href="premiere-fois.html">Première fois</a></li>
+            <li><a href="cours.html">Cours</a></li>
+            <li><a href="tarifs.html">Tarifs</a></li>
+            <li><a href="calendrier.html">Réserver</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <p class="footer-col-head">Le studio</p>
+          <ul>
+            <li><a href="apropos.html">À propos</a></li>
+            <li><a href="location.html">Location</a></li>
+            <li><a href="corpo.html">Corpo B2B</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <p class="footer-col-head">Contact</p>
+          <ul>
+            <li><a href="https://maps.google.com/?q=Route+du+Village+1A+1066+Épalinges" target="_blank" rel="noopener">Localisation</a></li>
+            <li><a href="https://wa.me/41794621747" target="_blank" rel="noopener">WhatsApp</a></li>
+            <li><a href="mailto:info@amarte.ch">info@amarte.ch</a></li>
+            <li><a href="https://instagram.com/amarte_epalinges" target="_blank" rel="noopener">Instagram</a> · <a href="https://facebook.com/AmarteEpalinges" target="_blank" rel="noopener">Facebook</a></li>
+            <li><span class="footer-badge">Certifié QualiCert</span></li>
+          </ul>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="footer-bar">
-    <p class="footer-copy">© <span class="footer-year"></span> Amarte. Tous droits réservés.</p>
-    <p class="footer-addr">Route du Village 1A, 2ème étage · 1066 Épalinges</p>
+    <div class="footer-util">
+      <a href="#">Télécharger l'application</a>
+      <a href="#">Politique de confidentialité</a>
+    </div>
   </div>
   <div class="footer-deco"><p class="footer-deco-text">amarte</p></div>
+  <div class="footer-bar">
+    <p class="footer-copy">© <span class="footer-year"></span> Amarte — Tous droits réservés.</p>
+  </div>
 </footer>
 
 <script src="js/main.js"></script>

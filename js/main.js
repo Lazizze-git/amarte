@@ -42,6 +42,8 @@ if (burger && menu) {
     menuOpen = open;
     burger.classList.toggle('open', open);
     menu.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', String(open));
+    burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
     document.body.style.overflow = open ? 'hidden' : '';
     if (open) {
       gsap.fromTo(menu.querySelectorAll('.nav-menu-link'),
@@ -388,4 +390,25 @@ window.addEventListener('scroll', () => {
   progressBar.style.width = Math.min(scrolled, 100) + '%';
 }, { passive: true });
 
-
+// ── FAÇADE VIDÉO YOUTUBE (clic/clavier → chargement de l'iframe) ──
+const videoFacade = document.getElementById('defi-video');
+if (videoFacade && videoFacade.dataset.yt) {
+  const loadVideo = () => {
+    const id = videoFacade.dataset.yt;
+    const iframe = document.createElement('iframe');
+    iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
+    iframe.title = 'Vidéo de présentation Amarte';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    iframe.allowFullscreen = true;
+    videoFacade.innerHTML = '';
+    videoFacade.classList.add('is-playing');
+    videoFacade.removeAttribute('role');
+    videoFacade.removeAttribute('tabindex');
+    videoFacade.removeAttribute('aria-label');
+    videoFacade.appendChild(iframe);
+  };
+  videoFacade.addEventListener('click', loadVideo, { once: true });
+  videoFacade.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); loadVideo(); }
+  });
+}
