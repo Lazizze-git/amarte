@@ -43,11 +43,31 @@
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 
+  // Convertit un texte libre (Sanity) en HTML sûr :
+  //   - \n  → <br>
+  //   - *x* → <em>x</em>
+  // L'échappement est fait AVANT pour empêcher toute injection.
+  const richText = (s) => esc(s)
+    .replace(/\n/g, '<br>')
+    .replace(/\*([^*\n]+)\*/g, '<em>$1</em>');
+
   // Format suisse des montants : 1490 → "1'490"
   const chf = (n) => Number(n).toLocaleString('de-CH');
 
   // Libellés de catégorie
   const CAT = { yoga: 'Yoga', pilates: 'Pilates', bienetre: 'Bien-être' };
+
+  // Mapping fichier HTML → ID page Sanity (pour les heros)
+  const PAGE_ID = {
+    'apropos.html':       'apropos',
+    'cours.html':         'cours',
+    'tarifs.html':        'tarifs',
+    'calendrier.html':    'calendrier',
+    'contact.html':       'contact',
+    'location.html':      'location',
+    'corpo.html':         'corpo',
+    'premiere-fois.html': 'premiere-fois',
+  };
 
   // ── DÉTECTION DE PAGE ─────────────────────────────────────────
   const raw  = location.pathname.split('/').pop().replace(/^$/, 'index');
@@ -271,40 +291,192 @@
     }
   }
 
-  // ── PARAMÈTRES DU SITE (toutes les pages : footer, contacts) ──
+  // ── PARAMÈTRES DU SITE (toutes les pages) ─────────────────────
   query(`*[_id == "siteSettings"][0]{
-    adresse, telephone, email, instagram, facebook
+    adresse, telephone, telephone2, email, instagram, facebook, tagline,
+    glofoxUrlReservation, glofoxUrlMembership, glofoxUrlLogin,
+    horairesOuverture
   }`).then(renderSettings).catch(() => {/* garder le HTML statique */});
 
   function renderSettings(s) {
     if (!s) return;
 
-    // Email — liens mailto + texte affiché
+    // ── Email — liens mailto + texte affiché ───────────────────
     if (s.email) {
       document.querySelectorAll('a[href^="mailto:"]').forEach(a => {
         a.href = `mailto:${s.email}`;
         if (/@/.test(a.textContent)) a.textContent = s.email;
       });
     }
-    // Téléphone — liens tel + texte affiché
+
+    // ── Téléphone principal — sélection par href existant ──────
     if (s.telephone) {
       const telHref = s.telephone.replace(/[^\d+]/g, '');
-      document.querySelectorAll('a[href^="tel:"]').forEach(a => {
+      // Sélecteurs des hrefs actuels du HTML statique (fallback)
+      document.querySelectorAll('a[href="tel:+41794621747"]').forEach(a => {
         a.href = `tel:${telHref}`;
-        if (/[\d]/.test(a.textContent)) a.textContent = s.telephone;
+        a.textContent = a.textContent.replace(/\+\d[\d\s]+/, s.telephone);
+      });
+      // Liens WhatsApp wa.me — on aligne aussi le numéro
+      const waNum = telHref.replace('+', '');
+      document.querySelectorAll('a[href*="wa.me/41794621747"]').forEach(a => {
+        a.href = a.href.replace(/wa\.me\/\d+/, `wa.me/${waNum}`);
       });
     }
-    // Réseaux sociaux
+
+    // ── Téléphone secondaire ───────────────────────────────────
+    if (s.telephone2) {
+      const tel2Href = s.telephone2.replace(/[^\d+]/g, '');
+      document.querySelectorAll('a[href="tel:+41788106464"]').forEach(a => {
+        a.href = `tel:${tel2Href}`;
+        a.textContent = a.textContent.replace(/\+\d[\d\s]+/, s.telephone2);
+      });
+    }
+
+    // ── Réseaux sociaux ────────────────────────────────────────
     if (s.instagram) {
       document.querySelectorAll('a[href*="instagram.com"]').forEach(a => { a.href = s.instagram; });
     }
     if (s.facebook) {
       document.querySelectorAll('a[href*="facebook.com"]').forEach(a => { a.href = s.facebook; });
     }
-    // Adresse (pied de page)
+
+    // ── Tagline du footer (toutes les pages) ───────────────────
+    if (s.tagline) {
+      document.querySelectorAll('.footer-tagline').forEach(el => {
+        el.innerHTML = richText(s.tagline);
+      });
+    }
+
+    // ── Adresse — page Contact ─────────────────────────────────
     if (s.adresse) {
+      // Bloc « Adresse » (1er .contact-info-val de la page)
+      const block = document.querySelector('.contact-info-block .contact-info-val');
+      if (block) block.innerHTML = richText(s.adresse);
+      // Encart sous la carte
+      const mapAddr = document.querySelector('.contact-map-address');
+      if (mapAddr) mapAddr.innerHTML = richText(s.adresse);
+      // Footer (legacy)
       document.querySelectorAll('.footer-addr').forEach(el => { el.textContent = s.adresse; });
     }
+
+    // ── Horaires d'accueil — page Contact ──────────────────────
+    if (Array.isArray(s.horairesOuverture) && s.horairesOuverture.length) {
+      const hoursWrap = document.querySelector('.contact-hours');
+      if (hoursWrap) {
+        hoursWrap.innerHTML = s.horairesOuverture.map(h => `
+          <div class="contact-hour-row">
+            <span class="contact-hour-day">${esc(h.jours || '')}</span>
+            <span class="contact-hour-val">${esc(h.heures || '')}</span>
+          </div>`).join('');
+      }
+    }
+
+    // ── URLs Glofox — réservation / abonnements / login ────────
+    if (s.glofoxUrlReservation) {
+      const iframe = document.getElementById('glofox-calendar');
+      if (iframe) iframe.src = s.glofoxUrlReservation;
+    }
+    if (s.glofoxUrlMembership) {
+      document.querySelectorAll('a[href*="/memberships?header=memberships"]').forEach(a => {
+        a.href = s.glofoxUrlMembership;
+      });
+    }
+    if (s.glofoxUrlLogin) {
+      document.querySelectorAll('a[href*="/memberships?login"]').forEach(a => {
+        a.href = s.glofoxUrlLogin;
+      });
+    }
+  }
+
+  // ── HEROS DE PAGE (apropos / cours / tarifs / etc.) ───────────
+  const heroPageId = PAGE_ID[page];
+  if (heroPageId) {
+    query(`*[_type == "pageHero" && page == $page][0]{
+      label, titre, sousTitre
+    }`, { page: heroPageId }).then((hero) => {
+      if (!hero) return;
+      renderHero(hero);
+    }).catch(() => {/* fallback statique */});
+  }
+
+  function renderHero(h) {
+    // Label : .page-hero-label OU .defi-hero-label
+    if (h.label) {
+      const labelEl =
+        document.querySelector('.page-hero-label') ||
+        document.querySelector('.defi-hero-label');
+      if (labelEl) labelEl.innerHTML = richText(h.label);
+    }
+    // Titre : .page-hero-title OU .cours-hero-title OU .defi-hero-title
+    if (h.titre) {
+      const titleEl =
+        document.querySelector('.page-hero-title') ||
+        document.querySelector('.cours-hero-title') ||
+        document.querySelector('.defi-hero-title');
+      if (titleEl) titleEl.innerHTML = richText(h.titre);
+    }
+    // Sous-titre : .page-hero-sub OU .cours-hero-sub OU .defi-hero-sub
+    if (h.sousTitre) {
+      const subEl =
+        document.querySelector('.page-hero-sub') ||
+        document.querySelector('.cours-hero-sub') ||
+        document.querySelector('.defi-hero-sub');
+      if (subEl) subEl.innerHTML = richText(h.sousTitre);
+    }
+  }
+
+  // ── INFO CARDS — Calendrier (3 cards numérotées) ──────────────
+  if (page === 'calendrier.html') {
+    query(`*[_type == "infoCard" && groupe == "cal-info" && actif == true]
+           | order(ordre asc){ titre, texte }`)
+      .then(renderCalInfo).catch(() => {/* fallback */});
+  }
+  function renderCalInfo(cards) {
+    if (!cards || !cards.length) return;
+    const wrap = document.querySelector('.cal-info-inner');
+    if (!wrap) return;
+    wrap.innerHTML = cards.map((c, i) => `
+      <div class="cal-info-card">
+        <p class="cal-info-icon">${String(i + 1).padStart(2, '0')}</p>
+        <p class="cal-info-title">${esc(c.titre)}</p>
+        <p class="cal-info-text">${esc(c.texte || '')}</p>
+      </div>`).join('');
+  }
+
+  // ── INFO CARDS — Cours « Bon à savoir » (3 cards, SVGs préservés) ──
+  if (page === 'cours.html') {
+    query(`*[_type == "infoCard" && groupe == "cours-know" && actif == true]
+           | order(ordre asc){ titre, texte }`)
+      .then(renderCoursKnow).catch(() => {/* fallback */});
+  }
+  function renderCoursKnow(cards) {
+    if (!cards || !cards.length) return;
+    // On préserve les SVG (icônes) — on remplace seulement titre + texte
+    const dom = document.querySelectorAll('.cours-know-card');
+    cards.forEach((c, i) => {
+      const card = dom[i];
+      if (!card) return;
+      const titleEl = card.querySelector('.cours-know-title');
+      const textEl  = card.querySelector('.cours-know-text');
+      if (titleEl) titleEl.textContent = c.titre || '';
+      if (textEl)  textEl.textContent  = c.texte || '';
+    });
+  }
+
+  // ── INFO CARDS — Contact « Accès & Transport » ────────────────
+  if (page === 'contact.html') {
+    query(`*[_type == "infoCard" && groupe == "contact-access" && actif == true]
+           | order(ordre asc){ titre }`)
+      .then(renderContactAccess).catch(() => {/* fallback */});
+  }
+  function renderContactAccess(items) {
+    if (!items || !items.length) return;
+    const wrap = document.querySelector('.contact-access');
+    if (!wrap) return;
+    wrap.innerHTML = items.map(it => `
+      <div class="contact-access-item"><span class="contact-access-dash">—</span> ${esc(it.titre)}</div>
+    `).join('');
   }
 
 })();

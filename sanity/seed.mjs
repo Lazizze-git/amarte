@@ -17,18 +17,57 @@ const cat = { '--accent': 'yoga', '--text': 'pilates', '--text-muted': 'bienetre
 push({
   _id: 'siteSettings',
   _type: 'settings',
-  adresse: 'Route du Village 1A, 2ème étage, 1066 Épalinges',
-  telephone: '+41 79 462 17 47',
-  email: 'info@amarte.ch',
-  instagram: 'https://www.instagram.com/amarte_epalinges/',
-  facebook: 'https://www.facebook.com/AmarteEpalinges',
-  glofoxBranchId: '66cca39faa7ce5d29003a6e3',
+  adresse:    'Route du Village 1A, 2ème étage, 1066 Épalinges',
+  telephone:  '+41 79 462 17 47',
+  telephone2: '+41 78 810 64 64',
+  email:      'info@amarte.ch',
+  tagline:    "Bouger. Respirer. *S'épanouir.*",
+  instagram:  'https://www.instagram.com/amarte_epalinges/',
+  facebook:   'https://www.facebook.com/AmarteEpalinges',
+  glofoxBranchId:      '66cca39faa7ce5d29003a6e3',
+  glofoxUrlReservation:'https://app.glofox.com/portal/#/branch/66cca39faa7ce5d29003a6e3/classes-week-view?header=classes&gt=GTM-K4MSN7T3',
+  glofoxUrlMembership: 'https://app.glofox.com/portal/#/branch/66cca39faa7ce5d29003a6e3/memberships?header=memberships&gt=GTM-K4MSN7T3',
+  glofoxUrlLogin:      'https://app.glofox.com/portal/#/branch/66cca39faa7ce5d29003a6e3/memberships?login',
   horairesOuverture: [
-    { _key: 'h1', jours: 'Lundi – Vendredi', heures: '08:30 – 20:30' },
-    { _key: 'h2', jours: 'Samedi',           heures: '09:00 – 13:00' },
-    { _key: 'h3', jours: 'Dimanche',         heures: '09:00 – 19:00' },
+    { _key: 'h1', jours: 'Lundi – Vendredi', heures: '8h00 – 20h00' },
+    { _key: 'h2', jours: 'Samedi',           heures: '8h00 – 17h00' },
+    { _key: 'h3', jours: 'Dimanche',         heures: 'Fermé' },
   ],
 })
+
+// ── HÉROS DES PAGES (1 doc par page, hors index) ─────────────
+const heros = [
+  { page: 'apropos',       label: 'Le studio',                titre: 'Un lieu pour\nrevenir au mouvement.', sousTitre: "Amarte est né d'une idée simple : offrir un espace où chacun peut bouger, respirer et *s'épanouir* — à son rythme, sans jugement." },
+  { page: 'cours',         label: 'Cours & disciplines',      titre: 'Nos *cours*',                          sousTitre: '11 cours hebdomadaires — Yoga, Pilates, Bien-être.\nUne pratique pour chaque intention, un accueil pour chaque niveau.' },
+  { page: 'tarifs',        label: 'Tarifs & formules',        titre: 'À votre\n*rythme.*',                   sousTitre: "Pas de renouvellement automatique, jamais. Vous continuez parce que vous le voulez, pas parce qu'on vous y oblige." },
+  { page: 'calendrier',    label: 'Planning',                  titre: 'Calendrier',                           sousTitre: 'Consultez le planning de la semaine et réservez votre place en ligne. *Les disponibilités se mettent à jour en temps réel.*' },
+  { page: 'contact',       label: 'Contact',                   titre: 'Venez nous\nrendre visite.',           sousTitre: "Une question, une demande d'information ou envie de commencer ? *Nous sommes là.*" },
+  { page: 'location',      label: "Location d'espace",        titre: 'Notre salle,\nvotre projet.',          sousTitre: 'Un espace lumineux de 120 m² avec baie vitrée en arc de cercle, *disponible à la location pour vos cours, ateliers et événements bien-être.*' },
+  { page: 'corpo',         label: 'Entreprises & Partenariats', titre: 'Bien-être\nen entreprise',           sousTitre: "Parce qu'une équipe qui se sent bien *performe mieux.* Nous concevons des programmes sur mesure pour les entreprises de la région." },
+  { page: 'premiere-fois', label: 'Studio bien-être · Épalinges', titre: 'Force. Souplesse.\nMobilité.',     sousTitre: 'Un mois pour retrouver un corps plus fort, plus souple, plus libre — celui qui vous portera longtemps. Découvrez le Défi, et nos deux garanties, dans la vidéo.' },
+]
+heros.forEach((h) => push({ _id: `pageHero-${h.page}`, _type: 'pageHero', ...h }))
+
+// ── INFO CARDS — Calendrier (3), Cours (3), Contact accès (4) ─
+const infoCards = [
+  // cal-info — 3 cards numérotées 01/02/03 sur calendrier.html
+  { groupe: 'cal-info', titre: 'Réservation en ligne', texte: 'Choisissez votre cours et confirmez en quelques secondes. Confirmation immédiate par email.', ordre: 1 },
+  { groupe: 'cal-info', titre: 'Annulation flexible',  texte: "Annulation gratuite jusqu'à 2 h avant le cours. Au-delà, le crédit est consommé.",          ordre: 2 },
+  { groupe: 'cal-info', titre: 'Places limitées',      texte: "Nombre de places restreint pour garantir l'attention individuelle. Réservez à l'avance.",  ordre: 3 },
+  // cours-know — 3 cards « Bon à savoir » sur cours.html (les icônes SVG restent en HTML statique)
+  { groupe: 'cours-know', titre: 'En petit comité',      texte: '15 personnes max par cours — de la place pour être vu, guidé, corrigé.', ordre: 1 },
+  { groupe: 'cours-know', titre: 'Matériel fourni',      texte: 'Tapis et accessoires sur place. Venez simplement en tenue confortable.', ordre: 2 },
+  { groupe: 'cours-know', titre: 'Guidé à votre niveau', texte: "Débutant ou confirmé, les profs s'adaptent à vos limites du jour.",    ordre: 3 },
+  // contact-access — 4 items « Accès & Transport » sur contact.html
+  { groupe: 'contact-access', titre: 'Parking souterrain gratuit', ordre: 1 },
+  { groupe: 'contact-access', titre: 'Places extérieures',         ordre: 2 },
+  { groupe: 'contact-access', titre: 'Bus Girarde à 20 m',         ordre: 3 },
+  { groupe: 'contact-access', titre: 'Abri vélo sécurisé',         ordre: 4 },
+]
+infoCards.forEach((c, i) => push({
+  _id: `infoCard-${c.groupe}-${c.ordre}`,
+  _type: 'infoCard', actif: true, ...c,
+}))
 
 // ── TÉMOIGNAGES — grille de 12 cartes sur la homepage ────────
 const temoignages = [

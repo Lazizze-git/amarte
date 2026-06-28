@@ -2,6 +2,8 @@ import { horaire }    from './horaire'
 import { cours }      from './cours'
 import { temoignage } from './temoignage'
 import { tarif }      from './tarif'
+import { pageHero }   from './pageHero'
+import { infoCard }   from './infoCard'
 import { settings }   from './settings'
 
 export const schemaTypes = [
@@ -9,5 +11,7 @@ export const schemaTypes = [
   cours,
   temoignage,
   tarif,
+  pageHero,
+  infoCard,
   settings,
 ]
