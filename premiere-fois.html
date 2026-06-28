@@ -277,53 +277,18 @@
         <h2 class="defi-sched-title">Trouvez vos deux créneaux <em>par semaine.</em></h2>
         <p class="defi-sched-sub">Matin, midi et soir, plusieurs fois par jour — vous trouverez sans peine vos deux créneaux dans la semaine.</p>
       </div>
-      <p class="defi-sched-note">Planning d'exemple — à remplacer par les horaires réels (idéalement l'agenda Glofox intégré ici).</p>
-      <div class="defi-table-wrap gs-reveal">
-        <table class="defi-table">
-          <thead>
-            <tr>
-              <th>Horaire</th><th>Lundi</th><th>Mardi</th><th>Mercredi</th><th>Jeudi</th><th>Vendredi</th><th>Samedi</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th>09:00</th>
-              <td><span class="defi-cls">Yoga Yin<small>doux</small></span></td>
-              <td><span class="defi-cls">Pilates<small>tonique</small></span></td>
-              <td><span class="defi-cls">Yoga Flow<small>moyen</small></span></td>
-              <td><span class="defi-cls">Pilates<small>doux</small></span></td>
-              <td><span class="defi-cls">Yogilates<small>moyen</small></span></td>
-              <td><span class="defi-cls">NIA<small>dynamique</small></span></td>
-            </tr>
-            <tr>
-              <th>12:15</th>
-              <td><span class="defi-cls">Pilates<small>express</small></span></td>
-              <td>—</td>
-              <td><span class="defi-cls">Yoga Vinyasa<small>dynamique</small></span></td>
-              <td>—</td>
-              <td><span class="defi-cls">Pilates<small>express</small></span></td>
-              <td>—</td>
-            </tr>
-            <tr>
-              <th>18:30</th>
-              <td><span class="defi-cls">Yoga Vinyasa<small>dynamique</small></span></td>
-              <td><span class="defi-cls">NIA<small>dynamique</small></span></td>
-              <td><span class="defi-cls">Pilates<small>tonique</small></span></td>
-              <td><span class="defi-cls">Yoga Yin<small>doux</small></span></td>
-              <td><span class="defi-cls">Yogilates<small>moyen</small></span></td>
-              <td>—</td>
-            </tr>
-            <tr>
-              <th>19:45</th>
-              <td><span class="defi-cls">Pilates<small>doux</small></span></td>
-              <td><span class="defi-cls">Yoga Hatha<small>doux</small></span></td>
-              <td>—</td>
-              <td><span class="defi-cls">Vinyasa<small>dynamique</small></span></td>
-              <td>—</td>
-              <td>—</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="glofox-embed-wrap gs-reveal">
+        <iframe
+          id="glofox-calendar"
+          class="glofox-iframe"
+          src="https://app.glofox.com/portal/#/branch/66cca39faa7ce5d29003a6e3/classes-week-view?header=classes&gt=GTM-K4MSN7T3"
+          title="Planning des cours — Amarte Studio"
+          width="100%"
+          height="0"
+          scrolling="no"
+          frameborder="0"
+          allow="payment https://app.glofox.com"
+        ></iframe>
       </div>
     </div>
   </section>
@@ -406,6 +371,19 @@
   </div>
 </footer>
 
+<script src="js/iframe-resizer.min.js"></script>
+<script>
+  // Auto-dimensionnement de l'iframe Glofox — même paramétrage que calendrier.html
+  iFrameResize({
+    log: false,
+    checkOrigin: false,
+    tolerance: 10,
+    sizeHeight: true,
+    heightCalculationMethod: 'lowestElement',
+    minHeight: 300,
+    scrolling: 'auto'
+  }, '#glofox-calendar');
+</script>
 <script src="js/main.js"></script>
 <script src="js/cms.js" defer></script>
 <script src="js/tracking.js" defer></script>
