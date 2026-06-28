@@ -1,4 +1,4 @@
-// ── TÉMOIGNAGE — carousel de la homepage ─────────────────────
+// ── TÉMOIGNAGE — grille de la homepage (~12 cartes) ──────────
 export const temoignage = {
   name:  'temoignage',
   title: 'Témoignage',
@@ -7,16 +7,17 @@ export const temoignage = {
   fields: [
     {
       name: 'texte', title: 'Texte du témoignage', type: 'text', rows: 4,
+      description: 'Sans les guillemets « » — ils sont ajoutés automatiquement sur le site.',
       validation: R => R.required().max(400),
     },
     {
-      name: 'auteur', title: 'Prénom + initiale', type: 'string',
-      description: 'Ex: Sophie M.',
+      name: 'auteur', title: 'Auteur', type: 'string',
+      description: 'Prénom (ou Prénom + Nom). Ex: Maria Martha. La 1ère lettre génère l\'avatar.',
       validation: R => R.required(),
     },
     {
       name: 'detail', title: 'Détail membre', type: 'string',
-      description: 'Ex: Membre depuis 6 mois · Yoga Flow',
+      description: 'Format : Discipline · ancienneté ou statut. Ex: Pilates · membre — Yoga & Pilates · +3 mois.',
     },
     {
       name: 'ordre', title: "Ordre d'affichage", type: 'number',

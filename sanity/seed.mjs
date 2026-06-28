@@ -30,12 +30,20 @@ push({
   ],
 })
 
-// ── TÉMOIGNAGES ──────────────────────────────────────────────
+// ── TÉMOIGNAGES — grille de 12 cartes sur la homepage ────────
 const temoignages = [
-  { texte: "Une expérience fantastique. L'accueil est chaleureux, l'espace est spacieux et les installations sont entièrement neuves. Je me sens vraiment chez moi.", auteur: 'Sophie M.', detail: 'Membre depuis 6 mois · Yoga Flow' },
-  { texte: "J'avais peur de ne pas être au niveau. Mais les enseignants proposent toujours des adaptations. Pour la première fois, j'ai trouvé un cours vraiment accessible.", auteur: 'Laurent D.', detail: 'Membre depuis 3 mois · Pilates' },
-  { texte: "Ce que j'apprécie chez Amarte, c'est l'absence de compétition. On vient pour soi, pas pour performer. Cette ambiance est rare.", auteur: 'Nathalie R.', detail: 'Membre depuis 1 an · Tous cours' },
-  { texte: "J'ai commencé avec le pack Découverte. Deux semaines plus tard, j'ai pris l'abonnement mensuel. Amarte m'a redonné le goût du mouvement.", auteur: 'Isabelle C.', detail: 'Membre depuis 8 mois · Yoga & Bien-être' },
+  { texte: "Après quelques mois de Pilates, je me sens très en forme, avec beaucoup plus de flexibilité et d'énergie. Je recommande à tout le monde. Merci Amarte.", auteur: 'Maria Martha', detail: 'Pilates · membre' },
+  { texte: "Débutante, j'ai tout de suite accroché au Yoga Flow avec Edith et Yuta : ma rigidité diminue. Et le Pilates renforce mon dos. Très motivée pour continuer.", auteur: 'Beatriz', detail: 'Yoga & Pilates · +3 mois' },
+  { texte: "Une activité hebdomadaire dynamique, relaxante et saine. Une façon agréable de développer la force, la flexibilité et l'équilibre.", auteur: 'Marianne', detail: 'Yoga Flow · membre' },
+  { texte: "Une super salle, avec une variété de profs qui permet d'adapter à sa forme. Moins de douleurs, et une forme physique en nette amélioration.", auteur: 'Jonathan', detail: 'Pilates · 1 mois' },
+  { texte: "Le Pilates a été une très belle découverte. J'ai gagné en force et en conscience corporelle grâce aux explications de Yuta. Un lieu que je recommande sans hésitation.", auteur: 'Lise', detail: 'Pilates & Yoga · 1 mois' },
+  { texte: "Des cours dans une ambiance solaire et bienveillante, dans le respect du corps et des capacités de chacun. Une équipe très à l'écoute.", auteur: 'Marine', detail: 'Yoga & Pilates · membre' },
+  { texte: "Un choix de cours variés et accessibles aux débutants, avec des horaires pratiques — et un parking ! Un endroit unique à Lausanne, à essayer absolument.", auteur: 'Alice', detail: 'Plusieurs disciplines · membre' },
+  { texte: "Un espace confortable, bien équipé, facile d'accès. Un joli choix de professeurs qualifiés en yoga et pilates, à prix raisonnable.", auteur: 'Julio', detail: 'Yoga & Pilates · membre' },
+  { texte: "Je pensais que le yoga n'était pas fait pour moi, trop calme. Grâce à Amarte : moins de douleurs chroniques au dos et un bien meilleur sommeil.", auteur: 'Khanh', detail: 'Yoga Flow · membre' },
+  { texte: "Un studio bien situé où l'on se sent chez soi, avec une palette de cours fabuleux. Mon cours préféré : le Kundalini avec Kallia.", auteur: 'Marielle', detail: 'Kundalini · membre' },
+  { texte: "Super expérience ! Tout est simple et fluide, de l'inscription aux cours. Le centre est vraiment facile d'accès.", auteur: 'Lorène', detail: 'Nouvelle membre' },
+  { texte: "On se sent tout de suite dans un vrai cocon, chaleureux et apaisant. Les professeurs sont à l'écoute et de qualité.", auteur: 'Robin', detail: 'Membre' },
 ]
 temoignages.forEach((t, i) => push({
   _id: `temoignage-${i + 1}`, _type: 'temoignage', ...t, ordre: i + 1, actif: true,

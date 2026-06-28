@@ -119,8 +119,28 @@
   function renderTemoignages(temoignages) {
     if (!temoignages || temoignages.length === 0) return;
 
-    // Le carrousel est piloté par main.js (window.amarteInitTesti).
-    // On le ré-initialise avec les données Sanity (textContent = sûr).
+    // Nouvelle structure — grille de cartes (.tcards / .tcard)
+    const grid = document.querySelector('.tcards');
+    if (grid) {
+      const avatarVariants = ['tav-a','tav-b','tav-c','tav-d','tav-e','tav-f','tav-g','tav-h'];
+      grid.innerHTML = temoignages.map((t, idx) => {
+        const auteur   = (t.auteur || '').trim();
+        const initiale = (auteur[0] || '?').toUpperCase();
+        const variant  = avatarVariants[idx % avatarVariants.length];
+        return `
+          <div class="tcard">
+            <div class="stars" aria-hidden="true">★★★★★</div>
+            <p class="tq">« ${esc(t.texte || '')} »</p>
+            <div class="twho">
+              <span class="tav ${variant}">${esc(initiale)}</span>
+              <span><span class="tn">${esc(auteur)}</span><br><span class="tc">${esc(t.detail || '')}</span></span>
+            </div>
+          </div>`;
+      }).join('');
+      return;
+    }
+
+    // Ancienne structure — carrousel (window.amarteInitTesti dans main.js)
     if (typeof window.amarteInitTesti === 'function') {
       window.amarteInitTesti(temoignages);
     }
