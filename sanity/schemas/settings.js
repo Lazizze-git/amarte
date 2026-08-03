@@ -14,7 +14,7 @@ export const settings = {
     },
     {
       name: 'telephone', title: 'Téléphone', type: 'string',
-      initialValue: '+41 79 462 17 47',
+      initialValue: '+41 78 810 64 64',
     },
     {
       name: 'email', title: 'Email', type: 'string',

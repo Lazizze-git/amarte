@@ -18,7 +18,7 @@ push({
   _id: 'siteSettings',
   _type: 'settings',
   adresse: 'Route du Village 1A, 2ème étage, 1066 Épalinges',
-  telephone: '+41 79 462 17 47',
+  telephone: '+41 78 810 64 64',
   email: 'info@amarte.ch',
   instagram: 'https://www.instagram.com/amarte_epalinges/',
   facebook: 'https://www.facebook.com/AmarteEpalinges',
