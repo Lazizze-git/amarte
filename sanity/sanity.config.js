@@ -31,6 +31,8 @@ export default defineConfig({
             S.documentTypeListItem('cours').title('🧘  Cours'),
             S.documentTypeListItem('temoignage').title('💬  Témoignages'),
             S.documentTypeListItem('tarif').title('💰  Tarifs'),
+            S.documentTypeListItem('pageHero').title('🪧  Heros des pages'),
+            S.documentTypeListItem('infoCard').title('📌  Cards infos'),
           ]),
     }),
     visionTool(),
