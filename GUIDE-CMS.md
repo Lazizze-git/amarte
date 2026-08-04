@@ -4,11 +4,17 @@
 
 | Contenu | Où modifier |
 |---|---|
-| Planning hebdomadaire | **Horaires** → ajouter / supprimer / modifier des créneaux |
-| Descriptions des cours | **Cours** → modifier texte, niveau, catégorie |
-| Témoignages | **Témoignages** → ajouter, réordonner, désactiver |
-| Prix des abonnements | **Tarifs** → modifier les prix et descriptions |
-| Infos du studio | **Paramètres du site** → adresse, tél, email, horaires |
+| Témoignages (page d'accueil) | **Témoignages** → ajouter, réordonner, désactiver |
+| Téléphone, email, réseaux sociaux | **Paramètres du site** |
+
+> ⚠️ **Les cours, le planning et les tarifs ne passent plus par le CMS.**
+> Ils sont écrits directement dans les pages, qui font désormais foi.
+> Les rubriques *Cours*, *Horaires* et *Tarifs* du studio Sanity ne sont
+> plus lues par le site : les modifier n'aura aucun effet.
+>
+> ⚠️ Le champ **téléphone** des *Paramètres du site* remplace le numéro
+> affiché partout sur le site au chargement. Il doit contenir le numéro
+> officiel : **+41 78 810 64 64**.
 
 ---
 

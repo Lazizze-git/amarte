@@ -1,414 +1,371 @@
-gsap.registerPlugin(ScrollTrigger);
-
-// Respecte la préférence système « réduire les animations » :
-// on accélère fortement la timeline → les éléments arrivent à leur état
-// final quasi instantanément (le contenu reste visible, sans mouvement).
-if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  gsap.globalTimeline.timeScale(200);
-}
-
 /* ============================================================
-   AMARTE — Animations
-   Inspiré Core Atelier : reveals variés, parallaxe, counters
+   AMARTE STUDIO — Comportements d'interface
+   ------------------------------------------------------------
+   Aucune dépendance externe. Le site reste entièrement lisible
+   et navigable si ce fichier n'est pas exécuté.
+
+   1. Année du pied de page
+   2. En-tête au défilement
+   3. Panneau de navigation (ouverture, focus, clavier, iOS)
+   4. Révélations au défilement
+   5. Formulaires de contact
+   6. Filtres de la page Cours
+   7. Simulateur de la page Tarifs
+   8. Widget de réservation Glofox
    ============================================================ */
-
-// ── FOOTER YEAR ──────────────────────────────────────────────
-document.querySelectorAll('.footer-year').forEach(el => el.textContent = new Date().getFullYear());
-
-// ── NAV SCROLL ───────────────────────────────────────────────
-const header = document.getElementById('nav-header');
-if (header) {
-  window.addEventListener('scroll', () => {
-    header.classList.toggle('scrolled', window.scrollY > 60);
-  }, { passive: true });
-}
-
-// ── ACTIVE NAV ───────────────────────────────────────────────
 (function () {
-  const path = window.location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('.nav-menu-link').forEach(link => {
-    const href = (link.getAttribute('href') || '').split('/').pop();
-    if (href === path) link.setAttribute('aria-current', 'page');
+  'use strict';
+
+  var reduceMotion = window.matchMedia
+    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    : false;
+
+  /* ── 1 · Année du pied de page ─────────────────────────── */
+  var year = String(new Date().getFullYear());
+  document.querySelectorAll('.footer-year').forEach(function (el) {
+    el.textContent = year;
   });
-})();
 
-// ── BURGER / MENU ────────────────────────────────────────────
-const burger = document.getElementById('burger-btn');
-const menu   = document.getElementById('nav-menu');
-let menuOpen = false;
+  /* ── 2 · En-tête au défilement ─────────────────────────── */
+  (function header() {
+    var el = document.getElementById('nav-header');
+    if (!el) return;
 
-if (burger && menu) {
-  function toggleMenu(open) {
-    menuOpen = open;
-    burger.classList.toggle('open', open);
-    menu.classList.toggle('open', open);
-    burger.setAttribute('aria-expanded', String(open));
-    burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
-    document.body.style.overflow = open ? 'hidden' : '';
-    if (open) {
-      gsap.fromTo(menu.querySelectorAll('.nav-menu-link'),
-        { x: -24, opacity: 0 },
-        { x: 0, opacity: 1, duration: 0.45, ease: 'power3.out', stagger: 0.06, delay: 0.15 }
+    var ticking = false;
+    function sync() {
+      ticking = false;
+      // Le panneau ouvert fige la page (scrollY = 0) : on gèle l'état de
+      // l'en-tête pour éviter qu'il ne clignote pendant l'ouverture.
+      if (document.body.classList.contains('menu-open')) return;
+      el.classList.toggle('is-scrolled', window.scrollY > 40);
+    }
+    window.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(sync);
+    }, { passive: true });
+    sync();
+  })();
+
+  /* ── 3 · Panneau de navigation ─────────────────────────── */
+  /* Le panneau s'ouvre en demi-largeur sur le côté droit : la page reste
+     visible derrière, voilée par `.nav-scrim` qui referme au clic. */
+  (function navMenu() {
+    var burger = document.getElementById('burger-btn');
+    var menu   = document.getElementById('nav-menu');
+    var scrim  = document.getElementById('nav-scrim');
+    var header = document.getElementById('nav-header');
+    if (!burger || !menu) return;
+
+    var isOpen = false;
+    var scrollY = 0;
+    var FOCUSABLE = 'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
+    // Tout ce qui n'est ni l'en-tête, ni le voile, ni le panneau : rendu
+    // inerte pendant l'ouverture (invisible aux lecteurs d'écran et au clavier).
+    var pageParts = Array.prototype.filter.call(document.body.children, function (el) {
+      if (el === menu || el === scrim || el === header) return false;
+      return ['SCRIPT', 'NOSCRIPT', 'TEMPLATE', 'STYLE'].indexOf(el.tagName) === -1;
+    });
+
+    function focusables() {
+      return Array.prototype.filter.call(
+        menu.querySelectorAll(FOCUSABLE),
+        function (el) { return el.offsetParent !== null; }
       );
     }
-  }
-  burger.addEventListener('click', () => toggleMenu(!menuOpen));
-  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
-}
 
-// ── NAV ENTRANCE ─────────────────────────────────────────────
-gsap.fromTo('.nav-logo',
-  { opacity: 0, x: -20 },
-  { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out', delay: 0.1 }
-);
-gsap.fromTo('.nav-links a',
-  { opacity: 0, y: -10 },
-  { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: 0.07, delay: 0.25 }
-);
+    function open() {
+      if (isOpen) return;
+      isOpen = true;
+      scrollY = window.scrollY;
 
-// ── HOMEPAGE HERO ────────────────────────────────────────────
-const heroLines = ['hl0','hl1','hl2'].map(id => document.getElementById(id)).filter(Boolean);
-if (heroLines.length) {
-  const heroImg = document.getElementById('hero-img');
-  const heroSub = document.getElementById('hero-sub');
-  const heroBtn = document.getElementById('hero-btn');
+      // Le verrou de défilement escamote la barre de défilement : on réserve
+      // sa largeur pour que la page ne saute pas latéralement.
+      var gap = window.innerWidth - document.documentElement.clientWidth;
+      document.documentElement.style.setProperty('--sbw', (gap > 0 ? gap : 0) + 'px');
 
-  if (heroImg) {
-    gsap.fromTo(heroImg,
-      { scale: 1.1, opacity: 0.6 },
-      { scale: 1, opacity: 1, duration: 2.2, ease: 'power2.out' }
-    );
-    // subtle parallax on hero
-    gsap.to(heroImg, {
-      yPercent: -8,
-      ease: 'none',
-      scrollTrigger: { trigger: heroImg.closest('section') || heroImg, start: 'top top', end: 'bottom top', scrub: 1 }
+      menu.removeAttribute('inert');
+      menu.setAttribute('aria-hidden', 'false');
+      menu.classList.add('is-open');
+      burger.setAttribute('aria-expanded', 'true');
+      burger.setAttribute('aria-label', 'Fermer le menu');
+      pageParts.forEach(function (el) { el.setAttribute('inert', ''); });
+
+      // Verrou de défilement compatible iOS : on fige la page à sa position.
+      document.body.style.top = '-' + scrollY + 'px';
+      document.body.classList.add('menu-open');
+
+      var first = focusables()[0];
+      if (first) first.focus({ preventScroll: true });
+    }
+
+    function close(returnFocus) {
+      if (!isOpen) return;
+      isOpen = false;
+
+      menu.classList.remove('is-open');
+      menu.setAttribute('aria-hidden', 'true');
+      menu.setAttribute('inert', '');
+      burger.setAttribute('aria-expanded', 'false');
+      burger.setAttribute('aria-label', 'Ouvrir le menu');
+      pageParts.forEach(function (el) { el.removeAttribute('inert'); });
+
+      document.body.classList.remove('menu-open');
+      document.body.style.top = '';
+      // Restitution exacte de la position, sans défilement animé.
+      var behavior = document.documentElement.style.scrollBehavior;
+      document.documentElement.style.scrollBehavior = 'auto';
+      window.scrollTo(0, scrollY);
+      document.documentElement.style.scrollBehavior = behavior;
+      document.documentElement.style.removeProperty('--sbw');
+
+      if (returnFocus) burger.focus({ preventScroll: true });
+    }
+
+    // État initial : le panneau est hors du flux d'accessibilité.
+    menu.setAttribute('aria-hidden', 'true');
+    menu.setAttribute('inert', '');
+
+    burger.addEventListener('click', function () {
+      isOpen ? close(true) : open();
     });
-  }
 
-  // Ligne par ligne — clip-path wipe vers le haut
-  heroLines.forEach((line, i) => {
-    const wrap = line.closest('.hero-line-wrap') || line;
-    gsap.fromTo(line,
-      { y: '108%' },
-      { y: '0%', duration: 1.1, ease: 'expo.out', delay: 0.15 + i * 0.12 }
-    );
-  });
+    // Un clic à côté du panneau referme.
+    if (scrim) scrim.addEventListener('click', function () { close(true); });
 
-  if (heroSub) gsap.fromTo(heroSub, { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', delay: 0.7 });
-  if (heroBtn) gsap.fromTo(heroBtn, { opacity: 0, y: 16, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'back.out(1.3)', delay: 0.9 });
-}
+    // Un lien cliqué ferme le panneau (la navigation suit).
+    menu.addEventListener('click', function (e) {
+      if (e.target.closest('a')) close(false);
+    });
 
-// ── SCROLL REVEALS — VARIÉS ───────────────────────────────────
+    // Échap ferme, Tab reste enfermé dans le panneau.
+    document.addEventListener('keydown', function (e) {
+      if (!isOpen) return;
+      if (e.key === 'Escape') { e.preventDefault(); close(true); return; }
+      if (e.key !== 'Tab') return;
 
-// 1. gs-reveal : fade + translateY léger (par défaut)
-// Skip elements managed by dedicated container staggers defined below
-const STAGGER_CONTAINERS = '.corpo-offers-grid';
-document.querySelectorAll('.gs-reveal').forEach((el) => {
-  if (el.closest(STAGGER_CONTAINERS)) return;
-  if (el.closest('.gs-stagger')) return;   // parent stagger handles it
-  gsap.fromTo(el,
-    { y: 44, opacity: 0 },
-    { y: 0, opacity: 1, duration: 0.85, ease: 'power3.out',
-      scrollTrigger: { trigger: el, start: 'top 91%', once: true } }
-  );
-});
+      var items = focusables();
+      if (!items.length) return;
+      var first = items[0];
+      var last  = items[items.length - 1];
 
-// 2. gs-stagger : enfants en cascade avec direction variable
-document.querySelectorAll('.gs-stagger').forEach(el => {
-  const children = Array.from(el.children).filter(c => c.tagName !== 'BR');
-  gsap.fromTo(children,
-    { y: 36, opacity: 0 },
-    { y: 0, opacity: 1, duration: 0.78, ease: 'power3.out', stagger: 0.1,
-      scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
-  );
-});
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault(); last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault(); first.focus();
+      }
+    });
+  })();
 
-// 3. Section labels — slide depuis la gauche
-document.querySelectorAll('.section-label').forEach(el => {
-  gsap.fromTo(el,
-    { x: -20, opacity: 0 },
-    { x: 0, opacity: 1, duration: 0.7, ease: 'power2.out',
-      scrollTrigger: { trigger: el, start: 'top 92%', once: true } }
-  );
-});
+  /* ── 4 · Révélations au défilement ─────────────────────── */
+  (function reveals() {
+    var root = document.documentElement;
+    if (!root.classList.contains('js-reveal')) return;
 
-// 4. Titres de section — clip-path wipe (Core Atelier style)
-document.querySelectorAll('h1.page-hero-title, h2.pf-hero-title').forEach(el => {
-  gsap.fromTo(el,
-    { clipPath: 'inset(0 0 100% 0)', y: 18 },
-    { clipPath: 'inset(0 0 0% 0)', y: 0, duration: 1.05, ease: 'power4.out',
-      scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
-  );
-});
+    var targets = [];
+    document.querySelectorAll('.gs-reveal').forEach(function (el) {
+      if (!el.closest('.gs-stagger')) targets.push(el);
+    });
+    document.querySelectorAll('.gs-stagger').forEach(function (group) {
+      Array.prototype.forEach.call(group.children, function (child, i) {
+        child.style.transitionDelay = Math.min(i, 5) * 70 + 'ms';
+        targets.push(child);
+      });
+    });
+    document.querySelectorAll('.gs-img-reveal').forEach(function (el) { targets.push(el); });
 
-// h2 généraux — fade + légère montée
-document.querySelectorAll('h2:not(.pf-hero-title):not(.booking-cta-title)').forEach(el => {
-  if (el.closest('.gs-stagger')) return;   // parent stagger gère déjà cet élément
-  gsap.fromTo(el,
-    { y: 28, opacity: 0 },
-    { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
-      scrollTrigger: { trigger: el, start: 'top 90%', once: true } }
-  );
-});
-
-// booking-cta-title — scale-in depuis légèrement plus grand
-document.querySelectorAll('.booking-cta-title, .pf-pack-title, .corpo-cta-title').forEach(el => {
-  gsap.fromTo(el,
-    { scale: 1.03, opacity: 0, y: 12 },
-    { scale: 1, opacity: 1, y: 0, duration: 1.0, ease: 'power3.out',
-      scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
-  );
-});
-
-// 5. Images — clip-path reveal + scale intérieure (timeline synchronisée)
-document.querySelectorAll('.gs-img-reveal').forEach(wrap => {
-  const inner = wrap.querySelector('.gs-img-inner');
-  const tl = gsap.timeline({
-    scrollTrigger: { trigger: wrap, start: 'top 85%', once: true }
-  });
-  tl.fromTo(wrap,
-    { clipPath: 'inset(100% 0% 0% 0%)' },
-    { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.3, ease: 'power4.inOut' }
-  );
-  if (inner) tl.fromTo(inner, { scale: 1.18 }, { scale: 1, duration: 1.3, ease: 'power4.inOut' }, 0);
-});
-
-// 6. Cours item cards — stagger par rangée (trigger sur la grille)
-const coursGrid = document.querySelector('.cours-grid');
-if (coursGrid) {
-  const items = coursGrid.querySelectorAll('.cours-item');
-  gsap.fromTo(items,
-    { y: 36, opacity: 0 },
-    { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out',
-      stagger: { amount: 0.45, from: 'start' },
-      scrollTrigger: { trigger: coursGrid, start: 'top 88%', once: true }
+    if (!('IntersectionObserver' in window)) {
+      targets.forEach(function (el) { el.classList.add('is-in'); });
+      return;
     }
-  );
-}
 
-// 7. Stats corpo — count-up + bounce
-document.querySelectorAll('.corpo-stat-val').forEach(el => {
-  gsap.fromTo(el,
-    { y: 32, opacity: 0, scale: 0.9 },
-    { y: 0, opacity: 1, scale: 1, duration: 0.75, ease: 'back.out(1.2)',
-      scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
-  );
-});
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-in');
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
 
-// 9. Tarifs illimité cards — container stagger
-const tarifCards = document.querySelectorAll('.tarifs-illimite-card');
-if (tarifCards.length) {
-  gsap.fromTo(Array.from(tarifCards),
-    { y: 28, opacity: 0 },
-    { y: 0, opacity: 1, duration: 0.75, ease: 'power3.out',
-      stagger: { amount: 0.3, from: 'start' },
-      scrollTrigger: { trigger: tarifCards[0].parentElement, start: 'top 88%', once: true }
-    }
-  );
-}
+    targets.forEach(function (el) { observer.observe(el); });
 
-// 11. Pack offre déco — scale depuis le centre
-document.querySelectorAll('.pf-pack-price-block, .tarifs-decouverte-price-block').forEach(el => {
-  gsap.fromTo(el,
-    { scale: 0.92, opacity: 0 },
-    { scale: 1, opacity: 1, duration: 0.85, ease: 'back.out(1.1)',
-      scrollTrigger: { trigger: el, start: 'top 88%', once: true } }
-  );
-});
+    // Filet de sécurité : rien ne doit rester invisible.
+    window.setTimeout(function () {
+      targets.forEach(function (el) { el.classList.add('is-in'); });
+    }, 2500);
+  })();
 
-// 12. Image parallax — sur toutes les images hero
-document.querySelectorAll('.pf-hero-img, .cours-hero-img-wrap img').forEach(img => {
-  const section = img.closest('section') || img.parentElement;
-  gsap.to(img, {
-    yPercent: -10,
-    ease: 'none',
-    scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: 1 }
+  /* ── 5 · Formulaires de contact ────────────────────────── */
+
+  /* Présélection du sujet depuis l'adresse : contact.html?sujet=entreprise.
+     Les clés sont les `value` des <option> de contact.html. Paramètre absent
+     ou inconnu : le champ garde son choix par défaut, rien ne casse. Le
+     formulaire reste utilisable si ce script ne s'exécute pas. */
+  (function presetSubject() {
+    var select = document.getElementById('c-sujet');
+    if (!select || !window.URLSearchParams) return;
+
+    var wanted = new URLSearchParams(window.location.search).get('sujet');
+    if (!wanted) return;
+
+    var known = Array.prototype.some.call(select.options, function (option) {
+      return option.value === wanted;
+    });
+    if (known) select.value = wanted;
+  })();
+
+  /* Aucun service d'envoi n'est configuré à ce jour : plutôt que de
+     laisser croire à un envoi, on confirme la réception ET on rappelle
+     les canaux directs. Renseigner `data-endpoint` sur le <form> pour
+     brancher un vrai service (Formspree, Web3Forms…). */
+  document.querySelectorAll('.contact-form').forEach(function (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+
+      var wrap = form.closest('.form-wrap');
+      if (!wrap) return;
+
+      var endpoint = form.dataset.endpoint;
+      var done = function () {
+        // La confirmation rappelle toujours WhatsApp et l'e-mail : personne
+        // ne doit rester sans réponse si le message n'arrive pas.
+        wrap.innerHTML =
+          '<div class="form-success" role="status" tabindex="-1">' +
+            '<p class="form-success-title">Message bien reçu.</p>' +
+            '<p class="form-success-sub">On vous répond sous 24&nbsp;heures ouvrées.<br>' +
+            'Besoin d\'une réponse tout de suite ? ' +
+            '<a href="https://wa.me/41788106464" target="_blank" rel="noopener">WhatsApp</a> ou ' +
+            '<a href="mailto:info@amarte.ch">info@amarte.ch</a>.</p>' +
+          '</div>';
+        // Le bouton qui avait le focus vient d'être retiré : on le redonne à
+        // la confirmation, sinon le focus retombe en haut de page.
+        var success = wrap.firstChild;
+        if (success && success.focus) success.focus({ preventScroll: true });
+        wrap.scrollIntoView({ block: 'center', behavior: reduceMotion ? 'auto' : 'smooth' });
+      };
+
+      if (!endpoint) { done(); return; }
+
+      var button = form.querySelector('[type="submit"]');
+      if (button) { button.disabled = true; button.textContent = 'Envoi…'; }
+
+      fetch(endpoint, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' }
+      })
+        .then(done)
+        .catch(function () {
+          if (button) { button.disabled = false; button.textContent = 'Réessayer'; }
+        });
+    });
   });
-});
 
-// 13. Corpo offer cards — container stagger
-const corpoOfferCards = document.querySelectorAll('.corpo-offer-card');
-if (corpoOfferCards.length) {
-  gsap.fromTo(Array.from(corpoOfferCards),
-    { y: 32, opacity: 0 },
-    { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out',
-      stagger: { amount: 0.3, from: 'start' },
-      scrollTrigger: { trigger: corpoOfferCards[0].parentElement, start: 'top 85%', once: true }
+  /* ── 6 · Filtres de la page Cours ──────────────────────── */
+  (function coursFilters() {
+    var bar = document.querySelector('.cours-filters-bar');
+    var grid = document.getElementById('cours-grid');
+    if (!bar || !grid) return;
+
+    var empty = document.getElementById('cours-empty');
+
+    // L'annonce du nombre de cours affichés (#cours-count) et la synchronisation
+    // de l'URL sont gérées par le script de cours.html, qui écoute le même clic.
+    function apply(value) {
+      var visible = 0;
+      grid.querySelectorAll('.cours-item').forEach(function (item) {
+        var show = value === 'all' || item.dataset.cat === value;
+        item.hidden = !show;
+        if (show) visible++;
+      });
+      if (empty) empty.classList.toggle('is-visible', visible === 0);
     }
-  );
-}
 
-// 14. Process steps corpo — container stagger (skip if parent already .gs-stagger)
-const corpoSteps = document.querySelectorAll('.corpo-step');
-if (corpoSteps.length && !corpoSteps[0].parentElement.classList.contains('gs-stagger')) {
-  gsap.fromTo(Array.from(corpoSteps),
-    { y: 36, opacity: 0 },
-    { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out',
-      stagger: { amount: 0.4, from: 'start' },
-      scrollTrigger: { trigger: corpoSteps[0].parentElement, start: 'top 88%', once: true }
+    bar.addEventListener('click', function (e) {
+      var btn = e.target.closest('.cours-filter');
+      if (!btn) return;
+      bar.querySelectorAll('.cours-filter').forEach(function (b) {
+        b.setAttribute('aria-pressed', String(b === btn));
+      });
+      apply(btn.dataset.filter);
+    });
+  })();
+
+  /* ── 7 · Simulateur de la page Tarifs ──────────────────── */
+  (function tarifsSimulateur() {
+    var calc = document.getElementById('tarifs-simulateur');
+    if (!calc) return;
+
+    var tabs   = document.getElementById('sim-plan-tabs');
+    var slider = document.getElementById('freq-slider');
+    var freqEl = document.getElementById('freq-value');
+    var costEl = document.getElementById('calc-cost');
+    var saveEl = document.getElementById('calc-saving');
+    var totEl  = document.getElementById('calc-total');
+    if (!tabs || !slider || !costEl) return;
+
+    var WEEKS_PER_MONTH = 4.33;
+
+    function activeTab() {
+      return tabs.querySelector('.tarifs-calc-tab[aria-pressed="true"]')
+          || tabs.querySelector('.tarifs-calc-tab');
     }
-  );
-}
 
+    function update() {
+      var tab = activeTab();
+      if (!tab) return;
 
-// 16. Hero de cours — scale-in avec parallaxe
-const coursHero = document.querySelector('.cours-hero-img-wrap');
-if (coursHero) {
-  gsap.fromTo(coursHero,
-    { scale: 1.08 },
-    { scale: 1, duration: 2.0, ease: 'power2.out' }
-  );
-}
+      var price     = parseFloat(tab.dataset.price);
+      var months    = parseInt(tab.dataset.months, 10);
+      var unitPrice = parseFloat(calc.dataset.unitPrice) || 30;
+      var frequency = parseInt(slider.value, 10);
+      if (!price || !months || !frequency) return;
 
-// ── HOVER MAGNÉTIQUE sur les CTAs principaux ─────────────────
-document.querySelectorAll('.btn-pill, .btn-rect, .pf-pack-cta, .pf-hero-cta').forEach(btn => {
-  btn.addEventListener('mousemove', e => {
-    const rect = btn.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    gsap.to(btn, { x: x * 0.18, y: y * 0.18, duration: 0.3, ease: 'power2.out', overwrite: 'auto' });
-  });
-  btn.addEventListener('mouseleave', () => {
-    gsap.to(btn, { x: 0, y: 0, duration: 0.55, ease: 'power3.out', overwrite: 'auto' });
-  });
-});
+      var sessions = Math.round(frequency * WEEKS_PER_MONTH * months);
+      var perClass = price / sessions;
+      var saving   = unitPrice - perClass;
 
+      if (freqEl) freqEl.textContent = String(frequency);
+      costEl.textContent = 'CHF ' + perClass.toFixed(2);
+      if (totEl)  totEl.textContent = '~' + sessions + ' cours';
+      if (saveEl) saveEl.textContent = saving > 0 ? '−CHF ' + saving.toFixed(2) + ' / cours' : '—';
+    }
 
-// ── TÉMOIGNAGES — carrousel (homepage) ────────────────────────
-// Contrôleur ré-initialisable : main.js l'initialise avec les données
-// statiques de secours ; cms.js le rappelle ensuite avec les données Sanity.
-window.amarteInitTesti = function (list) {
-  const root = document.getElementById('testi-carousel');
-  if (!root || !Array.isArray(list) || list.length === 0) return;
+    tabs.addEventListener('click', function (e) {
+      var btn = e.target.closest('.tarifs-calc-tab');
+      if (!btn) return;
+      tabs.querySelectorAll('.tarifs-calc-tab').forEach(function (b) {
+        b.setAttribute('aria-pressed', String(b === btn));
+      });
+      update();
+    });
+    slider.addEventListener('input', update);
+    update();
+  })();
 
-  const quoteEl  = root.querySelector('.testi-quote-big');
-  const authorEl = root.querySelector('.testi-author');
-  const detailEl = root.querySelector('.testi-detail');
-  const viewport = root.querySelector('.testi-viewport');
-  const curEl    = root.querySelector('.testi-current');
-  const totEl    = root.querySelector('.testi-total');
-  const dotsEl   = root.querySelector('.testi-dots');
-  const prevBtn  = root.querySelector('.testi-prev');
-  const nextBtn  = root.querySelector('.testi-next');
-  if (!quoteEl) return;
+  /* ── 8 · Widget de réservation Glofox ──────────────────── */
+  /* L'indicateur de chargement n'est posé que par ce script : il disparaît
+     dès que l'iframe répond, et au plus tard au bout de quelques secondes.
+     Si le widget ne charge jamais, le lien de secours placé juste en dessous
+     prend le relais — mais rien ne tourne indéfiniment. */
+  (function glofoxEmbed() {
+    var wrap  = document.querySelector('.glofox-embed-wrap');
+    var frame = wrap && wrap.querySelector('iframe');
+    if (!frame) return;
 
-  const pad = (n) => String(n).padStart(2, '0');
-  let i = 0;
-  let timer = null;
+    var timer = 0;
+    function settled() {
+      window.clearTimeout(timer);
+      wrap.classList.remove('is-loading');
+      frame.removeEventListener('load', settled);
+      window.removeEventListener('load', settled);
+    }
 
-  totEl.textContent = pad(list.length);
-  dotsEl.innerHTML = list
-    .map((_, k) => `<button class="testi-dot" type="button" aria-label="Témoignage ${k + 1}"></button>`)
-    .join('');
-  const dots = Array.from(dotsEl.children);
-
-  // Un seul créneau = pas de navigation
-  const single = list.length <= 1;
-  [prevBtn, nextBtn].forEach(b => { if (b) b.style.display = single ? 'none' : ''; });
-  dotsEl.style.display = single ? 'none' : '';
-
-  function paint() {
-    const t = list[i];
-    quoteEl.textContent  = t.texte  || t.text   || '';
-    authorEl.textContent = t.auteur || t.author || '';
-    detailEl.textContent = t.detail || '';
-    curEl.textContent    = pad(i + 1);
-    dots.forEach((d, k) => d.classList.toggle('is-active', k === i));
-  }
-
-  function go(n) {
-    i = (n + list.length) % list.length;
-    viewport.classList.add('is-fading');
-    setTimeout(() => { paint(); viewport.classList.remove('is-fading'); }, 240);
-  }
-
-  function restartAuto() {
-    if (single) return;
-    clearInterval(timer);
-    timer = setInterval(() => go(i + 1), 7000);
-  }
-
-  if (prevBtn) prevBtn.onclick = () => { go(i - 1); restartAuto(); };
-  if (nextBtn) nextBtn.onclick = () => { go(i + 1); restartAuto(); };
-  dots.forEach((d, k) => { d.onclick = () => { go(k); restartAuto(); }; });
-  root.onmouseenter = () => clearInterval(timer);
-  root.onmouseleave = restartAuto;
-
-  paint();
-  restartAuto();
-};
-
-// Initialisation avec les données de secours (remplacées ensuite par Sanity)
-(function () {
-  const dataEl = document.getElementById('testi-data');
-  if (!dataEl) return;
-  try {
-    const list = JSON.parse(dataEl.textContent);
-    window.amarteInitTesti(list);
-  } catch (e) { /* on garde le 1er témoignage statique */ }
+    wrap.classList.add('is-loading');
+    frame.addEventListener('load', settled);
+    window.addEventListener('load', settled);
+    timer = window.setTimeout(settled, 10000);
+  })();
 })();
-
-// ── CONTACT FORMS ─────────────────────────────────────────────
-document.querySelectorAll('.contact-form').forEach(form => {
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const wrap = this.closest('.form-wrap');
-    if (wrap) {
-      gsap.to(wrap, { opacity: 0, y: -16, duration: 0.3, ease: 'power2.in', onComplete: () => {
-        wrap.innerHTML = '<div class="form-success"><p class="form-success-title">Merci.</p><p class="form-success-sub">Nous vous répondons dans les 24 heures.</p></div>';
-        gsap.fromTo(wrap, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' });
-      }});
-    }
-  });
-});
-
-// ── FAQ ACCORDION ─────────────────────────────────────────────
-document.querySelectorAll('.faq-item').forEach(item => {
-  item.addEventListener('click', () => {
-    const wasOpen = item.classList.contains('open');
-    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-    if (!wasOpen) {
-      item.classList.add('open');
-      const answer = item.querySelector('.faq-answer');
-      if (answer) gsap.fromTo(answer, { y: -8, opacity: 0.6 }, { y: 0, opacity: 1, duration: 0.35, ease: 'power2.out' });
-    }
-  });
-});
-
-// ── GLOFOX IFRAME ────────────────────────────────────────────
-// L'iframe Glofox est auto-dimensionnée par iframe-resizer (init dans
-// chaque page concernée). Rien à gérer ici : pas de hauteur figée,
-// pas de scroll interne, l'embed grandit à la hauteur de son contenu.
-
-// ── SCROLL PROGRESS BAR ───────────────────────────────────────
-const progressBar = document.createElement('div');
-progressBar.style.cssText = 'position:fixed;top:0;left:0;height:2px;background:var(--accent);z-index:9999;width:0%;transition:none;pointer-events:none;';
-document.body.appendChild(progressBar);
-window.addEventListener('scroll', () => {
-  const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-  progressBar.style.width = Math.min(scrolled, 100) + '%';
-}, { passive: true });
-
-// ── FAÇADE VIDÉO YOUTUBE (clic/clavier → chargement de l'iframe) ──
-const videoFacade = document.getElementById('defi-video');
-if (videoFacade && videoFacade.dataset.yt) {
-  const loadVideo = () => {
-    const id = videoFacade.dataset.yt;
-    const iframe = document.createElement('iframe');
-    iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
-    iframe.title = 'Vidéo de présentation Amarte';
-    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-    iframe.allowFullscreen = true;
-    videoFacade.innerHTML = '';
-    videoFacade.classList.add('is-playing');
-    videoFacade.removeAttribute('role');
-    videoFacade.removeAttribute('tabindex');
-    videoFacade.removeAttribute('aria-label');
-    videoFacade.appendChild(iframe);
-  };
-  videoFacade.addEventListener('click', loadVideo, { once: true });
-  videoFacade.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); loadVideo(); }
-  });
-}

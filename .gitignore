@@ -45,3 +45,6 @@ next-env.d.ts
 
 # documents internes (brief, charte)
 *.pdf
+
+# éditeur local
+.vscode/

@@ -43,34 +43,35 @@
   // 2. INITIATION_CHECKOUT — clic sur CTAs d'achat
   // ----------------------------------------------------------
   function trackCheckout(el) {
-    var location = el.getAttribute('data-cta') || 'unknown';
-    var label = el.textContent.trim().slice(0, 80);
     push('initiation_checkout', Object.assign({
-      cta_location: location,
-      cta_label: label,
+      cta_location: el.getAttribute('data-cta') || 'unknown',
+      cta_label: el.textContent.trim().slice(0, 80),
+      destination: el.href || '',
       page_path: window.location.pathname
     }, getUtm()));
   }
 
-  // Cible : tous les liens d'achat (data-cta="acheter-abonnement", "decouverte-detail", etc.)
-  // + tous les liens externes vers Glofox / Zenitoo
+  // Un début d'achat = un clic vers une page de paiement.
+  // On identifie ces liens par leur destination (les URLs d'achat Glofox se
+  // terminent par /buy), et non par le nom du data-cta : un nom peut changer,
+  // une destination de paiement non. Un clic ne déclenche qu'un seul event.
+  //
+  // Volontairement exclus, car ce ne sont PAS des achats :
+  //   - le lien « Se connecter » (…/memberships?login)
+  //   - le widget et les liens de réservation de cours
+  // L'achat effectif reste détecté plus bas par conversion_achat.
+  function isCheckoutLink(link) {
+    var href = link.getAttribute('href') || '';
+    if (link.hasAttribute('data-checkout')) return true;
+    return /glofox\.com\/.*\/buy(\?|#|$)/i.test(href);
+  }
+
   document.addEventListener('click', function (e) {
-    var el = e.target.closest('[data-cta]');
-    if (el) {
-      var cta = el.getAttribute('data-cta');
-      // Les CTA marqués comme déclencheurs de checkout
-      if (/acheter|decouverte|pf-/i.test(cta)) {
-        trackCheckout(el);
-      }
-    }
-    // Liens externes vers les plateformes de réservation
-    var link = e.target.closest('a[href*="glofox.com"], a[href*="zenitoo.ch"]');
-    if (link) {
-      push('initiation_checkout', Object.assign({
-        cta_location: 'external-booking',
-        cta_label: link.textContent.trim().slice(0, 80),
-        destination: link.href
-      }, getUtm()));
+    var target = e.target;
+    if (!target || typeof target.closest !== 'function') return;
+    var link = target.closest('a[href]');
+    if (link && isCheckoutLink(link)) {
+      trackCheckout(link);
     }
   }, { capture: true });
 
