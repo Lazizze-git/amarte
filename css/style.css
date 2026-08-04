@@ -353,7 +353,12 @@ body[data-nav-invert]:not(.menu-open) #nav-header:not(.is-scrolled) {
   justify-content: space-between;
   max-width: var(--max-w);
   margin-inline: auto;
-  padding-block: 1rem;
+  /* La hauteur de l'en-tête EST --header-h, à la bordure près : c'est la
+     seule source de vérité. Tout ce qui se cale dessous (barre de filtres
+     collante, ancres, panneau de menu) tombe alors au pixel près. Un
+     padding libre ferait diverger la hauteur réelle de la variable et
+     rouvrirait le liseré entre l'en-tête et la barre de filtres. */
+  min-height: calc(var(--header-h) - 1px);
   gap: var(--sp-5);
 }
 
@@ -2162,7 +2167,9 @@ footer { background: var(--bg-warm); }
 
   /* Navigation — le panneau laisse toujours voir un bord de la page */
   #nav-menu { width: 86%; min-width: 0; max-width: 420px; }
-  .nav-inner { padding-block: 0.75rem; }
+  /* Pas de padding vertical ici : la hauteur vient de --header-h (voir
+     .nav-inner). Un padding s'ajouterait au logo et repousserait la barre
+     de filtres collante d'un pixel sous l'en-tête. */
   .nav-logo-img-dark, .nav-logo-img-light { height: 38px; }
   .nav-login { display: none; }   /* repris dans le panneau */
 
