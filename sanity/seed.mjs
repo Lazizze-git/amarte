@@ -17,25 +17,72 @@ const cat = { '--accent': 'yoga', '--text': 'pilates', '--text-muted': 'bienetre
 push({
   _id: 'siteSettings',
   _type: 'settings',
-  adresse: 'Route du Village 1A, 2ème étage, 1066 Épalinges',
-  telephone: '+41 78 810 64 64',
-  email: 'info@amarte.ch',
-  instagram: 'https://www.instagram.com/amarte_epalinges/',
-  facebook: 'https://www.facebook.com/AmarteEpalinges',
-  glofoxBranchId: '66cca39faa7ce5d29003a6e3',
+  adresse:    'Route du Village 1A, 2ème étage, 1066 Épalinges',
+  telephone:  '+41 79 462 17 47',
+  telephone2: '+41 78 810 64 64',
+  email:      'info@amarte.ch',
+  tagline:    "Bouger. Respirer. *S'épanouir.*",
+  instagram:  'https://www.instagram.com/amarte_epalinges/',
+  facebook:   'https://www.facebook.com/AmarteEpalinges',
+  glofoxBranchId:      '66cca39faa7ce5d29003a6e3',
+  glofoxUrlReservation:'https://app.glofox.com/portal/#/branch/66cca39faa7ce5d29003a6e3/classes-week-view?header=classes&gt=GTM-K4MSN7T3',
+  glofoxUrlMembership: 'https://app.glofox.com/portal/#/branch/66cca39faa7ce5d29003a6e3/memberships?header=memberships&gt=GTM-K4MSN7T3',
+  glofoxUrlLogin:      'https://app.glofox.com/portal/#/branch/66cca39faa7ce5d29003a6e3/memberships?login',
   horairesOuverture: [
-    { _key: 'h1', jours: 'Lundi – Vendredi', heures: '08:30 – 20:30' },
-    { _key: 'h2', jours: 'Samedi',           heures: '09:00 – 13:00' },
-    { _key: 'h3', jours: 'Dimanche',         heures: '09:00 – 19:00' },
+    { _key: 'h1', jours: 'Lundi – Vendredi', heures: '8h00 – 20h00' },
+    { _key: 'h2', jours: 'Samedi',           heures: '8h00 – 17h00' },
+    { _key: 'h3', jours: 'Dimanche',         heures: 'Fermé' },
   ],
 })
 
-// ── TÉMOIGNAGES ──────────────────────────────────────────────
+// ── HÉROS DES PAGES (1 doc par page, hors index) ─────────────
+const heros = [
+  { page: 'apropos',       label: 'Le studio',                titre: 'Un lieu pour\nrevenir au mouvement.', sousTitre: "Amarte est né d'une idée simple : offrir un espace où chacun peut bouger, respirer et *s'épanouir* — à son rythme, sans jugement." },
+  { page: 'cours',         label: 'Cours & disciplines',      titre: 'Nos *cours*',                          sousTitre: '11 cours hebdomadaires — Yoga, Pilates, Bien-être.\nUne pratique pour chaque intention, un accueil pour chaque niveau.' },
+  { page: 'tarifs',        label: 'Tarifs & formules',        titre: 'À votre\n*rythme.*',                   sousTitre: "Pas de renouvellement automatique, jamais. Vous continuez parce que vous le voulez, pas parce qu'on vous y oblige." },
+  { page: 'calendrier',    label: 'Planning',                  titre: 'Calendrier',                           sousTitre: 'Consultez le planning de la semaine et réservez votre place en ligne. *Les disponibilités se mettent à jour en temps réel.*' },
+  { page: 'contact',       label: 'Contact',                   titre: 'Venez nous\nrendre visite.',           sousTitre: "Une question, une demande d'information ou envie de commencer ? *Nous sommes là.*" },
+  { page: 'location',      label: "Location d'espace",        titre: 'Notre salle,\nvotre projet.',          sousTitre: 'Un espace lumineux de 120 m² avec baie vitrée en arc de cercle, *disponible à la location pour vos cours, ateliers et événements bien-être.*' },
+  { page: 'corpo',         label: 'Entreprises & Partenariats', titre: 'Bien-être\nen entreprise',           sousTitre: "Parce qu'une équipe qui se sent bien *performe mieux.* Nous concevons des programmes sur mesure pour les entreprises de la région." },
+  { page: 'premiere-fois', label: 'Studio bien-être · Épalinges', titre: 'Force. Souplesse.\nMobilité.',     sousTitre: 'Un mois pour retrouver un corps plus fort, plus souple, plus libre — celui qui vous portera longtemps. Découvrez le Défi, et nos deux garanties, dans la vidéo.' },
+]
+heros.forEach((h) => push({ _id: `pageHero-${h.page}`, _type: 'pageHero', ...h }))
+
+// ── INFO CARDS — Calendrier (3), Cours (3), Contact accès (4) ─
+const infoCards = [
+  // cal-info — 3 cards numérotées 01/02/03 sur calendrier.html
+  { groupe: 'cal-info', titre: 'Réservation en ligne', texte: 'Choisissez votre cours et confirmez en quelques secondes. Confirmation immédiate par email.', ordre: 1 },
+  { groupe: 'cal-info', titre: 'Annulation flexible',  texte: "Annulation gratuite jusqu'à 2 h avant le cours. Au-delà, le crédit est consommé.",          ordre: 2 },
+  { groupe: 'cal-info', titre: 'Places limitées',      texte: "Nombre de places restreint pour garantir l'attention individuelle. Réservez à l'avance.",  ordre: 3 },
+  // cours-know — 3 cards « Bon à savoir » sur cours.html (les icônes SVG restent en HTML statique)
+  { groupe: 'cours-know', titre: 'En petit comité',      texte: '15 personnes max par cours — de la place pour être vu, guidé, corrigé.', ordre: 1 },
+  { groupe: 'cours-know', titre: 'Matériel fourni',      texte: 'Tapis et accessoires sur place. Venez simplement en tenue confortable.', ordre: 2 },
+  { groupe: 'cours-know', titre: 'Guidé à votre niveau', texte: "Débutant ou confirmé, les profs s'adaptent à vos limites du jour.",    ordre: 3 },
+  // contact-access — 4 items « Accès & Transport » sur contact.html
+  { groupe: 'contact-access', titre: 'Parking souterrain gratuit', ordre: 1 },
+  { groupe: 'contact-access', titre: 'Places extérieures',         ordre: 2 },
+  { groupe: 'contact-access', titre: 'Bus Girarde à 20 m',         ordre: 3 },
+  { groupe: 'contact-access', titre: 'Abri vélo sécurisé',         ordre: 4 },
+]
+infoCards.forEach((c, i) => push({
+  _id: `infoCard-${c.groupe}-${c.ordre}`,
+  _type: 'infoCard', actif: true, ...c,
+}))
+
+// ── TÉMOIGNAGES — grille de 12 cartes sur la homepage ────────
 const temoignages = [
-  { texte: "Une expérience fantastique. L'accueil est chaleureux, l'espace est spacieux et les installations sont entièrement neuves. Je me sens vraiment chez moi.", auteur: 'Sophie M.', detail: 'Membre depuis 6 mois · Yoga Flow' },
-  { texte: "J'avais peur de ne pas être au niveau. Mais les enseignants proposent toujours des adaptations. Pour la première fois, j'ai trouvé un cours vraiment accessible.", auteur: 'Laurent D.', detail: 'Membre depuis 3 mois · Pilates' },
-  { texte: "Ce que j'apprécie chez Amarte, c'est l'absence de compétition. On vient pour soi, pas pour performer. Cette ambiance est rare.", auteur: 'Nathalie R.', detail: 'Membre depuis 1 an · Tous cours' },
-  { texte: "J'ai commencé avec le pack Découverte. Deux semaines plus tard, j'ai pris l'abonnement mensuel. Amarte m'a redonné le goût du mouvement.", auteur: 'Isabelle C.', detail: 'Membre depuis 8 mois · Yoga & Bien-être' },
+  { texte: "Après quelques mois de Pilates, je me sens très en forme, avec beaucoup plus de flexibilité et d'énergie. Je recommande à tout le monde. Merci Amarte.", auteur: 'Maria Martha', detail: 'Pilates · membre' },
+  { texte: "Débutante, j'ai tout de suite accroché au Yoga Flow avec Edith et Yuta : ma rigidité diminue. Et le Pilates renforce mon dos. Très motivée pour continuer.", auteur: 'Beatriz', detail: 'Yoga & Pilates · +3 mois' },
+  { texte: "Une activité hebdomadaire dynamique, relaxante et saine. Une façon agréable de développer la force, la flexibilité et l'équilibre.", auteur: 'Marianne', detail: 'Yoga Flow · membre' },
+  { texte: "Une super salle, avec une variété de profs qui permet d'adapter à sa forme. Moins de douleurs, et une forme physique en nette amélioration.", auteur: 'Jonathan', detail: 'Pilates · 1 mois' },
+  { texte: "Le Pilates a été une très belle découverte. J'ai gagné en force et en conscience corporelle grâce aux explications de Yuta. Un lieu que je recommande sans hésitation.", auteur: 'Lise', detail: 'Pilates & Yoga · 1 mois' },
+  { texte: "Des cours dans une ambiance solaire et bienveillante, dans le respect du corps et des capacités de chacun. Une équipe très à l'écoute.", auteur: 'Marine', detail: 'Yoga & Pilates · membre' },
+  { texte: "Un choix de cours variés et accessibles aux débutants, avec des horaires pratiques — et un parking ! Un endroit unique à Lausanne, à essayer absolument.", auteur: 'Alice', detail: 'Plusieurs disciplines · membre' },
+  { texte: "Un espace confortable, bien équipé, facile d'accès. Un joli choix de professeurs qualifiés en yoga et pilates, à prix raisonnable.", auteur: 'Julio', detail: 'Yoga & Pilates · membre' },
+  { texte: "Je pensais que le yoga n'était pas fait pour moi, trop calme. Grâce à Amarte : moins de douleurs chroniques au dos et un bien meilleur sommeil.", auteur: 'Khanh', detail: 'Yoga Flow · membre' },
+  { texte: "Un studio bien situé où l'on se sent chez soi, avec une palette de cours fabuleux. Mon cours préféré : le Kundalini avec Kallia.", auteur: 'Marielle', detail: 'Kundalini · membre' },
+  { texte: "Super expérience ! Tout est simple et fluide, de l'inscription aux cours. Le centre est vraiment facile d'accès.", auteur: 'Lorène', detail: 'Nouvelle membre' },
+  { texte: "On se sent tout de suite dans un vrai cocon, chaleureux et apaisant. Les professeurs sont à l'écoute et de qualité.", auteur: 'Robin', detail: 'Membre' },
 ]
 temoignages.forEach((t, i) => push({
   _id: `temoignage-${i + 1}`, _type: 'temoignage', ...t, ordre: i + 1, actif: true,

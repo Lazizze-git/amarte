@@ -7,7 +7,7 @@
   <meta name="description" content="Louez la salle Amarte à Épalinges : 120 m², baie vitrée en arc de cercle, cuisine équipée, douche, 15 tapis et équipements yoga. Dès CHF 60/h. Idéale cours, ateliers, événements." />
   <meta name="keywords" content="location salle yoga Lausanne, salle bien-être Épalinges, espace atelier, location studio Vaud" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
-  <meta name="theme-color" content="#22353f" />
+  <meta name="theme-color" content="#2b1b1b" />
   <link rel="canonical" href="https://amarte.ch/location.html" />
   <link rel="alternate" hreflang="fr-CH" href="https://amarte.ch/location.html" />
   <meta property="og:type" content="website" />
@@ -51,69 +51,75 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" as="font" type="font/otf" href="public/fonts/RomieTrial-Regular.otf" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&amp;display=swap" rel="stylesheet" />
-  <link rel="icon" href="favicon.ico" sizes="32x32" />
-  <link rel="apple-touch-icon" href="public/images/apple-touch-icon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
-  <script>if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('js-reveal');</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-K4MSN7T3');</script>
   <!-- End Google Tag Manager -->
 </head>
-<body data-nav-invert>
+<body class="hero-blue">
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4MSN7T3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-
-<a class="skip-link" href="#main">Aller au contenu</a>
+<!-- End Google Tag Manager (noscript) -->
 
 <!-- ===== NAVIGATION ===== -->
 <header id="nav-header">
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo" aria-label="Amarte Studio — retour à l'accueil">
-      <img src="public/images/amarte_logo_dark.svg" alt="" width="55" height="44" class="nav-logo-img-dark" />
-      <img src="public/images/amarte_logo_light.svg" alt="" width="55" height="44" class="nav-logo-img-light" />
+    <span class="nav-side nav-side--left" aria-hidden="true"></span>
+    <a href="index.html" class="nav-logo" aria-label="Amarte Studio — accueil">
+      <img src="public/images/amarte_logo_dark.svg" alt="Amarte Studio" class="nav-logo-img-dark" /><img src="public/images/amarte_logo_light.svg" alt="Amarte Studio" class="nav-logo-img-light" />
     </a>
-    <div class="nav-side--right">
+    <div class="nav-side nav-side--right">
       <a class="nav-login" href="https://app.glofox.com/portal/#/branch/66cca39faa7ce5d29003a6e3/memberships?login" target="_blank" rel="noopener" data-cta="nav-login">Se connecter</a>
-      <button class="burger" id="burger-btn" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-menu">
-        <span class="b1"></span><span class="b2"></span><span class="b3"></span>
+      <button class="burger" id="burger-btn" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-menu">
+        <span class="b1"></span>
+        <span class="b2"></span>
+        <span class="b3"></span>
       </button>
     </div>
   </div>
 </header>
 
-<div class="nav-scrim" id="nav-scrim"></div>
 <div id="nav-menu">
-  <div class="nav-menu-inner">
-    <nav class="nav-menu-links" aria-label="Navigation principale">
-      <a href="index.html" class="nav-menu-link"><span class="nav-menu-label-wrap">Accueil</span><span class="nav-menu-arrow" aria-hidden="true">→</span></a>
-      <a href="premiere-fois.html" class="nav-menu-link"><span class="nav-menu-label-wrap">Première fois</span><span class="nav-menu-arrow" aria-hidden="true">→</span></a>
-      <a href="cours.html" class="nav-menu-link"><span class="nav-menu-label-wrap">Cours</span><span class="nav-menu-arrow" aria-hidden="true">→</span></a>
-      <a href="calendrier.html" class="nav-menu-link"><span class="nav-menu-label-wrap">Calendrier</span><span class="nav-menu-arrow" aria-hidden="true">→</span></a>
-      <a href="tarifs.html" class="nav-menu-link"><span class="nav-menu-label-wrap">Tarifs</span><span class="nav-menu-arrow" aria-hidden="true">→</span></a>
-      <a href="contact.html" class="nav-menu-link"><span class="nav-menu-label-wrap">Contact</span><span class="nav-menu-arrow" aria-hidden="true">→</span></a>
-    </nav>
-    <nav class="nav-menu-secondary" aria-label="Le studio">
-      <p class="nav-menu-secondary-head">Le studio</p>
-      <div class="nav-menu-sub-links">
-        <a href="apropos.html" class="nav-menu-sub-link">À propos</a>
-        <a href="location.html" class="nav-menu-sub-link" aria-current="page">Louer la salle</a>
-        <a href="corpo.html" class="nav-menu-sub-link">Entreprises</a>
-      </div>
-    </nav>
-    <div class="nav-menu-bottom">
-      <a href="https://app.glofox.com/portal/#/branch/66cca39faa7ce5d29003a6e3/memberships?login" target="_blank" rel="noopener" class="btn btn--primary" data-cta="menu-login">Se connecter</a>
-      <div class="nav-menu-contact-row">
-        <a href="https://wa.me/41788106464" target="_blank" rel="noopener">WhatsApp · +41 78&nbsp;810 64 64</a>
-        <a href="mailto:info@amarte.ch">info@amarte.ch</a>
-      </div>
+  <nav class="nav-menu-links" aria-label="Navigation principale">
+    <a href="index.html" class="nav-menu-link">
+      <span class="nav-menu-label-wrap">Accueil</span>
+      <span class="nav-menu-arrow">→</span>
+    </a>
+    <a href="premiere-fois.html" class="nav-menu-link">
+      <span class="nav-menu-label-wrap">Première fois</span>
+      <span class="nav-menu-arrow">→</span>
+    </a>
+    <a href="cours.html" class="nav-menu-link">
+      <span class="nav-menu-label-wrap">Cours</span>
+      <span class="nav-menu-arrow">→</span>
+    </a>
+    <a href="calendrier.html" class="nav-menu-link">
+      <span class="nav-menu-label-wrap">Calendrier</span>
+      <span class="nav-menu-arrow">→</span>
+    </a>
+    <a href="tarifs.html" class="nav-menu-link">
+      <span class="nav-menu-label-wrap">Tarifs</span>
+      <span class="nav-menu-arrow">→</span>
+    </a>
+    <a href="contact.html" class="nav-menu-link">
+      <span class="nav-menu-label-wrap">Contact</span>
+      <span class="nav-menu-arrow">→</span>
+    </a>
+  </nav>
+  <div class="nav-menu-bottom">
+    <a href="https://app.glofox.com/portal/#/branch/66cca39faa7ce5d29003a6e3/memberships?login" target="_blank" rel="noopener" class="nav-menu-cta" data-cta="menu-login">Se connecter</a>
+    <div class="nav-menu-contact-row">
+      <a href="https://wa.me/41794621747" target="_blank" rel="noopener">WhatsApp · +41 79 462 17 47</a>
+      <a href="mailto:info@amarte.ch">info@amarte.ch</a>
     </div>
   </div>
 </div>
 
-<main id="main">
+<main>
 
   <!-- ===== PAGE HERO ===== -->
   <section class="page-hero">
@@ -125,32 +131,30 @@
       </div>
       <div class="page-hero-head">
         <div class="page-hero-head-text">
-          <span class="page-hero-label">Location d’espace</span>
+          <span class="page-hero-label">Location d'espace</span>
           <h1 class="page-hero-title">Notre salle,<br>votre projet.</h1>
         </div>
+        <img src="public/images/hero-figure-location.svg" alt="Illustration — silhouette yoga" class="page-hero-figure" loading="lazy" decoding="async" />
       </div>
       <p class="page-hero-sub">Un espace lumineux de 120 m² avec baie vitrée en arc de cercle, <em>disponible à la location pour vos cours, ateliers et événements bien-être.</em></p>
     </div>
   </section>
 
   <!-- ===== SPACE DETAIL ===== -->
-  <article class="location-space gs-reveal" aria-labelledby="la-salle">
+  <article class="location-space gs-reveal">
     <div class="location-space-img">
-      <picture>
-        <source srcset="public/images/salle-ensemble.webp" type="image/webp" />
-        <img src="public/images/salle-ensemble.jpg" width="1500" height="836" alt="Vue d'ensemble de la salle Amarte — 120 m², baie vitrée en arc de cercle" loading="lazy" decoding="async" />
-      </picture>
+      <img src="public/images/salle-ensemble.jpg" alt="Vue d'ensemble de la salle Amarte — 120 m², baie vitrée en arc de cercle" style="width:100%;height:100%;object-fit:cover;display:block;" />
     </div>
     <div class="location-space-content">
       <p class="location-space-num">120 m²</p>
-      <h2 class="location-space-title" id="la-salle">La Salle Amarte</h2>
+      <h2 class="location-space-title">La Salle Amarte</h2>
       <p class="location-space-tagline">Cours collectifs · Ateliers · Événements bien-être</p>
       <p class="location-space-desc">Salle moderne de 120 m² à Épalinges, baignée de lumière naturelle grâce à sa large baie vitrée en arc de cercle. Un cadre apaisant et chaleureux pour vos cours, ateliers et événements.</p>
       <div class="location-features">
         <div class="location-feature"><span class="location-feature-dash">—</span> Grande salle 120 m²</div>
         <div class="location-feature"><span class="location-feature-dash">—</span> Baie vitrée en arc de cercle</div>
         <div class="location-feature"><span class="location-feature-dash">—</span> Cuisine moderne équipée</div>
-        <div class="location-feature"><span class="location-feature-dash">—</span> Salle d’eau avec douche</div>
+        <div class="location-feature"><span class="location-feature-dash">—</span> Salle d'eau avec douche</div>
         <div class="location-feature"><span class="location-feature-dash">—</span> WC adapté PMR</div>
         <div class="location-feature"><span class="location-feature-dash">—</span> Parking souterrain gratuit</div>
         <div class="location-feature"><span class="location-feature-dash">—</span> Luminosité naturelle</div>
@@ -160,11 +164,11 @@
   </article>
 
   <!-- ===== EQUIPMENT ===== -->
-  <section class="location-equipment" aria-labelledby="equipements">
+  <section class="location-equipment">
     <div class="location-equipment-inner">
-      <div class="section-head gs-stagger">
+      <div class="gs-stagger location-equipment-head">
         <p class="section-label">Équipements inclus</p>
-        <h2 class="section-title" id="equipements">Tout ce qu’il vous faut, <em>déjà sur place.</em></h2>
+        <h2 style="font-family:var(--font-serif);font-size:clamp(2rem,5vw,3rem);line-height:1.08;color:var(--text)">Tout ce qu'il vous faut, <em>déjà sur place.</em></h2>
       </div>
       <div class="location-equipment-grid gs-stagger">
         <div class="location-equipment-card">
@@ -192,11 +196,11 @@
   </section>
 
   <!-- ===== PRICING TABLE ===== -->
-  <section class="location-pricing" aria-labelledby="tarifs-location">
+  <section class="location-pricing">
     <div class="location-pricing-inner">
-      <div class="section-head gs-stagger">
+      <div class="gs-stagger location-pricing-head">
         <p class="section-label">Grille tarifaire</p>
-        <h2 class="section-title" id="tarifs-location">Tarifs <em>à l’heure.</em></h2>
+        <h2 style="font-family:var(--font-serif);font-size:clamp(2rem,5vw,3rem);line-height:1.08;color:var(--text)">Tarifs <em>à l'heure.</em></h2>
         <p class="location-pricing-note">Tous les prix sont en CHF, TVA incluse. Aucune caution exigée.</p>
       </div>
       <div class="location-pricing-grid gs-reveal">
@@ -214,11 +218,11 @@
   </section>
 
   <!-- ===== BOOKING FORM ===== -->
-  <section class="location-booking" id="demande-location" aria-labelledby="demande-title">
+  <section class="location-booking" id="demande-location">
     <div class="location-booking-inner">
       <div class="gs-stagger">
         <p class="section-label">Réservation</p>
-        <h2 class="location-booking-title" id="demande-title">Faites votre <em>demande.</em></h2>
+        <h2 class="location-booking-title">Faites votre <em>demande.</em></h2>
         <p class="location-booking-sub">Décrivez votre projet — réponse sous 24 h avec les disponibilités.</p>
         <div class="location-booking-info">
           <div class="location-booking-row"><span class="location-booking-dash">—</span> Réponse sous 24h ouvrées</div>
@@ -228,25 +232,25 @@
         </div>
       </div>
       <div class="form-wrap gs-reveal">
-        <form class="contact-form" novalidate>
+        <form class="contact-form">
           <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="l-prenom">Prénom</label>
-              <input type="text" id="l-prenom" name="prenom" class="form-input" autocomplete="given-name" placeholder="Marie" required />
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">Prénom</label>
+              <input type="text" class="form-input" placeholder="Marie" required />
             </div>
-            <div class="form-group">
-              <label class="form-label" for="l-nom">Nom</label>
-              <input type="text" id="l-nom" name="nom" class="form-input" autocomplete="family-name" placeholder="Dupont" required />
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">Nom</label>
+              <input type="text" class="form-input" placeholder="Dupont" required />
             </div>
           </div>
           <div class="form-group">
-            <label class="form-label" for="l-email">E-mail</label>
-            <input type="email" id="l-email" name="email" class="form-input" spellcheck="false" autocomplete="email" placeholder="marie@exemple.ch" required />
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" placeholder="marie@exemple.ch" required />
           </div>
           <div class="form-group">
-            <label class="form-label" for="l-type">Type d’utilisation</label>
-            <select id="l-type" name="type" class="form-select">
-              <option value="">Type d’activité</option>
+            <label class="form-label">Type d'utilisation</label>
+            <select class="form-select">
+              <option value="">Type d'activité</option>
               <option>Cours collectif / atelier</option>
               <option>Cours privé</option>
               <option>Événement bien-être</option>
@@ -255,11 +259,10 @@
             </select>
           </div>
           <div class="form-group">
-            <label class="form-label" for="l-message">Message &amp; disponibilités souhaitées</label>
-            <textarea id="l-message" name="message" class="form-textarea" rows="4" placeholder="Décrivez votre projet, vos dates et horaires souhaités…" required></textarea>
+            <label class="form-label">Message &amp; disponibilités souhaitées</label>
+            <textarea class="form-textarea" rows="4" placeholder="Décrivez votre projet, vos dates et horaires souhaités..."></textarea>
           </div>
-          <button type="submit" class="btn btn--primary btn--block btn--lg">Envoyer la demande</button>
-          <p class="form-note">Réponse sous 24 heures ouvrées, ou directement sur <a href="https://wa.me/41788106464" target="_blank" rel="noopener">WhatsApp</a>.</p>
+          <button type="submit" class="form-submit">Envoyer la demande</button>
         </form>
       </div>
     </div>
@@ -267,48 +270,50 @@
 
 </main>
 
-<!-- ===== PIED DE PAGE ===== -->
+<!-- ===== FOOTER ===== -->
 <footer>
   <div class="footer-main">
     <div class="footer-inner">
-      <p class="footer-tagline">Bouger. Respirer. <em>S’épanouir.</em></p>
+      <p class="footer-tagline">Bouger. Respirer. <em>S'épanouir.</em></p>
       <div class="footer-links">
-        <nav class="footer-col" aria-label="Navigation du pied de page">
+        <div class="footer-col">
           <p class="footer-col-head">Navigation</p>
           <ul>
             <li><a href="premiere-fois.html">Première fois</a></li>
             <li><a href="cours.html">Cours</a></li>
             <li><a href="tarifs.html">Tarifs</a></li>
             <li><a href="calendrier.html">Réserver</a></li>
-            <li><a href="https://qrco.de/bfWgKJ?trackSharing=1" target="_blank" rel="noopener">Télécharger l’application</a></li>
             <li><a href="contact.html">Contact</a></li>
           </ul>
-        </nav>
-        <nav class="footer-col" aria-label="Le studio">
+        </div>
+        <div class="footer-col">
           <p class="footer-col-head">Le studio</p>
           <ul>
             <li><a href="apropos.html">À propos</a></li>
-            <li><a href="location.html">Louer la salle</a></li>
-            <li><a href="corpo.html">Entreprises</a></li>
+            <li><a href="location.html">Location</a></li>
+            <li><a href="corpo.html">Corpo B2B</a></li>
           </ul>
-        </nav>
+        </div>
         <div class="footer-col">
           <p class="footer-col-head">Contact</p>
           <ul>
-            <li><a href="https://www.google.com/maps/place/Amarte+Studio+SNC/@46.5491867,6.67145,17z/data=!3m1!4b1!4m6!3m5!1s0x478c2f3f396df907:0xbe0cc1aee20d6086!8m2!3d46.549183!4d6.6740249!16s%2Fg%2F11nn201t62" target="_blank" rel="noopener">Route du Village 1A, 1066 Épalinges</a></li>
-            <li><a href="https://wa.me/41788106464" target="_blank" rel="noopener">WhatsApp · +41 78&nbsp;810 64 64</a></li>
+            <li><a href="https://maps.google.com/?q=Route+du+Village+1A+1066+Épalinges" target="_blank" rel="noopener">Localisation</a></li>
+            <li><a href="https://wa.me/41794621747" target="_blank" rel="noopener">WhatsApp</a></li>
             <li><a href="mailto:info@amarte.ch">info@amarte.ch</a></li>
-            <li><a href="https://instagram.com/amarte_epalinges" target="_blank" rel="noopener">Instagram</a></li>
-            <li><a href="https://facebook.com/AmarteEpalinges" target="_blank" rel="noopener">Facebook</a></li>
+            <li><a href="https://instagram.com/amarte_epalinges" target="_blank" rel="noopener">Instagram</a> · <a href="https://facebook.com/AmarteEpalinges" target="_blank" rel="noopener">Facebook</a></li>
+            <li><span class="footer-badge">Certifié QualiCert</span></li>
           </ul>
-          <p class="footer-badge">Certifié QualiCert</p>
         </div>
       </div>
     </div>
+    <div class="footer-util">
+      <a href="#">Télécharger l'application</a>
+      <a href="#">Politique de confidentialité</a>
+    </div>
   </div>
-  <div class="footer-deco" aria-hidden="true"><p class="footer-deco-text">amarte</p></div>
+  <div class="footer-deco"><p class="footer-deco-text">amarte</p></div>
   <div class="footer-bar">
-    <p class="footer-copy">© <span class="footer-year"></span> Amarte Studio — Tous droits réservés.</p>
+    <p class="footer-copy">© <span class="footer-year"></span> Amarte — Tous droits réservés.</p>
   </div>
 </footer>
 
