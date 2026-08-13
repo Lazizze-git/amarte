@@ -650,6 +650,12 @@ body.menu-open .nav-scrim {
   box-shadow: 0 0 0 3px rgba(34,53,63,0.12);
 }
 .form-textarea { resize: vertical; min-height: 128px; }
+.form-textarea--compact { min-height: 92px; }
+/* iOS centre verticalement la valeur des champs date/heure et la décale à
+   gauche : on la recale sur la même ligne de base que les autres champs. */
+.form-input[type="date"], .form-input[type="time"] { text-align: left; }
+.form-input::-webkit-date-and-time-value { text-align: left; margin: 0; }
+.form-input::-webkit-calendar-picker-indicator { opacity: 0.55; cursor: pointer; }
 .form-select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23695f58' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
@@ -772,6 +778,8 @@ body.menu-open .nav-scrim {
   gap: clamp(1rem, 4vw, 3rem);
   margin-bottom: var(--sp-5);
 }
+/* Page sans sous-titre (location) : pas de marge morte sous le titre. */
+.page-hero-inner > .page-hero-head:last-child { margin-bottom: 0; }
 .page-hero-head-text { min-width: 0; }
 .page-hero-label {
   display: block;
@@ -1821,6 +1829,7 @@ body.menu-open .nav-scrim {
 .location-equipment-card:hover { border-color: var(--border-md); }
 .location-equipment-val { font-family: var(--font-serif); font-size: clamp(2.25rem, 4vw, 3rem); color: var(--text); line-height: 1; margin-bottom: var(--sp-2); }
 .location-equipment-label { font-size: var(--fs-label); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+.location-equipment-footer { font-size: var(--fs-sm); color: var(--text-muted); margin-top: var(--sp-5); }
 
 .location-pricing { padding: var(--sec-v) var(--gutter); background: var(--bg); }
 .location-pricing-inner { max-width: var(--max-w); margin-inline: auto; }

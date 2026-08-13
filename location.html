@@ -129,7 +129,6 @@
           <h1 class="page-hero-title">Notre salle,<br>votre projet.</h1>
         </div>
       </div>
-      <p class="page-hero-sub">Un espace lumineux de 120 m² avec baie vitrée en arc de cercle, <em>disponible à la location pour vos cours, ateliers et événements bien-être.</em></p>
     </div>
   </section>
 
@@ -153,6 +152,7 @@
         <div class="location-feature"><span class="location-feature-dash">—</span> Salle d’eau avec douche</div>
         <div class="location-feature"><span class="location-feature-dash">—</span> WC adapté PMR</div>
         <div class="location-feature"><span class="location-feature-dash">—</span> Parking souterrain gratuit</div>
+        <div class="location-feature"><span class="location-feature-dash">—</span> Arrêt de bus Girarde à 20 m (+ connexion métro M2)</div>
         <div class="location-feature"><span class="location-feature-dash">—</span> Luminosité naturelle</div>
         <div class="location-feature"><span class="location-feature-dash">—</span> 2ème étage, accès ascenseur</div>
       </div>
@@ -188,6 +188,7 @@
           <p class="location-equipment-label">Ceintures</p>
         </div>
       </div>
+      <p class="location-equipment-footer">Besoin de plus ? 15 tapis et 15 couvertures supplémentaires disponibles en supplément, sur demande.</p>
     </div>
   </section>
 
@@ -219,16 +220,15 @@
       <div class="gs-stagger">
         <p class="section-label">Réservation</p>
         <h2 class="location-booking-title" id="demande-title">Faites votre <em>demande.</em></h2>
-        <p class="location-booking-sub">Décrivez votre projet — réponse sous 24 h avec les disponibilités.</p>
+        <p class="location-booking-sub">Décrivez votre projet et vos horaires souhaités — on revient vers vous avec les disponibilités.</p>
         <div class="location-booking-info">
-          <div class="location-booking-row"><span class="location-booking-dash">—</span> Réponse sous 24h ouvrées</div>
           <div class="location-booking-row"><span class="location-booking-dash">—</span> Visite possible sur rendez-vous</div>
           <div class="location-booking-row"><span class="location-booking-dash">—</span> Réductions pour réservations régulières</div>
           <div class="location-booking-row"><span class="location-booking-dash">—</span> Parking souterrain gratuit inclus</div>
         </div>
       </div>
       <div class="form-wrap gs-reveal">
-        <form class="contact-form" novalidate>
+        <form class="contact-form" novalidate data-success-note="On revient vers vous avec les disponibilités.">
           <div class="form-row">
             <div class="form-group">
               <label class="form-label" for="l-prenom">Prénom</label>
@@ -244,6 +244,16 @@
             <input type="email" id="l-email" name="email" class="form-input" spellcheck="false" autocomplete="email" placeholder="marie@exemple.ch" required />
           </div>
           <div class="form-group">
+            <label class="form-label" for="l-tel">Téléphone <span class="form-note">(facultatif)</span></label>
+            <input type="tel" id="l-tel" name="telephone" class="form-input" autocomplete="tel" placeholder="+41 78 000 00 00" />
+          </div>
+          <!-- Ces champs alimentent directement la facture : l'adresse complète et
+               les horaires réels d'occupation sont obligatoires côté client. -->
+          <div class="form-group">
+            <label class="form-label" for="l-adresse">Adresse de facturation complète</label>
+            <textarea id="l-adresse" name="adresse_facturation" class="form-textarea form-textarea--compact" rows="3" autocomplete="street-address" placeholder="Nom de l’entreprise (si applicable)&#10;Rue et n°&#10;NPA et localité" required></textarea>
+          </div>
+          <div class="form-group">
             <label class="form-label" for="l-type">Type d’utilisation</label>
             <select id="l-type" name="type" class="form-select">
               <option value="">Type d’activité</option>
@@ -255,11 +265,31 @@
             </select>
           </div>
           <div class="form-group">
-            <label class="form-label" for="l-message">Message &amp; disponibilités souhaitées</label>
-            <textarea id="l-message" name="message" class="form-textarea" rows="4" placeholder="Décrivez votre projet, vos dates et horaires souhaités…" required></textarea>
+            <label class="form-label" for="l-date">Date souhaitée</label>
+            <input type="date" id="l-date" name="date" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="l-heure-entree">Heure d’entrée dans la salle</label>
+                <input type="time" id="l-heure-entree" name="heure_entree" class="form-input" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="l-heure-sortie">Heure de sortie</label>
+                <input type="time" id="l-heure-sortie" name="heure_sortie" class="form-input" required />
+              </div>
+            </div>
+            <p class="form-note">Le coût de location couvre toute la durée d’occupation de la salle (installation, événement, rangement et nettoyage).</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="l-participants">Nombre de participants <span class="form-note">(facultatif)</span></label>
+            <input type="number" id="l-participants" name="participants" class="form-input" min="1" step="1" inputmode="numeric" placeholder="12" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="l-message">Message <span class="form-note">(facultatif)</span></label>
+            <textarea id="l-message" name="message" class="form-textarea" rows="4" placeholder="Décrivez votre projet, le déroulé souhaité…"></textarea>
           </div>
           <button type="submit" class="btn btn--primary btn--block btn--lg">Envoyer la demande</button>
-          <p class="form-note">Réponse sous 24 heures ouvrées, ou directement sur <a href="https://wa.me/41788106464" target="_blank" rel="noopener">WhatsApp</a>.</p>
         </form>
       </div>
     </div>

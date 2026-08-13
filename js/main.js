@@ -228,13 +228,17 @@
       if (!wrap) return;
 
       var endpoint = form.dataset.endpoint;
+      // Le délai de réponse annoncé n'est pas le même partout : la page
+      // Location ne promet plus de 24 h. `data-success-note` sur le <form>
+      // remplace la première phrase de la confirmation.
+      var note = form.dataset.successNote || 'On vous répond sous 24&nbsp;heures ouvrées.';
       var done = function () {
         // La confirmation rappelle toujours WhatsApp et l'e-mail : personne
         // ne doit rester sans réponse si le message n'arrive pas.
         wrap.innerHTML =
           '<div class="form-success" role="status" tabindex="-1">' +
             '<p class="form-success-title">Message bien reçu.</p>' +
-            '<p class="form-success-sub">On vous répond sous 24&nbsp;heures ouvrées.<br>' +
+            '<p class="form-success-sub">' + note + '<br>' +
             'Besoin d\'une réponse tout de suite ? ' +
             '<a href="https://wa.me/41788106464" target="_blank" rel="noopener">WhatsApp</a> ou ' +
             '<a href="mailto:info@amarte.ch">info@amarte.ch</a>.</p>' +
