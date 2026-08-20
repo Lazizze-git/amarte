@@ -7,6 +7,7 @@
    1. Année du pied de page
    2. En-tête au défilement
    3. Panneau de navigation (ouverture, focus, clavier, iOS)
+      + barre d'ordinateur : sous-menu « Le studio », bascule 1025 px
    4. Révélations au défilement
    5. Formulaires de contact
    6. Filtres de la page Cours
@@ -156,6 +157,60 @@
         e.preventDefault(); first.focus();
       }
     });
+  })();
+
+  /* ── 3b · Sous-menu « Le studio » (navigation d'ordinateur) ──
+     Le seul repli de la barre : les trois pages qui parlent du lieu.
+     Sans ce script le bouton reste inerte, mais les trois pages restent
+     joignables par le pied de page et par le panneau latéral. */
+  (function studioMenu() {
+    var btn  = document.getElementById('studio-menu-btn');
+    var drop = document.getElementById('studio-menu');
+    if (!btn || !drop) return;
+
+    function setOpen(open) {
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open) drop.removeAttribute('hidden');
+      else drop.setAttribute('hidden', '');
+    }
+    setOpen(false);
+
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setOpen(btn.getAttribute('aria-expanded') !== 'true');
+    });
+
+    // Un clic ailleurs, Échap, ou le départ du focus referment.
+    document.addEventListener('click', function (e) {
+      if (!drop.contains(e.target)) setOpen(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      if (btn.getAttribute('aria-expanded') !== 'true') return;
+      setOpen(false);
+      btn.focus();
+    });
+    document.addEventListener('focusin', function (e) {
+      if (e.target !== btn && !drop.contains(e.target)) setOpen(false);
+    });
+  })();
+
+  /* ── 3c · Passage tablette → ordinateur ──
+     Au-delà de 1024 px la barre affiche toutes les pages et le bouton
+     du panneau disparaît. Si le panneau était ouvert au moment du
+     redimensionnement, son bouton de fermeture s'en irait avec lui :
+     on le referme donc nous-mêmes. */
+  (function navBreakpoint() {
+    if (!window.matchMedia) return;
+    var desktop = window.matchMedia('(min-width: 1025px)');
+    var burger  = document.getElementById('burger-btn');
+    if (!burger) return;
+
+    function sync(e) {
+      if (e.matches && burger.getAttribute('aria-expanded') === 'true') burger.click();
+    }
+    if (desktop.addEventListener) desktop.addEventListener('change', sync);
+    else if (desktop.addListener) desktop.addListener(sync);
   })();
 
   /* ── 4 · Révélations au défilement ─────────────────────── */

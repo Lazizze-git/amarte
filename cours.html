@@ -81,9 +81,30 @@
 <header id="nav-header">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo" aria-label="Amarte Studio — retour à l'accueil">
-      <img src="public/images/amarte_logo_dark.svg" alt="" width="55" height="44" class="nav-logo-img-dark" />
-      <img src="public/images/amarte_logo_light.svg" alt="" width="55" height="44" class="nav-logo-img-light" />
+      <img src="public/images/amarte_logo_lockup_dark.svg" alt="" width="194" height="44" class="nav-logo-img-dark" />
+      <img src="public/images/amarte_logo_lockup_light.svg" alt="" width="194" height="44" class="nav-logo-img-light" />
     </a>
+    <!-- Navigation d'ordinateur — visible à partir de 1025 px, là où le
+         panneau latéral et son bouton disparaissent. Les deux ne sont
+         jamais affichés en même temps : c'est le média qui tranche. -->
+    <nav class="nav-desktop" aria-label="Navigation principale">
+      <a class="nav-desktop-link" href="premiere-fois.html">Première fois</a>
+      <a class="nav-desktop-link" href="cours.html" aria-current="page">Cours</a>
+      <a class="nav-desktop-link" href="calendrier.html">Calendrier</a>
+      <a class="nav-desktop-link" href="tarifs.html">Tarifs</a>
+      <div class="nav-desktop-group">
+        <button type="button" class="nav-desktop-link nav-desktop-toggle" id="studio-menu-btn"
+                aria-expanded="false" aria-controls="studio-menu">
+          Le studio<span class="nav-desktop-caret" aria-hidden="true"></span>
+        </button>
+        <div class="nav-desktop-drop" id="studio-menu" hidden>
+          <a class="nav-desktop-sub" href="apropos.html">À propos</a>
+          <a class="nav-desktop-sub" href="location.html">Louer la salle</a>
+          <a class="nav-desktop-sub" href="corpo.html">Entreprises</a>
+        </div>
+      </div>
+      <a class="nav-desktop-link" href="contact.html">Contact</a>
+    </nav>
     <div class="nav-side--right">
       <a class="nav-login" href="https://app.glofox.com/portal/#/branch/66cca39faa7ce5d29003a6e3/memberships?login" target="_blank" rel="noopener" data-cta="nav-login">Se connecter</a>
       <button class="burger" id="burger-btn" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-menu">

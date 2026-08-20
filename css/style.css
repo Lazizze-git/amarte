@@ -368,6 +368,94 @@ body[data-nav-invert]:not(.menu-open) #nav-header:not(.is-scrolled) {
 
 .nav-side--right { display: flex; align-items: center; gap: var(--sp-5); }
 
+/* ── Navigation d'ordinateur ──
+   À partir de 1025 px, les pages se rejoignent directement depuis la
+   barre : plus de bouton à ouvrir pour changer de page. En dessous,
+   ce bloc disparaît et le panneau latéral reprend seul la main —
+   les deux ne coexistent jamais (voir § 21). */
+.nav-desktop { display: none; }
+
+@media (min-width: 1025px) {
+  .nav-desktop {
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 1.8vw, 1.9rem);
+  }
+}
+
+.nav-desktop-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 44px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-body);
+  white-space: nowrap;
+  position: relative;
+  transition: color var(--dur-2);
+}
+/* Le soulignement se dessine sous le libellé sans jamais déplacer la
+   rangée : un `border-bottom` ferait sauter la barre d'un pixel. */
+.nav-desktop-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.85rem;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-2) var(--ease-out);
+}
+.nav-desktop-link:hover { color: var(--text); }
+.nav-desktop-link:hover::after { transform: scaleX(1); }
+.nav-desktop-link[aria-current="page"],
+.nav-desktop-toggle[data-section-current] { color: var(--accent-text); }
+.nav-desktop-link[aria-current="page"]::after { transform: scaleX(1); }
+
+/* Sous-menu « Le studio » — les trois pages qui parlent du lieu plutôt
+   que de la pratique. Regroupées, elles n'allongent pas la barre. */
+.nav-desktop-group { position: relative; }
+.nav-desktop-caret {
+  width: 0.42rem;
+  height: 0.42rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform var(--dur-2) var(--ease-out);
+}
+.nav-desktop-toggle[aria-expanded="true"] .nav-desktop-caret { transform: translateY(1px) rotate(-135deg); }
+
+.nav-desktop-drop {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 13rem;
+  display: flex;
+  flex-direction: column;
+  padding: var(--sp-2);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  box-shadow: 0 18px 40px -22px rgba(34,53,63,0.45);
+}
+.nav-desktop-sub {
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--r-xs);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-body);
+  white-space: nowrap;
+  transition: background var(--dur-2), color var(--dur-2);
+}
+.nav-desktop-sub:hover { background: var(--bg-soft); color: var(--text); }
+.nav-desktop-sub[aria-current="page"] { color: var(--accent-text); }
+
+
 .nav-login {
   /* inline-flex + min-height : la zone cliquable fait la taille d'un doigt
      sans que le lien change d'aspect (la rangée est déjà centrée). */
@@ -412,10 +500,20 @@ body[data-nav-invert]:not(.menu-open) #nav-header:not(.is-scrolled) {
 .burger[aria-expanded="true"] .b2 { opacity: 0; transform: scaleX(0); }
 .burger[aria-expanded="true"] .b3 { transform: translateY(-6.5px) rotate(-45deg); }
 
+/* Au-delà de 1024 px, toutes les pages sont dans la barre : le bouton du
+   panneau n'a plus rien à ouvrir. */
+@media (min-width: 1025px) {
+  .burger { display: none; }
+}
+
 /* Contenu clair au-dessus d'un héros sombre */
 body[data-nav-invert]:not(.menu-open) #nav-header:not(.is-scrolled) .nav-login { color: rgba(255,255,255,0.88); }
 body[data-nav-invert]:not(.menu-open) #nav-header:not(.is-scrolled) .nav-login:hover { color: var(--white); border-bottom-color: rgba(255,255,255,0.7); }
 body[data-nav-invert]:not(.menu-open) #nav-header:not(.is-scrolled) .burger span { background: var(--white); }
+body[data-nav-invert]:not(.menu-open) #nav-header:not(.is-scrolled) .nav-desktop-link { color: rgba(255,255,255,0.88); }
+body[data-nav-invert]:not(.menu-open) #nav-header:not(.is-scrolled) .nav-desktop-link:hover { color: var(--white); }
+body[data-nav-invert]:not(.menu-open) #nav-header:not(.is-scrolled) .nav-desktop-link[aria-current="page"],
+body[data-nav-invert]:not(.menu-open) #nav-header:not(.is-scrolled) .nav-desktop-toggle[data-section-current] { color: var(--white); }
 body[data-nav-invert]:not(.menu-open) #nav-header:not(.is-scrolled) .nav-logo-img-dark { display: none; }
 body[data-nav-invert]:not(.menu-open) #nav-header:not(.is-scrolled) .nav-logo-img-light { display: block; }
 
@@ -430,8 +528,9 @@ body.menu-open #nav-header {
   border-bottom-color: transparent;
   padding-right: calc(var(--gutter) + env(safe-area-inset-right) + var(--sbw, 0px));
 }
-.nav-logo, .nav-login { transition: opacity var(--dur-2) var(--ease-out); }
+.nav-logo, .nav-desktop, .nav-login { transition: opacity var(--dur-2) var(--ease-out); }
 body.menu-open .nav-logo,
+body.menu-open .nav-desktop,
 body.menu-open .nav-login { opacity: 0; visibility: hidden; }
 
 /* ── Panneau de navigation ── */
@@ -622,7 +721,20 @@ body.menu-open .nav-scrim {
 
 /* ═══ 08 · FORMULAIRES ═══════════════════════════════════ */
 .contact-form { display: flex; flex-direction: column; gap: var(--sp-5); }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-5); }
+/* Formulaire long (demande de location) : les champs sont appariés par
+   ligne et la respiration verticale se resserre d'un cran. Rien n'est
+   retiré — c'est la hauteur totale qui diminue. */
+.contact-form--dense { gap: var(--sp-4); }
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-5);
+  /* Les libellés n'ont pas tous la même hauteur (certains passent à la
+     ligne) : on aligne sur le bas pour que les champs restent sur une
+     même ligne. */
+  align-items: end;
+}
+.form-row--3 { grid-template-columns: 1.2fr 1fr 1fr; gap: var(--sp-4); }
 .form-group { display: flex; flex-direction: column; gap: var(--sp-2); }
 .form-label {
   font-size: var(--fs-label);
@@ -821,6 +933,11 @@ body.menu-open .nav-scrim {
   display: block;
   position: relative;
   overflow: hidden;
+  /* `width` explicite, indispensable : sans lui la largeur reste `auto`,
+     et le navigateur reporte alors `max-height` sur la largeur via
+     l'`aspect-ratio` — la photo s'arrêtait à 1860 px (620 × 3) au lieu
+     d'atteindre le bord droit de l'écran. */
+  width: 100%;
   aspect-ratio: 5 / 4;          /* mobile : la photo doit exister, pas s'effacer */
   max-height: 78svh;            /* garde-fou en paysage sur téléphone */
   background: var(--bg-soft);   /* couleur d'attente avant chargement */
@@ -1856,7 +1973,7 @@ body.menu-open .nav-scrim {
 .location-pricing-footer { font-size: var(--fs-sm); color: var(--text-muted); }
 
 .location-booking { padding: var(--sec-v) var(--gutter); background: var(--bg-warm); }
-.location-booking-inner { max-width: var(--max-w); margin-inline: auto; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2.5rem, 6vw, 5rem); }
+.location-booking-inner { max-width: var(--max-w); margin-inline: auto; display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(2.5rem, 6vw, 5rem); }
 .location-booking-title { font-family: var(--font-serif); font-size: var(--fs-h2); font-weight: 400; color: var(--text); margin-bottom: var(--sp-4); }
 .location-booking-title em { color: var(--accent-text); }
 .location-booking-sub { font-size: var(--fs-lead); color: var(--text-muted); line-height: 1.7; margin-bottom: var(--sp-6); }
@@ -2144,6 +2261,10 @@ footer { background: var(--bg-warm); }
   .corpo-step:first-child, .corpo-step:nth-child(3) { padding-left: 0; }
   .corpo-step:nth-child(even) { border-right: none; padding-right: 0; }
   .location-equipment-grid { grid-template-columns: repeat(3, 1fr); }
+  /* Date + deux horaires : trois de front ne tiennent plus dans la
+     demi-colonne du formulaire de location. */
+  .form-row--3 { grid-template-columns: 1fr 1fr; }
+  .form-row--3 > :first-child { grid-column: 1 / -1; }
   .cours-grid           { grid-template-columns: repeat(2, 1fr); }
   .tcards               { grid-template-columns: repeat(2, 1fr); }
   .tarifs-plans         { grid-template-columns: repeat(2, 1fr); }
@@ -2253,7 +2374,8 @@ footer { background: var(--bg-warm); }
 
   /* Contact */
   .contact-page-inner { grid-template-columns: 1fr; }
-  .form-row { grid-template-columns: 1fr; }
+  .form-row, .form-row--3 { grid-template-columns: 1fr; }
+  .form-row--3 > :first-child { grid-column: auto; }
   .contact-map-grid { grid-template-columns: 1fr; }
   .contact-map-card .btn { width: 100%; }
 
