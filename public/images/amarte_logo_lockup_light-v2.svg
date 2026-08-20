@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Verrouillage horizontal du logo Amarte : mêmes tracés que
-     amarte_logo_dark.svg, simplement remis côte à côte.
+     amarte_logo_light.svg, simplement remis côte à côte.
      Raison : empilé, le mot « AMARTE » ne fait que 22 % de la hauteur
      totale — à 44 px dans l'en-tête il tombait sous 10 px et devenait
      illisible. À plat, il en occupe 58 % et redevient net.
      Ne pas modifier les tracés ici : les corriger dans le fichier
      empilé, puis régénérer. -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1324 300" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-18 -18 1361 336" role="img">
   <defs>
     <style>
       .cls-1 {
-        fill: #344234;
+        fill: #fff;
       }
     </style>
   </defs>

@@ -362,8 +362,15 @@ body[data-nav-invert]:not(.menu-open) #nav-header:not(.is-scrolled) {
   gap: var(--sp-5);
 }
 
-.nav-logo { display: flex; align-items: center; min-height: 44px; padding-right: var(--sp-2); }
-.nav-logo-img-dark, .nav-logo-img-light { height: 44px; width: auto; }
+.nav-logo { display: flex; align-items: center; min-height: 49px; padding-right: var(--sp-2); }
+/* 49px et non 44 : le fichier SVG porte desormais 18 unites de fond
+   perdu de chaque cote, soit 6 % de la hauteur du dessin. Sans cette
+   marge, le trace touchait les quatre bords du viewBox et les
+   extremites fines (pointe du « A », bouts des arcs, petit point du
+   haut) se faisaient raboter a l'antialiasing. Les 5 px
+   supplementaires compensent exactement ce fond perdu : le dessin
+   reste affiche a ~44 px, taille inchangee. */
+.nav-logo-img-dark, .nav-logo-img-light { height: 49px; width: auto; }
 .nav-logo-img-light { display: none; }
 
 .nav-side--right { display: flex; align-items: center; gap: var(--sp-5); }
@@ -2300,7 +2307,7 @@ footer { background: var(--bg-warm); }
   /* Pas de padding vertical ici : la hauteur vient de --header-h (voir
      .nav-inner). Un padding s'ajouterait au logo et repousserait la barre
      de filtres collante d'un pixel sous l'en-tête. */
-  .nav-logo-img-dark, .nav-logo-img-light { height: 38px; }
+  .nav-logo-img-dark, .nav-logo-img-light { height: 43px; }  /* 38 px de dessin + le fond perdu */
   .nav-login { display: none; }   /* repris dans le panneau */
 
   /* Héros */
