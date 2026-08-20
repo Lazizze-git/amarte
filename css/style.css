@@ -363,15 +363,21 @@ body[data-nav-invert]:not(.menu-open) #nav-header:not(.is-scrolled) {
 }
 
 .nav-logo { display: flex; align-items: center; min-height: 49px; padding-right: var(--sp-2); }
-/* 49px et non 44 : le fichier SVG porte desormais 18 unites de fond
-   perdu de chaque cote, soit 6 % de la hauteur du dessin. Sans cette
-   marge, le trace touchait les quatre bords du viewBox et les
-   extremites fines (pointe du « A », bouts des arcs, petit point du
-   haut) se faisaient raboter a l'antialiasing. Les 5 px
-   supplementaires compensent exactement ce fond perdu : le dessin
-   reste affiche a ~44 px, taille inchangee. */
-.nav-logo-img-dark, .nav-logo-img-light { height: 49px; width: auto; }
-.nav-logo-img-light { display: none; }
+/* Le logo est un SVG integre au HTML (voir l'en-tete des pages), pas une
+   image chargee : un fichier image reste en cache navigateur meme quand la
+   page change, ce qui faisait reapparaitre l'ancien trace rogne. Integre,
+   il suit toujours la page.
+   49 px et non 44 : le viewBox porte 18 unites de fond perdu de chaque
+   cote, sans quoi le trace touchait ses quatre bords et les extremites
+   fines (pointe du « A », bouts des arcs, petit point du haut) se
+   faisaient raboter a l'antialiasing. Les 5 px compensent ce fond perdu :
+   le dessin reste affiche a ~44 px, taille inchangee.
+   La couleur passe par currentColor : une seule copie du trace sert les
+   en-tetes clairs et sombres. */
+.nav-logo-mark { height: 49px; width: auto; display: block; color: #344234; }
+/* #344234 en dur : c'est le vert de la marque, present dans le fichier
+   d'origine. Aucune variable du theme ne porte cette teinte — --text est
+   un brun (#2b1b1b) et donnerait une autre couleur au logo. */
 
 .nav-side--right { display: flex; align-items: center; gap: var(--sp-5); }
 
@@ -521,8 +527,7 @@ body[data-nav-invert]:not(.menu-open) #nav-header:not(.is-scrolled) .nav-desktop
 body[data-nav-invert]:not(.menu-open) #nav-header:not(.is-scrolled) .nav-desktop-link:hover { color: var(--white); }
 body[data-nav-invert]:not(.menu-open) #nav-header:not(.is-scrolled) .nav-desktop-link[aria-current="page"],
 body[data-nav-invert]:not(.menu-open) #nav-header:not(.is-scrolled) .nav-desktop-toggle[data-section-current] { color: var(--white); }
-body[data-nav-invert]:not(.menu-open) #nav-header:not(.is-scrolled) .nav-logo-img-dark { display: none; }
-body[data-nav-invert]:not(.menu-open) #nav-header:not(.is-scrolled) .nav-logo-img-light { display: block; }
+body[data-nav-invert]:not(.menu-open) #nav-header:not(.is-scrolled) .nav-logo-mark { color: var(--white); }
 
 /* Menu ouvert : l'en-tête s'efface et ne garde que le bouton de fermeture.
    Le logo et « Se connecter » disparaissent — ils chevaucheraient le panneau
@@ -2307,7 +2312,7 @@ footer { background: var(--bg-warm); }
   /* Pas de padding vertical ici : la hauteur vient de --header-h (voir
      .nav-inner). Un padding s'ajouterait au logo et repousserait la barre
      de filtres collante d'un pixel sous l'en-tête. */
-  .nav-logo-img-dark, .nav-logo-img-light { height: 43px; }  /* 38 px de dessin + le fond perdu */
+  .nav-logo-mark { height: 43px; }  /* 38 px de dessin + le fond perdu */
   .nav-login { display: none; }   /* repris dans le panneau */
 
   /* Héros */
