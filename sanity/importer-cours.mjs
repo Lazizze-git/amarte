@@ -89,7 +89,37 @@ if (simulation) {
   process.exit(0)
 }
 
+// Le document des coordonnées traîne des champs abandonnés par
+// d'anciennes versions du schéma. Sanity les signale à chaque
+// ouverture ; on les retire une bonne fois, sans toucher aux champs
+// encore utilisés.
+const CHAMPS_COORDONNEES = [
+  'adresse', 'telephone', 'email', 'instagram', 'facebook',
+  'glofoxBranchId', 'horairesOuverture',
+]
+
+async function nettoyerCoordonnees() {
+  const lecture = `https://${PROJET}.api.sanity.io/v${API}/data/query/${DATASET}`
+                + `?query=${encodeURIComponent('*[_id == "siteSettings"][0]')}`
+  const r = await fetch(lecture, { headers: { Authorization: `Bearer ${jeton}` } })
+  if (!r.ok) return null
+
+  const doc = (await r.json()).result
+  if (!doc) return null
+
+  const orphelins = Object.keys(doc).filter(
+    (k) => !k.startsWith('_') && !CHAMPS_COORDONNEES.includes(k)
+  )
+  if (orphelins.length === 0) return null
+
+  console.log(`\nChamps abandonnés à retirer des coordonnées : ${orphelins.join(', ')}`)
+  return { patch: { id: 'siteSettings', unset: orphelins } }
+}
+
 const url = `https://${PROJET}.api.sanity.io/v${API}/data/mutate/${DATASET}?returnIds=true`
+const menage = await nettoyerCoordonnees()
+if (menage) mutations.push(menage)
+
 const reponse = await fetch(url, {
   method: 'POST',
   headers: {

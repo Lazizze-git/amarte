@@ -692,7 +692,7 @@
 
   // ── COORDONNÉES (toutes les pages : pied de page, contacts) ───
   query(`*[_id == "siteSettings"][0]{
-    telephone, email, instagram, facebook
+    telephone, email, instagram, facebook, glofoxBranchId
   }`).then(renderSettings).catch(() => {/* garder le HTML statique */});
 
   function renderSettings(s) {
@@ -712,6 +712,22 @@
     // Pour rebrancher : mettre `telephone` à jour dans siteSettings (Sanity),
     // vérifier la valeur, puis restaurer le bloc — et penser aux liens wa.me,
     // que ce code ne couvrait de toute façon pas.
+    // Identifiant Glofox : il apparaît dans une cinquantaine de liens
+    // du site. Le changer ici les met tous à jour, plutôt que d'avoir
+    // à reprendre chaque page si la plateforme attribue un nouvel
+    // espace.
+    if (s.glofoxBranchId) {
+      const nouveau = String(s.glofoxBranchId).trim();
+      if (/^[a-f0-9]{16,}$/i.test(nouveau)) {
+        document.querySelectorAll('a[href*="app.glofox.com"], iframe[src*="app.glofox.com"]').forEach((el) => {
+          const attr = el.tagName === 'IFRAME' ? 'src' : 'href';
+          const url = el.getAttribute(attr) || '';
+          const remplace = url.replace(/(\/branch\/)[a-f0-9]+/i, `$1${nouveau}`);
+          if (remplace !== url) el.setAttribute(attr, remplace);
+        });
+      }
+    }
+
     // Réseaux sociaux
     if (s.instagram) {
       document.querySelectorAll('a[href*="instagram.com"]').forEach(a => { a.href = s.instagram; });
