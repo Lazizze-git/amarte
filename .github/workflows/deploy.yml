@@ -37,6 +37,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Le CSS et le JS sont mis en cache une semaine par les
+      # navigateurs et par Cloudflare. Sans estampille, un
+      # déploiement laisse les visiteurs sur l'ancienne version.
+      # L'empreinte du commit change à chaque envoi, donc l'adresse
+      # du fichier change et le cache ne peut pas répondre à sa place.
+      - name: Estampiller le CSS et le JS
+        run: |
+          EMPREINTE=$(git rev-parse --short HEAD)
+          sed -i "s/?v=DEV/?v=$EMPREINTE/g" *.html
+          echo "Estampille appliquée : $EMPREINTE"
+          grep -o 'cms.js?v=[a-z0-9]*' index.html | head -1
+
       - name: Installer lftp
         run: sudo apt-get update && sudo apt-get install -y lftp
 
