@@ -1,0 +1,52 @@
+# ==========================================================
+#  Publication automatique du Studio Sanity
+#
+#  Se déclenche quand un fichier de sanity/ change sur `main`
+#  (schémas, configuration). Le site, lui, est déployé par
+#  deploy.yml : les deux sont indépendants.
+#
+#  À configurer une seule fois dans GitHub :
+#  dépôt → Settings → Secrets and variables → Actions
+#
+#    SANITY_AUTH_TOKEN   jeton créé sur sanity.io/manage
+#                        → projet amarte → API → Tokens
+#                        → rôle « Deploy Studio »
+# ==========================================================
+name: Publier le Studio Sanity
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'sanity/**'
+      - '.github/workflows/sanity.yml'
+  # Permet de republier à la main depuis l'onglet Actions.
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-sanity
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sanity
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # `npm ci` échouerait si le lockfile n'était plus aligné sur
+      # package.json ; `install` reste tolérant, ce qui convient ici
+      # où la chaîne n'a pas besoin d'être reproductible au commit près.
+      - name: Installer les dépendances
+        run: npm install --no-audit --no-fund
+
+      - name: Publier le Studio
+        env:
+          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
+        run: npx sanity deploy --yes
