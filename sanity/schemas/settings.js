@@ -18,7 +18,7 @@ export const settings = {
     },
     {
       name: 'email', title: 'Email', type: 'string',
-      initialValue: 'info@amarte.ch',
+      initialValue: 'hello@amarte.ch',
     },
     {
       name: 'instagram', title: 'URL Instagram', type: 'url',

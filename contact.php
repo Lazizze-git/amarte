@@ -15,12 +15,12 @@
 /* ── CONFIGURATION ────────────────────────────────────────── */
 
 // Destinataire des messages.
-const DEST = 'info@amarte.ch';
+const DEST = 'hello@amarte.ch';
 
 // Expéditeur technique. DOIT être une adresse du domaine hébergé
 // ici, sinon le message part en spam (SPF/DKIM ne valident plus).
 // Ne jamais mettre l'adresse du visiteur ici : elle va en Reply-To.
-const FROM_MAIL = 'info@amarte.ch';
+const FROM_MAIL = 'hello@amarte.ch';
 const FROM_NOM  = 'Site Amarte';
 
 // Nombre maximum d'envois par adresse IP et par heure.

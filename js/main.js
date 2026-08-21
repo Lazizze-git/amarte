@@ -298,7 +298,7 @@
             '<p class="form-success-sub">' + note + '<br>' +
             'Besoin d\'une réponse tout de suite ? ' +
             '<a href="https://wa.me/41788106464" target="_blank" rel="noopener">WhatsApp</a> ou ' +
-            '<a href="mailto:info@amarte.ch">info@amarte.ch</a>.</p>' +
+            '<a href="mailto:hello@amarte.ch">hello@amarte.ch</a>.</p>' +
           '</div>';
         // Le bouton qui avait le focus vient d'être retiré : on le redonne à
         // la confirmation, sinon le focus retombe en haut de page.
