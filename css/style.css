@@ -28,16 +28,24 @@
 
 
 /* ═══ 01 · POLICES ═══════════════════════════════════════ */
+/* Romie — © 2022-2025 Margot Lévêque. Tous droits réservés.
+   Licence commerciale achetée auprès de Claude Type (claudetype.com)
+   par Amarte Studio SNC — reçu n° CL5142 du 21 août 2026.
+   Romie Regular + Romie Medium, licence « S » (1-5 personnes).
+   Police propriétaire : ne pas redistribuer, ne pas réutiliser hors
+   des sites d'Amarte Studio. Détails : public/fonts/LICENSE.txt        */
 @font-face {
-  font-family: 'Romie Trial';
-  src: url('../public/fonts/RomieTrial-Regular.otf') format('opentype');
+  font-family: 'Romie';
+  src: url('../public/fonts/Romie-Regular.woff2') format('woff2'),
+       url('../public/fonts/Romie-Regular.woff')  format('woff');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'Romie Trial';
-  src: url('../public/fonts/RomieTrial-Medium.otf') format('opentype');
+  font-family: 'Romie';
+  src: url('../public/fonts/Romie-Medium.woff2') format('woff2'),
+       url('../public/fonts/Romie-Medium.woff')  format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -80,7 +88,7 @@
   --av-d: #4a5d66;
 
   /* — Typographie — */
-  --font-serif: 'Romie Trial', Georgia, 'Times New Roman', serif;
+  --font-serif: 'Romie', Georgia, 'Times New Roman', serif;
   --font-sans:  'Nunito', system-ui, -apple-system, sans-serif;
 
   --fs-display: clamp(2.6rem, 6.5vw, 5.5rem);  /* h1 des héros            */

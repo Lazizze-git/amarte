@@ -1,0 +1,47 @@
+ROMIE — LICENCE D'UTILISATION
+=============================
+
+Police          : Romie (Regular 400 · Medium 500) — version 2.101
+Créatrice       : Margot Lévêque (design additionnel : José Solé)
+Copyright       : © 2022–2025 Margot Lévêque. Tous droits réservés.
+Marque          : « Romie » est une marque déposée de Margot Lévêque.
+Fonderie        : Claude Type — https://claudetype.com
+Licences        : https://margotleveque.com/pages/licenses
+
+LICENCE ACQUISE
+---------------
+Titulaire       : Amarte Studio SNC — Route du Village 1A, 1066 Epalinges (CH)
+Vendeur         : Claude Type, Chemin de l'Islettaz 7, 1305 Penthalaz (CH)
+                  concierge@claudetype.com — TVA CHE-167.129.432
+Reçu / facture  : n° CL5142 du 21 août 2026
+Détail          : Romie Regular — licence « S » (1 à 5 personnes) — 99 USD
+                  Romie Medium  — licence « S » (1 à 5 personnes) — 99 USD
+                  Total 198 USD (payé, Visa •••• 8328)
+
+Le justificatif d'achat original (PDF du reçu CL5142) est conservé hors
+dépôt par Amarte Studio ; il n'est pas versionné ici car il contient des
+données de facturation privées.
+
+CONDITIONS D'USAGE DANS CE PROJET
+---------------------------------
+Romie est une police PROPRIÉTAIRE, pas une police libre.
+
+Autorisé :
+  · intégration web (@font-face) sur les sites d'Amarte Studio ;
+  · usage bureautique / print par l'équipe couverte par la licence « S ».
+
+Interdit :
+  · redistribuer, revendre ou partager les fichiers de police ;
+  · les servir depuis un CDN public ou un dépôt public réutilisable ;
+  · les fournir à un tiers (prestataire, client, sous-traitant) sans
+    lui faire acquérir sa propre licence ;
+  · modifier, renommer ou dériver les fichiers ;
+  · les convertir en un format non couvert par la licence achetée.
+
+Seuls les formats web (.woff2 / .woff) sont déposés ici. Les fichiers
+bureautiques (.otf) sont volontairement exclus du dépôt afin de limiter
+leur diffusion.
+
+En cas d'extension du site (nouvelle entité, plus de 5 personnes, app,
+usage par un tiers), une licence complémentaire doit être achetée auprès
+de Claude Type avant mise en ligne.
