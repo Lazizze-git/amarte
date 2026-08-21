@@ -21,6 +21,8 @@ export const infoCard = {
           { title: '📅  Calendrier — réserver, annuler, places', value: 'calendrier' },
           { title: '🧘  Cours — ce qu\'il faut savoir',           value: 'cours' },
           { title: '📍  Contact — accès et transports',           value: 'contact' },
+          { title: '✨  Première fois — ce qu\'il faut savoir',    value: 'premiere-fois' },
+          { title: '📊  Première fois — les résultats en chiffres', value: 'resultats' },
         ],
         layout: 'radio',
       },
@@ -28,7 +30,8 @@ export const infoCard = {
     },
     {
       name: 'titre', title: 'Titre', type: 'string',
-      description: 'Pour la série Contact, c\'est la ligne entière : ex. Parking souterrain gratuit.',
+      description: 'Pour la série Contact, c\'est la ligne entière (ex. Parking souterrain gratuit). '
+                 + 'Pour les résultats, c\'est le chiffre mis en avant (ex. 300+).',
       validation: R => R.required().max(90),
     },
     {

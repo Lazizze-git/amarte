@@ -47,12 +47,19 @@
   // ponctuation double et les unités ne doivent pas se retrouver
   // seules en début de ligne. La personne qui saisit tape des
   // espaces ordinaires, le site rétablit les insécables.
-  const UNITES = 'h|min|s|m|km|cm|kg|g|%|CHF|€|°C';
   function typo(t) {
     return String(t == null ? '' : t)
       .replace(/ ([?!:;»])/g, '\u00A0$1')
       .replace(/(«) /g, '$1\u00A0')
-      .replace(new RegExp('(\\d) (' + UNITES + ')\\b', 'g'), '$1\u00A0$2');
+      // Unités alphabétiques : la limite de mot évite de coller
+      // « 3 minutes » ou « 5 grammes ».
+      .replace(/(\d) (h|min|km|cm|kg|CHF|m|g|s)\b/g, '$1\u00A0$2')
+      // Unités symboliques : pas de limite de mot possible après un
+      // caractère non alphabétique.
+      .replace(/(\d) ([%€°])/g, '$1\u00A0$2')
+      // Fractions écrites en toutes lettres : « 1 / 2 » se lit mal
+      // coupé en fin de ligne.
+      .replace(/(\d) \/ (\d)/g, '$1\u00A0/\u00A0$2');
   }
 
   // Échappe le HTML pour éviter toute casse de la mise en page.
@@ -121,6 +128,13 @@
   function enrichir(texte) {
     return esc(typo(texte))
       .replace(/\*([^*\n]+)\*/g, '<em>$1</em>')
+      // Lien en écriture simple : [texte affiché](adresse). L'adresse
+      // est restreinte à http(s), mailto et aux pages du site, pour
+      // qu'un contenu du CMS ne puisse pas exécuter de script.
+      .replace(/\[([^\]\n]+)\]\(([^)\s]+)\)/g, (tout, libelle, url) =>
+        /^(https?:\/\/|mailto:|[\w-]+\.html|\/)/.test(url)
+          ? `<a href="${url}"${/^https?:\/\//.test(url) ? ' target="_blank" rel="noopener"' : ''}>${libelle}</a>`
+          : libelle)
       // Typographie française : la ponctuation double ne doit jamais
       // se retrouver seule en début de ligne. On rétablit l'espace
       // insécable même si la personne a tapé une espace ordinaire.
@@ -166,17 +180,69 @@
     }
   }
 
+  // ── QUESTIONS FRÉQUENTES (page Première fois) ─────────────────
+  const zoneFaq = document.querySelector('[data-cms-faq]');
+  if (zoneFaq) {
+    query(`*[_type == "faq" && actif != false] | order(ordre asc){
+      question, reponse
+    }`).then((l) => renderFaq(zoneFaq, l)).catch(() => {/* garder le HTML */});
+  }
+
+  // Le suivi des clics repose sur l'attribut data-cta. Un lien écrit
+  // dans le CMS n'en a pas : sans cet ajout, ces clics disparaîtraient
+  // des statistiques.
+  function suivreLiens(html, nom) {
+    return html.replace(/<a href=/g, `<a data-cta="${nom}" href=`);
+  }
+
+  function renderFaq(zone, liste) {
+    if (!liste || liste.length === 0) return;
+    zone.innerHTML = liste.map((f) => `
+      <details class="pf-faq-item">
+        <summary class="pf-faq-q">${esc(typo(f.question))}</summary>
+        <p class="pf-faq-a">${suivreLiens(enrichir(f.reponse), 'premiere-faq-lien')}</p>
+      </details>`).join('');
+    if (typeof window.amarteRevele === 'function') window.amarteRevele(zone);
+  }
+
+  // ── TITRES DE SECTION ─────────────────────────────────────────
+  // Les en-têtes à l'intérieur des pages : petit label, titre, phrase
+  // d'introduction. Une page peut en contenir plusieurs, tous chargés
+  // en une requête.
+  const zonesBloc = Array.from(document.querySelectorAll('[data-cms-bloc-titre], [data-cms-bloc-label]'))
+    .map((el) => el.dataset.cmsBlocTitre || el.dataset.cmsBlocLabel);
+  if (zonesBloc.length) {
+    const liste = [...new Set(zonesBloc)].map((z) => `"${z}"`).join(', ');
+    query(`*[_type == "bloc" && zone in [${liste}] && actif != false]{
+      zone, label, titre, intro
+    }`).then(renderBlocs).catch(() => {/* garder le texte du HTML */});
+  }
+
+  function renderBlocs(blocs) {
+    if (!blocs || blocs.length === 0) return;
+    blocs.forEach((b) => {
+      if (!b.zone) return;
+      const lab = document.querySelector(`[data-cms-bloc-label="${b.zone}"]`);
+      if (lab && b.label) lab.textContent = typo(b.label);
+      const tit = document.querySelector(`[data-cms-bloc-titre="${b.zone}"]`);
+      if (tit && b.titre) tit.innerHTML = enrichir(b.titre);
+      const intro = document.querySelector(`[data-cms-bloc-intro="${b.zone}"]`);
+      if (intro && b.intro) intro.innerHTML = enrichir(b.intro);
+    });
+  }
+
   // ── REPÈRES (calendrier, cours, contact) ──────────────────────
   // Les cartes gardent leur icône et leur numéro, dessinés à la main
   // dans le HTML : on ne remplace que les textes. Ajouter un repère
   // duplique la dernière carte, qui sert de gabarit.
-  const zoneInfos = document.querySelector('[data-cms-infos]');
-  if (zoneInfos) {
-    const serie = zoneInfos.dataset.cmsInfos;
+  // Une page peut porter plusieurs séries : la page Première fois en
+  // a deux, les repères et les chiffres.
+  document.querySelectorAll('[data-cms-infos]').forEach((zone) => {
+    const serie = zone.dataset.cmsInfos;
     query(`*[_type == "infoCard" && groupe == "${serie}" && actif != false] | order(ordre asc){
       titre, texte
-    }`).then((l) => renderInfos(zoneInfos, l)).catch(() => {/* garder le HTML */});
-  }
+    }`).then((l) => renderInfos(zone, l)).catch(() => {/* garder le HTML */});
+  });
 
   function renderInfos(zone, liste) {
     if (!liste || liste.length === 0) return;
@@ -195,9 +261,11 @@
       }
       carte.hidden = false;
 
-      // La série Contact tient sur une seule ligne, sans titre séparé.
-      const titre = carte.querySelector('h3') || carte;
-      const texte = carte.querySelector('p:last-of-type');
+      // Les séries n'ont pas toutes la même structure : un titre en
+      // h3 pour les cartes, un grand chiffre pour les résultats, et
+      // une simple ligne pour les accès.
+      const titre = carte.querySelector('h3, [class$="-val"]') || carte;
+      const texte = carte.querySelector('[class$="-text"]') || carte.querySelector('p:last-of-type');
 
       if (titre === carte) {
         // On préserve le tiret décoratif placé avant le texte.

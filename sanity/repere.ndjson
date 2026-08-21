@@ -8,3 +8,12 @@
 {"_id": "info-acces-2", "_type": "infoCard", "groupe": "contact", "ordre": 2, "actif": true, "titre": "Places extérieures gratuites"}
 {"_id": "info-acces-3", "_type": "infoCard", "groupe": "contact", "ordre": 3, "actif": true, "titre": "Bus arrêt Girarde à 20 m"}
 {"_id": "info-acces-4", "_type": "infoCard", "groupe": "contact", "ordre": 4, "actif": true, "titre": "Abri vélo sécurisé"}
+{"_id": "info-pf-1", "_type": "infoCard", "groupe": "premiere-fois", "ordre": 1, "actif": true, "titre": "En petit groupe", "texte": "15 personnes maximum par cours. De la place pour être vu, guidé, accompagné — jamais noyé dans la masse."}
+{"_id": "info-pf-2", "_type": "infoCard", "groupe": "premiere-fois", "ordre": 2, "actif": true, "titre": "Tout le matériel est fourni", "texte": "Tapis et accessoires sont sur place. Venez simplement en tenue confortable, on s’occupe du reste."}
+{"_id": "info-pf-3", "_type": "infoCard", "groupe": "premiere-fois", "ordre": 3, "actif": true, "titre": "Parking souterrain gratuit", "texte": "Un parking souterrain gratuit sous le studio. Le code d’accès vous arrive par mail dès votre inscription."}
+{"_id": "info-pf-4", "_type": "infoCard", "groupe": "premiere-fois", "ordre": 4, "actif": true, "titre": "Réservation libre, en ligne", "texte": "Vous réservez et gérez vos cours en quelques secondes depuis l’application, quand ça vous arrange."}
+{"_id": "info-pf-5", "_type": "infoCard", "groupe": "premiere-fois", "ordre": 5, "actif": true, "titre": "Guidé, jamais seul", "texte": "Chaque corps a ses limites. Les profs s’adaptent à vous et vous guident pas à pas, séance après séance."}
+{"_id": "info-pf-6", "_type": "infoCard", "groupe": "premiere-fois", "ordre": 6, "actif": true, "titre": "Edith, la fondatrice", "texte": "Présente et à l’écoute. Pas de service client, pas d’intermédiaire — vous échangez directement avec elle."}
+{"_id": "info-res-1", "_type": "infoCard", "groupe": "resultats", "ordre": 1, "actif": true, "titre": "300+", "texte": "personnes accompagnées depuis 2024."}
+{"_id": "info-res-2", "_type": "infoCard", "groupe": "resultats", "ordre": 2, "actif": true, "titre": "80 %", "texte": "ressentent une vraie différence en moins d’un mois."}
+{"_id": "info-res-3", "_type": "infoCard", "groupe": "resultats", "ordre": 3, "actif": true, "titre": "1 / 2", "texte": "le ressent dès les premières séances : meilleur sommeil, raideurs qui se dénouent, douleurs du bas du dos qui diminuent."}

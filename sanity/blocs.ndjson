@@ -1,0 +1,8 @@
+{"_id": "bloc-cal-info", "_type": "bloc", "zone": "cal-info", "actif": true, "label": "Comment ça marche", "titre": "Réserver, annuler, *en toute liberté.*"}
+{"_id": "bloc-cours-savoir", "_type": "bloc", "zone": "cours-savoir", "actif": true, "label": "Avant de venir", "titre": "Bon *à savoir.*"}
+{"_id": "bloc-index-disciplines", "_type": "bloc", "zone": "index-disciplines", "actif": true, "label": "Nos disciplines", "titre": "Plusieurs profs, *plusieurs styles.*", "intro": "Trouvez la pratique qui vous ressemble — et le prof qui vous met en mouvement."}
+{"_id": "bloc-pf-offres", "_type": "bloc", "zone": "pf-offres", "actif": true, "label": "Nouveau chez Amarte ?", "titre": "Conçu pour vous *lancer.*", "intro": "Deux parcours, pensés selon vos besoins."}
+{"_id": "bloc-pf-resultats", "_type": "bloc", "zone": "pf-resultats", "actif": true, "label": "Les résultats", "titre": "Le mouvement, *ça se cultive.*", "intro": "Le problème, ce n’est pas l’âge — c’est de perdre, peu à peu, les capacités qui gardent le corps libre."}
+{"_id": "bloc-pf-savoir", "_type": "bloc", "zone": "pf-savoir", "actif": true, "label": "Ce qu’il faut savoir", "titre": "Tout est pensé pour que vous vous sentiez *à votre place.*"}
+{"_id": "bloc-pf-cours", "_type": "bloc", "zone": "pf-cours", "actif": true, "label": "Les cours", "titre": "Trouvez votre pratique, *et vos créneaux.*", "intro": "Plusieurs disciplines, plusieurs profs, du plus doux au plus tonique — chaque prof s’adapte à vous, à votre niveau et à vos limites du jour."}
+{"_id": "bloc-pf-faq", "_type": "bloc", "zone": "pf-faq", "actif": true, "label": "Questions fréquentes", "titre": "Les questions *qu’on nous pose.*"}

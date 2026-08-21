@@ -39,6 +39,8 @@ const SOURCES = [
   { fichier: 'heros.ndjson', type: 'pageHero', libelle: 'en-têtes de page' },
   { fichier: 'tarifs.ndjson', type: 'tarif',   libelle: 'tarifs' },
   { fichier: 'repere.ndjson', type: 'infoCard', libelle: 'repères' },
+  { fichier: 'blocs.ndjson', type: 'bloc',     libelle: 'titres de section' },
+  { fichier: 'faq.ndjson',   type: 'faq',      libelle: 'questions fréquentes' },
 ]
 
 const docs = []
@@ -55,7 +57,7 @@ for (const src of SOURCES) {
   }
 
   console.log(`${lus.length} ${src.libelle} :`)
-  lus.forEach((d) => console.log(`  · ${d.titre || d.nom || d.page}`))
+  lus.forEach((d) => console.log(`  · ${d.titre || d.nom || d.question || d.zone || d.page}`))
   docs.push(...lus)
 }
 

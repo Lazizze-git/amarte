@@ -46,6 +46,14 @@ export default defineConfig({
                   .defaultOrdering([{ field: 'ordre', direction: 'asc' }])
               ),
             S.documentTypeListItem('pageHero').title('🖥️   En-têtes de page'),
+            S.documentTypeListItem('bloc').title('📝  Titres de section'),
+            S.listItem()
+              .title('❓  Questions fréquentes')
+              .child(
+                S.documentTypeList('faq')
+                  .title('Questions fréquentes')
+                  .defaultOrdering([{ field: 'ordre', direction: 'asc' }])
+              ),
             S.listItem()
               .title('📌  Repères des pages')
               .child(
