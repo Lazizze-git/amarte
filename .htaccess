@@ -1,0 +1,117 @@
+# ==========================================================
+#  AMARTE STUDIO — site statique (HTML/CSS/JS)
+#  Hébergement cPanel / Apache
+#
+#  ⚠ Ce fichier REMPLACE le .htaccess de WordPress.
+#    Ne pas fusionner les deux : les règles de réécriture de
+#    WordPress renvoient toutes les URL vers index.php, ce qui
+#    donnerait des 404 sur tarifs.html, cours.html, etc.
+# ==========================================================
+
+# ── Page d'accueil ────────────────────────────────────────
+DirectoryIndex index.html
+
+# ── Pas de listing des dossiers ───────────────────────────
+Options -Indexes
+
+# ── Encodage par défaut ───────────────────────────────────
+AddDefaultCharset UTF-8
+
+
+# ══ REDIRECTIONS ══════════════════════════════════════════
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Validation SSL (AutoSSL / Let's Encrypt) : laisser passer en
+  # HTTP, sinon le renouvellement du certificat échoue.
+  RewriteRule ^\.well-known/ - [L]
+
+  # HTTP → HTTPS
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+  # www → sans www (l'URL canonique du sitemap est https://amarte.ch)
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+</IfModule>
+
+
+# ══ TYPES MIME ════════════════════════════════════════════
+# Certains serveurs ne connaissent pas encore woff2.
+<IfModule mod_mime.c>
+  AddType font/woff2 .woff2
+  AddType font/woff  .woff
+  AddType image/webp .webp
+  AddType image/svg+xml .svg
+  AddType application/manifest+json .webmanifest
+</IfModule>
+
+
+# ══ COMPRESSION ═══════════════════════════════════════════
+# Les polices woff/woff2 sont déjà compressées : ne pas les
+# repasser dans gzip, ce serait du travail pour rien.
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+  AddOutputFilterByType DEFLATE application/javascript text/javascript
+  AddOutputFilterByType DEFLATE application/json application/xml
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+
+# ══ CACHE NAVIGATEUR ══════════════════════════════════════
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  # Polices — jamais modifiées, cache long.
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType font/woff  "access plus 1 year"
+
+  # Images — cache long.
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png  "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon  "access plus 1 year"
+
+  # CSS / JS — 1 semaine. Volontairement court : les fichiers
+  # sont édités en place (pas de hash dans le nom), un cache
+  # d'un an bloquerait les mises à jour chez les visiteurs.
+  ExpiresByType text/css               "access plus 1 week"
+  ExpiresByType application/javascript "access plus 1 week"
+  ExpiresByType text/javascript        "access plus 1 week"
+
+  # HTML — jamais mis en cache : les modifications de contenu
+  # doivent être visibles immédiatement.
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Les polices sont immuables : le navigateur ne revalide pas.
+  <FilesMatch "\.(woff2?)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Le HTML est revalidé à chaque visite.
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+
+# ══ SÉCURITÉ ══════════════════════════════════════════════
+<IfModule mod_headers.c>
+  # Empêche l'affichage du site dans une iframe tierce.
+  Header always set X-Frame-Options "SAMEORIGIN"
+  # Empêche le navigateur de deviner un type MIME.
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Bloque l'accès aux fichiers cachés (.git, .env, .htaccess…)
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
+
+# Le dépôt Git ne doit jamais être exposé.
+RedirectMatch 404 /\.git
