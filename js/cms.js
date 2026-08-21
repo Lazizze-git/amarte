@@ -88,9 +88,13 @@
   // Chaque <picture data-cms-img="cle"> peut être remplacé depuis le
   // Studio. Sans document pour la clé, la photo d'origine reste :
   // le CMS ne peut pas vider une image par inadvertance.
+  // Deux types alimentent le même mécanisme : les photos générales du
+  // site (mediaBloc) et celles propres à chaque cours (coursPhoto).
+  // `cle` est unifiée pour que le remplacement ne connaisse qu'un cas.
   if (document.querySelector('[data-cms-img]')) {
-    query(`*[_type == "mediaBloc" && actif != false]{
-      cle, alt, "ref": image.asset._ref
+    query(`*[_type in ["mediaBloc", "coursPhoto"] && actif != false]{
+      "cle": select(_type == "coursPhoto" => cours, cle),
+      alt, "ref": image.asset._ref
     }`).then(renderMedias).catch(() => {/* garder les photos du site */});
   }
 
