@@ -65,8 +65,8 @@
   const raw  = location.pathname.split('/').pop().replace(/^$/, 'index');
   const page = raw.endsWith('.html') ? raw : raw + '.html';
 
-  // ── TÉMOIGNAGES (index.html) ──────────────────────────────────
-  if (page === 'index.html') {
+  // ── TÉMOIGNAGES (accueil et Première fois) ────────────────────
+  if (document.querySelector('.tcards')) {
     query(`*[_type == "temoignage" && actif == true] | order(ordre asc) {
       texte, auteur, detail
     }`).then(renderTemoignages).catch(() => {/* garder les avis statiques */});
@@ -77,6 +77,12 @@
 
     const grid = document.querySelector('.tcards');
     if (!grid) return;
+
+    // La page Première fois n'en présente que quelques-uns : on garde
+    // le nombre prévu par la mise en page plutôt que d'en déverser
+    // douze dans une section conçue pour quatre.
+    const place = grid.children.length;
+    if (place > 0 && temoignages.length > place) temoignages = temoignages.slice(0, place);
 
     // Palette d'avatars de la charte, alternée pour éviter la monotonie.
     const TONES = ['tav-a', 'tav-b', 'tav-c', 'tav-d'];
@@ -331,6 +337,7 @@
     }`).then((liste) => {
       renderCours(liste);
       renderDisciplines(liste);
+      renderSemaine(liste);
     }).catch(() => {/* garder les cours du HTML */});
   }
 
@@ -365,10 +372,15 @@
   function renderCours(liste) {
     if (!liste || liste.length === 0) return;
 
-    const grille = document.getElementById('cours-grid');
-    if (!grille) return;
+    // Le même balisage sert la page Cours et la liste défilante de la
+    // page Première fois : une seule fiche alimente les deux.
+    const cibles = [
+      document.getElementById('cours-grid'),
+      document.querySelector('[data-cms-cours-rail]'),
+    ].filter(Boolean);
+    if (cibles.length === 0) return;
 
-    grille.innerHTML = liste.map((c) => {
+    const html = liste.map((c) => {
       // Photo : celle déposée dans le CMS, sinon celle d'origine du site.
       const fichier = c.imageFichier || 'cours-collectif-1';
       const src = c.ref
@@ -408,12 +420,72 @@
       </article>`;
     }).join('');
 
-    // Les cartes viennent d'être créées : sans cet appel elles restent
-    // à opacité zéro, l'animation d'apparition ne les connaissant pas.
-    if (typeof window.amarteRevele === 'function') window.amarteRevele(grille);
+    cibles.forEach((cible) => {
+      cible.innerHTML = html;
+      // Les cartes viennent d'être créées : sans cet appel elles restent
+      // à opacité zéro, l'animation d'apparition ne les connaissant pas.
+      if (typeof window.amarteRevele === 'function') window.amarteRevele(cible);
+    });
 
     // Le compteur et la synchronisation d'URL de la page écoutent ceci.
     document.dispatchEvent(new CustomEvent('cours:rendus'));
+  }
+
+  // ── PLANNING DE LA SEMAINE (page Première fois) ───────────────
+  // Une grille de sept jours sur deux rangées, matin et soir, remplie
+  // à partir des mêmes fiches de cours. Un horaire modifié dans le CMS
+  // déplace le cours dans le planning sans autre intervention.
+  const JOURS_SEMAINE = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+
+  function renderSemaine(liste) {
+    const grille = document.querySelector('[data-cms-semaine]');
+    if (!grille || !liste || liste.length === 0) return;
+
+    // Le premier bloc porte les intitulés de rangées : on le conserve.
+    const intitules = grille.querySelector('.pf-week-labels');
+    if (!intitules) return;
+
+    const parJour = {};
+    JOURS_SEMAINE.forEach((j) => { parJour[j] = { matin: null, soir: null }; });
+
+    liste.forEach((c) => {
+      const parts = String(c.horaire || '').split('·');
+      if (parts.length < 2) return;
+      const jour = parts[0].trim();
+      const heure = parts.slice(1).join('·').trim();
+      if (!parJour[jour]) return;
+      // Avant midi au matin, le reste au soir — c'est le découpage
+      // qu'utilise déjà la page.
+      const h = parseInt(heure, 10);
+      const rangee = (isNaN(h) || h < 12) ? 'matin' : 'soir';
+      if (!parJour[jour][rangee]) parJour[jour][rangee] = { heure, cours: c };
+    });
+
+    const creneau = (x) => {
+      if (!x) return '<div class="pf-week-slot pf-week-slot--empty">—</div>';
+      const c = x.cours;
+      const niveau = String(c.niveau || '2');
+      return `<div class="pf-week-slot">
+        <p class="pf-slot-time">${esc(typo(x.heure))}</p>
+        <p class="pf-slot-name">${esc(c.titre)}</p>
+        <p class="pf-slot-teacher">${esc(c.instructeur || '')}</p>
+        <span class="disc2-intensity" data-level="${esc(niveau)}" role="img" aria-label="Intensité ${esc(INTENSITES[niveau] || 'moyenne')}"><i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i><span class="pf-level-text" aria-hidden="true">${esc(NIVEAUX[niveau] || 'Moyen')}</span></span>
+      </div>`;
+    };
+
+    const colonnes = JOURS_SEMAINE.map((jour) => {
+      const j = parJour[jour];
+      // Une journée sans aucun cours est grisée, comme aujourd'hui.
+      const vide = !j.matin && !j.soir ? ' pf-week-col--off' : '';
+      return `<div class="pf-week-col${vide}">
+        <p class="pf-week-dayname">${esc(jour)}</p>
+        ${creneau(j.matin)}
+        ${creneau(j.soir)}
+      </div>`;
+    }).join('');
+
+    grille.innerHTML = intitules.outerHTML + colonnes;
+    if (typeof window.amarteRevele === 'function') window.amarteRevele(grille);
   }
 
   // Horaire abrégé pour les cartes de l'accueil, plus étroites :
