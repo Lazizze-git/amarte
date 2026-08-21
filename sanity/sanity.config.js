@@ -29,6 +29,7 @@ export default defineConfig({
             S.divider(),
             S.documentTypeListItem('horaire').title('📅  Horaires'),
             S.documentTypeListItem('cours').title('🧘  Cours'),
+            S.documentTypeListItem('mediaBloc').title('🖼   Photos du site'),
             S.documentTypeListItem('temoignage').title('💬  Témoignages'),
             S.documentTypeListItem('tarif').title('💰  Tarifs'),
             S.documentTypeListItem('pageHero').title('🪧  Heros des pages'),

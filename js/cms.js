@@ -84,6 +84,71 @@
       </div>`).join('');
   }
 
+  // ── PHOTOS DU SITE (toutes les pages) ─────────────────────────
+  // Chaque <picture data-cms-img="cle"> peut être remplacé depuis le
+  // Studio. Sans document pour la clé, la photo d'origine reste :
+  // le CMS ne peut pas vider une image par inadvertance.
+  if (document.querySelector('[data-cms-img]')) {
+    query(`*[_type == "mediaBloc" && actif != false]{
+      cle, alt, "ref": image.asset._ref
+    }`).then(renderMedias).catch(() => {/* garder les photos du site */});
+  }
+
+  // Transforme une référence Sanity (image-<id>-<largeur>x<hauteur>-<ext>)
+  // en URL de son CDN. `auto=format` sert du WebP aux navigateurs qui le
+  // acceptent, ce qui remplace les <source type="image/webp"> du HTML.
+  function urlImage(ref, largeur) {
+    const p = String(ref || '').split('-');
+    if (p.length < 4 || p[0] !== 'image') return null;
+    const ext = p[p.length - 1];
+    const dim = p[p.length - 2];
+    const id  = p.slice(1, -2).join('-');
+    return `https://cdn.sanity.io/images/${SANITY_PROJECT_ID}/${SANITY_DATASET}/`
+         + `${id}-${dim}.${ext}?w=${largeur}&q=75&auto=format&fit=max`;
+  }
+
+  // La référence Sanity porte les dimensions du fichier d'origine.
+  function dimensions(ref) {
+    const m = /-(\d+)x(\d+)-[a-z]+$/.exec(String(ref || ''));
+    return m ? { l: parseInt(m[1], 10), h: parseInt(m[2], 10) } : null;
+  }
+
+  function renderMedias(medias) {
+    if (!medias || medias.length === 0) return;
+
+    // Une clé peut apparaître plusieurs fois dans le site : on indexe
+    // une seule fois, puis on applique à tous les emplacements.
+    const parCle = {};
+    medias.forEach((m) => { if (m.cle && m.ref) parCle[m.cle] = m; });
+
+    document.querySelectorAll('[data-cms-img]').forEach((picture) => {
+      const media = parCle[picture.dataset.cmsImg];
+      if (!media) return;
+
+      const img = picture.querySelector('img');
+      if (!img) return;
+
+      const url = urlImage(media.ref, 1600);
+      if (!url) return;
+
+      // Les <source> pointent vers les fichiers d'origine : les retirer,
+      // sinon le navigateur les préfère et la nouvelle photo ne s'affiche pas.
+      picture.querySelectorAll('source').forEach((s) => s.remove());
+
+      img.removeAttribute('srcset');
+      img.removeAttribute('sizes');
+      img.src = url;
+      img.srcset = url + ' 1x, ' + urlImage(media.ref, 2400) + ' 2x';
+      if (media.alt) img.alt = media.alt;
+
+      // Reprendre les dimensions réelles de la nouvelle photo : sans
+      // elles le navigateur ne peut plus réserver la bonne hauteur et
+      // la page sursaute au chargement.
+      const dim = dimensions(media.ref);
+      if (dim) { img.width = dim.l; img.height = dim.h; }
+    });
+  }
+
   // ── COORDONNÉES (toutes les pages : pied de page, contacts) ───
   query(`*[_id == "siteSettings"][0]{
     telephone, email, instagram, facebook

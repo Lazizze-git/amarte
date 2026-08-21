@@ -5,6 +5,7 @@ import { tarif }      from './tarif'
 import { pageHero }   from './pageHero'
 import { infoCard }   from './infoCard'
 import { settings }   from './settings'
+import { mediaBloc }  from './mediaBloc'
 
 export const schemaTypes = [
   horaire,
@@ -14,4 +15,5 @@ export const schemaTypes = [
   pageHero,
   infoCard,
   settings,
+  mediaBloc,
 ]

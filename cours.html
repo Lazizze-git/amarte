@@ -224,7 +224,7 @@
         <!-- 1 · Hatha Flow -->
         <article class="cours-item cours-item--photo gs-reveal" data-cat="yoga">
           <div class="cours-card-media gs-img-reveal">
-            <picture>
+            <picture data-cms-img="cours-collectif-1">
               <source srcset="public/images/cours-collectif-1.webp" type="image/webp" />
               <img src="public/images/cours-collectif-1.jpg" width="1500" height="1011" alt="" decoding="async" class="gs-img-inner" />
             </picture>
@@ -248,7 +248,7 @@
         <!-- 2 · Yoga Flow -->
         <article class="cours-item cours-item--photo gs-reveal" data-cat="yoga">
           <div class="cours-card-media gs-img-reveal">
-            <picture>
+            <picture data-cms-img="cta-banner">
               <source srcset="public/images/cta-banner.webp" type="image/webp" />
               <img src="public/images/cta-banner.jpg" width="1500" height="1008" alt="" loading="lazy" decoding="async" class="gs-img-inner" />
             </picture>
@@ -272,7 +272,7 @@
         <!-- 3 · Yogilates -->
         <article class="cours-item cours-item--photo gs-reveal" data-cat="pilates">
           <div class="cours-card-media gs-img-reveal">
-            <picture>
+            <picture data-cms-img="salle-ensemble">
               <source srcset="public/images/salle-ensemble.webp" type="image/webp" />
               <img src="public/images/salle-ensemble.jpg" width="1500" height="826" alt="" loading="lazy" decoding="async" class="gs-img-inner" />
             </picture>
@@ -296,7 +296,7 @@
         <!-- 4 · Pilates Tonus -->
         <article class="cours-item cours-item--photo gs-reveal" data-cat="pilates">
           <div class="cours-card-media gs-img-reveal">
-            <picture>
+            <picture data-cms-img="hero">
               <source srcset="public/images/hero.webp" type="image/webp" />
               <img src="public/images/hero.jpg" width="1537" height="1023" alt="" loading="lazy" decoding="async" class="gs-img-inner" />
             </picture>
@@ -320,7 +320,7 @@
         <!-- 5 · Pilates Fondation -->
         <article class="cours-item cours-item--photo gs-reveal" data-cat="pilates">
           <div class="cours-card-media gs-img-reveal">
-            <picture>
+            <picture data-cms-img="salle-tapis">
               <source srcset="public/images/salle-tapis.webp" type="image/webp" />
               <img src="public/images/salle-tapis.jpg" width="1100" height="806" alt="" loading="lazy" decoding="async" class="gs-img-inner" />
             </picture>
@@ -344,7 +344,7 @@
         <!-- 6 · Vinyasa Flow -->
         <article class="cours-item cours-item--photo gs-reveal" data-cat="yoga">
           <div class="cours-card-media gs-img-reveal">
-            <picture>
+            <picture data-cms-img="cta-banner">
               <source srcset="public/images/cta-banner.webp" type="image/webp" />
               <img src="public/images/cta-banner.jpg" width="1500" height="1008" alt="" loading="lazy" decoding="async" class="gs-img-inner" />
             </picture>
@@ -368,7 +368,7 @@
         <!-- 7 · Nia Doux -->
         <article class="cours-item cours-item--photo gs-reveal" data-cat="autres">
           <div class="cours-card-media gs-img-reveal">
-            <picture>
+            <picture data-cms-img="cours-collectif-2">
               <source srcset="public/images/cours-collectif-2.webp" type="image/webp" />
               <img src="public/images/cours-collectif-2.jpg" width="1500" height="1240" alt="" loading="lazy" decoding="async" class="gs-img-inner" />
             </picture>
@@ -392,7 +392,7 @@
         <!-- 8 · Pilates traditionnel -->
         <article class="cours-item cours-item--photo gs-reveal" data-cat="pilates">
           <div class="cours-card-media gs-img-reveal">
-            <picture>
+            <picture data-cms-img="salle-ensemble">
               <source srcset="public/images/salle-ensemble.webp" type="image/webp" />
               <img src="public/images/salle-ensemble.jpg" width="1500" height="826" alt="" loading="lazy" decoding="async" class="gs-img-inner" />
             </picture>
@@ -416,7 +416,7 @@
         <!-- 9 · Kundalini -->
         <article class="cours-item cours-item--photo gs-reveal" data-cat="yoga">
           <div class="cours-card-media gs-img-reveal">
-            <picture>
+            <picture data-cms-img="cours-collectif-1">
               <source srcset="public/images/cours-collectif-1.webp" type="image/webp" />
               <img src="public/images/cours-collectif-1.jpg" width="1500" height="1011" alt="" loading="lazy" decoding="async" class="gs-img-inner" />
             </picture>
@@ -440,7 +440,7 @@
         <!-- 10 · Pilates dynamique -->
         <article class="cours-item cours-item--photo gs-reveal" data-cat="pilates">
           <div class="cours-card-media gs-img-reveal">
-            <picture>
+            <picture data-cms-img="hero">
               <source srcset="public/images/hero.webp" type="image/webp" />
               <img src="public/images/hero.jpg" width="1537" height="1023" alt="" loading="lazy" decoding="async" class="gs-img-inner" />
             </picture>
@@ -555,9 +555,11 @@
 </footer>
 
 <script src="js/main.js"></script>
-<!-- js/cms.js est volontairement absent de cette page : il réécrit #cours-grid
-     avec les 11 cours de l'ancienne nomenclature encore présents dans Sanity.
-     Le document client « Page Cours » fait désormais foi ; le contenu est figé ici. -->
+<!-- cms.js avait été retiré de cette page parce qu'il réécrivait #cours-grid
+     avec l'ancienne nomenclature des cours restée dans Sanity. Ce code a été
+     supprimé depuis : le script ne touche plus qu'aux photos et aux
+     coordonnées. La liste des cours reste écrite en dur ici et fait foi. -->
+<script src="js/cms.js" defer></script>
 <script src="js/tracking.js" defer></script>
 
 <!-- Compléments aux filtres (js/main.js fait le tri) :
