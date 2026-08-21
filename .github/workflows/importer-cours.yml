@@ -1,0 +1,51 @@
+# ==========================================================
+#  Import des cours dans Sanity — opération ponctuelle
+#
+#  ⚠ NE SE DÉCLENCHE QU'À LA MAIN. Cet import remplace tous
+#    les cours du CMS par ceux du fichier sanity/cours.ndjson.
+#    Le lancer après que le client a modifié ses cours dans le
+#    Studio effacerait son travail.
+#
+#  Sert à la reprise initiale, ou à repartir de zéro si le
+#  contenu des cours a été abîmé.
+#
+#  Secret requis :
+#    SANITY_WRITE_TOKEN   jeton de rôle « Editor »
+#                         (celui de publication du Studio ne
+#                          peut pas écrire de contenu)
+# ==========================================================
+name: Importer les cours dans Sanity
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Tapez REMPLACER pour confirmer l’écrasement des cours'
+        required: true
+        default: ''
+
+jobs:
+  importer:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sanity
+    steps:
+      - uses: actions/checkout@v4
+
+      # Garde-fou : sans saisie explicite, on s'arrête avant d'écrire.
+      - name: Vérifier la confirmation
+        if: ${{ github.event.inputs.confirmation != 'REMPLACER' }}
+        run: |
+          echo "Confirmation absente ou incorrecte : aucun import effectué."
+          echo "Relancez en saisissant REMPLACER dans le champ prévu."
+          exit 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Importer les cours
+        env:
+          SANITY_WRITE_TOKEN: ${{ secrets.SANITY_WRITE_TOKEN }}
+        run: node importer-cours.mjs

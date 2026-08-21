@@ -232,6 +232,12 @@
 
     if (!('IntersectionObserver' in window)) {
       targets.forEach(function (el) { el.classList.add('is-in'); });
+      // Sans observateur, tout est visible d'emblée : les éléments
+      // ajoutés plus tard n'ont qu'à recevoir la même classe.
+      window.amarteRevele = function (racine) {
+        (racine || document).querySelectorAll('.gs-reveal, .gs-img-reveal')
+          .forEach(function (el) { el.classList.add('is-in'); });
+      };
       return;
     }
 
@@ -249,6 +255,20 @@
     window.setTimeout(function () {
       targets.forEach(function (el) { el.classList.add('is-in'); });
     }, 2500);
+
+    // Les cartes insérées après coup (grille des cours pilotée par le
+    // CMS) ne sont pas dans `targets` : sans cet appel elles resteraient
+    // à opacité zéro, donc invisibles.
+    window.amarteRevele = function (racine) {
+      var nouveaux = (racine || document).querySelectorAll('.gs-reveal, .gs-img-reveal');
+      nouveaux.forEach(function (el) {
+        if (el.classList.contains('is-in')) return;
+        observer.observe(el);
+      });
+      window.setTimeout(function () {
+        nouveaux.forEach(function (el) { el.classList.add('is-in'); });
+      }, 2500);
+    };
   })();
 
   /* ── 5 · Formulaires de contact ────────────────────────── */

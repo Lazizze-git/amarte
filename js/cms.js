@@ -84,17 +84,91 @@
       </div>`).join('');
   }
 
+  // ── COURS (page cours.html) ───────────────────────────────────
+  // La grille est réécrite depuis Sanity. Tant que la réponse n'est
+  // pas là — ou si elle échoue — les cours écrits dans le HTML
+  // restent affichés : la page ne peut pas se vider.
+  if (document.getElementById('cours-grid')) {
+    query(`*[_type == "cours" && actif != false] | order(ordre asc){
+      titre, categorie, horaire, instructeur, description, niveau, tag,
+      cle, imageFichier, imageAlt, "ref": image.asset._ref
+    }`).then(renderCours).catch(() => {/* garder les cours du HTML */});
+  }
+
+  const NIVEAUX = { '1': 'Doux', '2': 'Moyen', '3': 'Dynamique' };
+  const CATEGORIES = { yoga: 'Yoga', pilates: 'Pilates', autres: 'Autres' };
+
+  // Identifiant utilisable dans un attribut : sert au suivi des clics.
+  const ident = (s) => String(s || '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+  function renderCours(liste) {
+    if (!liste || liste.length === 0) return;
+
+    const grille = document.getElementById('cours-grid');
+    if (!grille) return;
+
+    grille.innerHTML = liste.map((c) => {
+      // Photo : celle déposée dans le CMS, sinon celle d'origine du site.
+      const fichier = c.imageFichier || 'cours-collectif-1';
+      const src = c.ref
+        ? esc(urlImage(c.ref, 1500))
+        : `public/images/${esc(fichier)}.jpg`;
+      const secours = c.ref
+        ? ''
+        : `<source srcset="public/images/${esc(fichier)}.webp" type="image/webp" />`;
+
+      const niveau = String(c.niveau || '2');
+      const slug = esc(c.cle || 'cours-' + ident(c.titre));
+
+      return `
+      <article class="cours-item cours-item--photo gs-reveal" data-cat="${esc(c.categorie)}">
+        <div class="cours-card-media gs-img-reveal">
+          <picture data-cms-img="${slug}">
+            ${secours}
+            <img src="${src}" alt="${esc(c.imageAlt || '')}" decoding="async" class="gs-img-inner" />
+          </picture>
+        </div>
+        <div class="cours-card-body">
+          <div class="cours-item-head">
+            <span class="cours-item-cat ${esc(c.categorie)}">${esc(CATEGORIES[c.categorie] || c.categorie)}</span>
+            <span class="cours-item-schedule">${esc(c.horaire)}</span>
+          </div>
+          <h3 class="cours-item-title">${esc(c.titre)}</h3>
+          ${c.instructeur ? `<p class="cours-item-sub">Avec ${esc(c.instructeur)}</p>` : ''}
+          ${c.description ? `<p class="cours-item-desc">${esc(c.description)}</p>` : ''}
+          <div class="cours-item-footer">
+            <span class="cours-level" data-level="${esc(niveau)}">${esc(NIVEAUX[niveau] || 'Moyen')}</span>
+            ${c.tag ? `<span class="cours-item-tag">${esc(c.tag)}</span>` : ''}
+          </div>
+          <a href="calendrier.html" class="btn btn--secondary cours-card-btn"
+             data-cta="cours-reserver-${esc(ident(c.titre))}"
+             aria-label="Réserver un cours ${esc(c.titre)}">Réserver <span aria-hidden="true">→</span></a>
+        </div>
+      </article>`;
+    }).join('');
+
+    // Les cartes viennent d'être créées : sans cet appel elles restent
+    // à opacité zéro, l'animation d'apparition ne les connaissant pas.
+    if (typeof window.amarteRevele === 'function') window.amarteRevele(grille);
+
+    // Le compteur et la synchronisation d'URL de la page écoutent ceci.
+    document.dispatchEvent(new CustomEvent('cours:rendus'));
+  }
+
   // ── PHOTOS DU SITE (toutes les pages) ─────────────────────────
   // Chaque <picture data-cms-img="cle"> peut être remplacé depuis le
   // Studio. Sans document pour la clé, la photo d'origine reste :
   // le CMS ne peut pas vider une image par inadvertance.
   // Deux types alimentent le même mécanisme : les photos générales du
-  // site (mediaBloc) et celles propres à chaque cours (coursPhoto).
-  // `cle` est unifiée pour que le remplacement ne connaisse qu'un cas.
+  // site (mediaBloc) et la photo portée par chaque fiche de cours.
+  // Les deux exposent une `cle`, le remplacement ne connaît qu'un cas.
+  // C'est ce qui met à jour les cartes de cours de la page d'accueil.
   if (document.querySelector('[data-cms-img]')) {
-    query(`*[_type in ["mediaBloc", "coursPhoto"] && actif != false]{
-      "cle": select(_type == "coursPhoto" => cours, cle),
-      alt, "ref": image.asset._ref
+    query(`*[_type in ["mediaBloc", "cours"] && actif != false && defined(image)]{
+      cle, "alt": select(_type == "cours" => imageAlt, alt),
+      "ref": image.asset._ref
     }`).then(renderMedias).catch(() => {/* garder les photos du site */});
   }
 

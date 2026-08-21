@@ -6,7 +6,6 @@ import { pageHero }   from './pageHero'
 import { infoCard }   from './infoCard'
 import { settings }   from './settings'
 import { mediaBloc }  from './mediaBloc'
-import { coursPhoto } from './coursPhoto'
 
 export const schemaTypes = [
   horaire,
@@ -17,5 +16,4 @@ export const schemaTypes = [
   infoCard,
   settings,
   mediaBloc,
-  coursPhoto,
 ]
