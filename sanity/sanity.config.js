@@ -4,10 +4,16 @@ import { visionTool }   from '@sanity/vision'
 import { schemaTypes }  from './schemas/index'
 
 // ─────────────────────────────────────────────────────────────
-//  AMARTE STUDIO — Configuration Sanity CMS
-//  1. Créez un projet sur https://www.sanity.io/manage
-//  2. Remplacez VOTRE_PROJECT_ID ci-dessous par votre vrai ID
-//  3. Lancez `npm install` puis `npm run dev` dans ce dossier
+//  AMARTE STUDIO — Configuration du CMS
+//
+//  Le menu ne présente que ce que le site lit réellement. Les
+//  rubriques Horaires, Tarifs, Heros de page et Cards infos ont
+//  été retirées : elles n'étaient plus lues, et les modifier
+//  n'avait aucun effet visible — ce qui est plus déroutant
+//  qu'une rubrique absente.
+//
+//  Le Studio est publié automatiquement à chaque modification
+//  de ce dossier (workflow .github/workflows/sanity.yml).
 // ─────────────────────────────────────────────────────────────
 
 export default defineConfig({
@@ -24,16 +30,21 @@ export default defineConfig({
           .title('Contenu')
           .items([
             S.listItem()
-              .title('⚙️  Paramètres du site')
-              .child(S.document().schemaType('settings').documentId('siteSettings')),
+              .title('🧘  Cours')
+              .child(
+                S.documentTypeList('cours')
+                  .title('Cours')
+                  // Les cours s'affichent dans l'ordre du site, pas
+                  // par date de modification : on retrouve la page.
+                  .defaultOrdering([{ field: 'ordre', direction: 'asc' }])
+              ),
             S.divider(),
-            S.documentTypeListItem('horaire').title('📅  Horaires'),
-            S.documentTypeListItem('cours').title('🧘  Cours'),
-            S.documentTypeListItem('mediaBloc').title('🖼   Photos du site'),
             S.documentTypeListItem('temoignage').title('💬  Témoignages'),
-            S.documentTypeListItem('tarif').title('💰  Tarifs'),
-            S.documentTypeListItem('pageHero').title('🪧  Heros des pages'),
-            S.documentTypeListItem('infoCard').title('📌  Cards infos'),
+            S.documentTypeListItem('mediaBloc').title('🖼   Photos du site'),
+            S.divider(),
+            S.listItem()
+              .title('⚙️  Coordonnées du studio')
+              .child(S.document().schemaType('settings').documentId('siteSettings')),
           ]),
     }),
     visionTool(),

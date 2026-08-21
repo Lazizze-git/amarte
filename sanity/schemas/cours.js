@@ -76,6 +76,20 @@ export const cours = {
       validation: R => R.max(160),
     },
     {
+      name: 'accueil', title: 'Mettre en avant sur l\'accueil', type: 'boolean',
+      description: 'La page d\'accueil présente une sélection de cours. '
+                 + 'Cochez pour que celui-ci en fasse partie — quatre est un bon nombre.',
+      initialValue: false,
+    },
+    {
+      name: 'ordreAccueil', title: 'Position sur l\'accueil', type: 'number',
+      description: '1 en premier. N\'apparaît que si le cours est mis en avant.',
+      // Ne s'affiche que lorsque la case ci-dessus est cochée : un champ
+      // sans objet dans le formulaire est une source de confusion.
+      hidden: ({ parent }) => !parent?.accueil,
+      initialValue: 1,
+    },
+    {
       name: 'ordre', title: 'Ordre d\'affichage', type: 'number',
       description: '1 en premier. Les cours sont listés dans cet ordre.',
       initialValue: 99,
@@ -113,12 +127,13 @@ export const cours = {
   preview: {
     select: {
       title: 'titre', cat: 'categorie', horaire: 'horaire',
-      media: 'image', actif: 'actif', ordre: 'ordre',
+      media: 'image', actif: 'actif', ordre: 'ordre', accueil: 'accueil',
     },
-    prepare({ title, cat, horaire, media, actif, ordre }) {
+    prepare({ title, cat, horaire, media, actif, ordre, accueil }) {
       const pastille = { yoga: '🧘', pilates: '🏋️', autres: '🌿' }
       return {
-        title: `${ordre != null ? ordre + '. ' : ''}${actif === false ? '⏸ ' : ''}${title}`,
+        title: `${ordre != null ? ordre + '. ' : ''}${actif === false ? '⏸ ' : ''}${title}`
+             + (accueil ? '  ⭐' : ''),
         subtitle: `${pastille[cat] || ''} ${horaire || ''}`.trim(),
         media,
       }

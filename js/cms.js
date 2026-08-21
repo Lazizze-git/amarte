@@ -88,14 +88,39 @@
   // La grille est réécrite depuis Sanity. Tant que la réponse n'est
   // pas là — ou si elle échoue — les cours écrits dans le HTML
   // restent affichés : la page ne peut pas se vider.
-  if (document.getElementById('cours-grid')) {
+  // La page Cours affiche tout ; l'accueil une sélection. Une seule
+  // requête sert les deux, chaque page ne rendant que ce qui la concerne.
+  if (document.getElementById('cours-grid') || document.querySelector('.disc2-grid')) {
     query(`*[_type == "cours" && actif != false] | order(ordre asc){
       titre, categorie, horaire, instructeur, description, niveau, tag,
-      cle, imageFichier, imageAlt, "ref": image.asset._ref
-    }`).then(renderCours).catch(() => {/* garder les cours du HTML */});
+      accueil, ordreAccueil, cle, imageFichier, imageAlt, "ref": image.asset._ref
+    }`).then((liste) => {
+      renderCours(liste);
+      renderDisciplines(liste);
+    }).catch(() => {/* garder les cours du HTML */});
   }
 
   const NIVEAUX = { '1': 'Doux', '2': 'Moyen', '3': 'Dynamique' };
+
+  // Dimensions des photos livrées avec le site. Elles servent à réserver
+  // la bonne hauteur avant chargement : sans elles, la page sursaute.
+  const TAILLES = {
+    'about': [1500, 830],
+    'cours-collectif-1': [1500, 1011],
+    'cours-collectif-2': [1500, 1240],
+    'cta-banner': [1500, 1008],
+    'hero': [1537, 1023],
+    'salle-ensemble': [1500, 826],
+    'salle-tapis': [1100, 806],
+  };
+
+  // Attributs width/height de la photo, qu'elle vienne du CMS ou du site.
+  function attributsTaille(ref, fichier) {
+    const d = ref ? dimensions(ref) : null;
+    if (d) return ` width="${d.l}" height="${d.h}"`;
+    const t = TAILLES[fichier];
+    return t ? ` width="${t[0]}" height="${t[1]}"` : '';
+  }
   const CATEGORIES = { yoga: 'Yoga', pilates: 'Pilates', autres: 'Autres' };
 
   // Identifiant utilisable dans un attribut : sert au suivi des clics.
@@ -127,7 +152,7 @@
         <div class="cours-card-media gs-img-reveal">
           <picture data-cms-img="${slug}">
             ${secours}
-            <img src="${src}" alt="${esc(c.imageAlt || '')}" decoding="async" class="gs-img-inner" />
+            <img src="${src}"${attributsTaille(c.ref, fichier)} alt="${esc(c.imageAlt || '')}" loading="lazy" decoding="async" class="gs-img-inner" />
           </picture>
         </div>
         <div class="cours-card-body">
@@ -155,6 +180,70 @@
 
     // Le compteur et la synchronisation d'URL de la page écoutent ceci.
     document.dispatchEvent(new CustomEvent('cours:rendus'));
+  }
+
+  // Horaire abrégé pour les cartes de l'accueil, plus étroites :
+  // « Mardi · 18h30 » devient « mar. 18h30 ».
+  const JOURS_COURTS = {
+    lundi: 'lun.', mardi: 'mar.', mercredi: 'mer.', jeudi: 'jeu.',
+    vendredi: 'ven.', samedi: 'sam.', dimanche: 'dim.',
+  };
+  function horaireCourt(horaire) {
+    const parts = String(horaire || '').split('·');
+    if (parts.length < 2) return String(horaire || '');
+    const jour = parts[0].trim().toLowerCase();
+    return (JOURS_COURTS[jour] || parts[0].trim()) + ' ' + parts.slice(1).join('·').trim();
+  }
+
+  const INTENSITES = { '1': 'douce', '2': 'moyenne', '3': 'dynamique' };
+
+  function renderDisciplines(liste) {
+    const grille = document.querySelector('.disc2-grid');
+    if (!grille || !liste) return;
+
+    // L'accueil a son propre ordre : les quatre cartes n'y apparaissent
+    // pas forcément dans l'ordre du planning.
+    const selection = liste
+      .filter((c) => c.accueil)
+      .sort((a, b) => (a.ordreAccueil ?? 99) - (b.ordreAccueil ?? 99));
+    // Aucune mise en avant cochée : on garde les cartes du HTML plutôt
+    // que d'afficher une section vide.
+    if (selection.length === 0) return;
+
+    grille.innerHTML = selection.map((c) => {
+      const fichier = c.imageFichier || 'cours-collectif-1';
+      const src = c.ref
+        ? esc(urlImage(c.ref, 1500))
+        : `public/images/${esc(fichier)}.jpg`;
+      const secours = c.ref
+        ? ''
+        : `<source srcset="public/images/${esc(fichier)}.webp" type="image/webp" />`;
+
+      const niveau = String(c.niveau || '2');
+      const prof = c.instructeur ? esc(c.instructeur) + ' · ' : '';
+      const initiale = c.instructeur ? esc(c.instructeur.trim().charAt(0).toUpperCase()) : '·';
+
+      return `
+      <article class="disc2-card gs-reveal">
+        <div class="disc2-media gs-img-reveal">
+          <picture data-cms-img="${esc(c.cle || '')}">
+            ${secours}
+            <img src="${src}"${attributsTaille(c.ref, fichier)} alt="${esc(c.imageAlt || 'Cours de ' + c.titre + ' en cours chez Amarte')}"
+                 loading="lazy" decoding="async" class="gs-img-inner" />
+          </picture>
+        </div>
+        <div class="disc2-body">
+          <h3 class="disc2-name">${esc(c.titre)}</h3>
+          ${c.description ? `<p class="disc2-desc">${esc(c.description)}</p>` : ''}
+          <div class="disc2-foot">
+            <span class="disc2-teacher"><span class="disc2-avatar" aria-hidden="true">${initiale}</span>${prof}${esc(horaireCourt(c.horaire))}</span>
+            <span class="disc2-intensity" data-level="${esc(niveau)}" role="img" aria-label="Intensité ${esc(INTENSITES[niveau] || 'moyenne')}"><i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i> ${esc(NIVEAUX[niveau] || 'Moyen')}</span>
+          </div>
+        </div>
+      </article>`;
+    }).join('');
+
+    if (typeof window.amarteRevele === 'function') window.amarteRevele(grille);
   }
 
   // ── PHOTOS DU SITE (toutes les pages) ─────────────────────────
