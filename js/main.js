@@ -270,10 +270,12 @@
     if (known) select.value = wanted;
   })();
 
-  /* Aucun service d'envoi n'est configuré à ce jour : plutôt que de
-     laisser croire à un envoi, on confirme la réception ET on rappelle
-     les canaux directs. Renseigner `data-endpoint` sur le <form> pour
-     brancher un vrai service (Formspree, Web3Forms…). */
+  /* Les formulaires sont envoyés à `data-endpoint` (contact.php, sur
+     l'hébergement) puis confirmés à l'écran. La confirmation rappelle
+     toujours WhatsApp et l'e-mail : si l'envoi échoue malgré tout,
+     personne ne doit rester sans moyen de nous joindre.
+     Un <form> sans `data-endpoint` affiche la confirmation sans rien
+     envoyer — à ne laisser que pour une maquette. */
   document.querySelectorAll('.contact-form').forEach(function (form) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -310,12 +312,23 @@
       var button = form.querySelector('[type="submit"]');
       if (button) { button.disabled = true; button.textContent = 'Envoi…'; }
 
+      var data = new FormData(form);
+      // Permet de savoir depuis quelle page le message part : les deux
+      // formulaires arrivent sur la même boîte mail.
+      if (form.dataset.origine) data.append('origine', form.dataset.origine);
+
       fetch(endpoint, {
         method: 'POST',
-        body: new FormData(form),
+        body: data,
         headers: { Accept: 'application/json' }
       })
-        .then(done)
+        .then(function (res) {
+          // fetch() ne rejette pas sur une erreur HTTP : sans ce test,
+          // un endpoint en panne afficherait quand même « Message reçu »
+          // et le visiteur croirait avoir été entendu.
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          done();
+        })
         .catch(function () {
           if (button) { button.disabled = false; button.textContent = 'Réessayer'; }
         });

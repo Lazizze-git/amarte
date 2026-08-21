@@ -285,7 +285,13 @@
         </div>
       </div>
       <div class="form-wrap gs-reveal">
-        <form class="contact-form contact-form--dense" novalidate data-success-note="On revient vers vous avec les disponibilités.">
+        <form class="contact-form contact-form--dense" novalidate data-success-note="On revient vers vous avec les disponibilités."
+              data-endpoint="/contact.php" data-origine="Location">
+          <!-- Piège à robots : voir contact.html. -->
+          <div class="form-hp" aria-hidden="true">
+            <label for="l-site-web">Ne pas remplir</label>
+            <input type="text" id="l-site-web" name="site_web" tabindex="-1" autocomplete="off" />
+          </div>
           <div class="form-row">
             <div class="form-group">
               <label class="form-label" for="l-prenom">Prénom</label>

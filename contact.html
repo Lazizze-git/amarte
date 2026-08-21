@@ -237,7 +237,14 @@
 
       <div class="gs-reveal" id="formulaire">
         <div class="form-wrap" id="form-wrap">
-          <form class="contact-form" id="contact-form" aria-label="Nous écrire" novalidate>
+          <form class="contact-form" id="contact-form" aria-label="Nous écrire" novalidate
+                data-endpoint="/contact.php" data-origine="Contact">
+            <!-- Piège à robots : invisible et hors du parcours clavier.
+                 contact.php ignore tout envoi où ce champ est rempli. -->
+            <div class="form-hp" aria-hidden="true">
+              <label for="c-site-web">Ne pas remplir</label>
+              <input type="text" id="c-site-web" name="site_web" tabindex="-1" autocomplete="off" />
+            </div>
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label" for="c-prenom">Prénom</label>

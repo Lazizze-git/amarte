@@ -740,6 +740,18 @@ body.menu-open .nav-scrim {
 
 
 /* ═══ 08 · FORMULAIRES ═══════════════════════════════════ */
+
+/* Piège à robots : le champ doit rester dans le DOM et être
+   soumis, mais invisible et inatteignable au clavier comme au
+   lecteur d'écran. `display:none` conviendrait, mais certains
+   robots l'inspectent — on le sort de l'écran à la place. */
+.form-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
 .contact-form { display: flex; flex-direction: column; gap: var(--sp-5); }
 /* Formulaire long (demande de location) : les champs sont appariés par
    ligne et la respiration verticale se resserre d'un cran. Rien n'est

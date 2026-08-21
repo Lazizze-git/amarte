@@ -24,5 +24,6 @@ deployment:
     - /bin/cp -f index.html apropos.html calendrier.html contact.html $DEPLOYPATH
     - /bin/cp -f corpo.html cours.html location.html premiere-fois.html $DEPLOYPATH
     - /bin/cp -f tarifs.html $DEPLOYPATH
+    - /bin/cp -f contact.php $DEPLOYPATH
     - /bin/cp -f favicon.ico robots.txt sitemap.xml $DEPLOYPATH
     - /bin/cp -f .htaccess $DEPLOYPATH
