@@ -43,6 +43,18 @@
     return (await res.json()).result;
   }
 
+  // Typographie française appliquée au texte venu du CMS : la
+  // ponctuation double et les unités ne doivent pas se retrouver
+  // seules en début de ligne. La personne qui saisit tape des
+  // espaces ordinaires, le site rétablit les insécables.
+  const UNITES = 'h|min|s|m|km|cm|kg|g|%|CHF|€|°C';
+  function typo(t) {
+    return String(t == null ? '' : t)
+      .replace(/ ([?!:;»])/g, '\u00A0$1')
+      .replace(/(«) /g, '$1\u00A0')
+      .replace(new RegExp('(\\d) (' + UNITES + ')\\b', 'g'), '$1\u00A0$2');
+  }
+
   // Échappe le HTML pour éviter toute casse de la mise en page.
   const esc = (s) => String(s == null ? '' : s)
     .replace(/&/g, '&amp;')
@@ -101,13 +113,11 @@
   // à la ligne coupe la ligne. Le texte est échappé d'abord, donc
   // rien de ce que le CMS contient ne peut injecter de balise.
   function enrichir(texte) {
-    return esc(texte)
+    return esc(typo(texte))
       .replace(/\*([^*\n]+)\*/g, '<em>$1</em>')
       // Typographie française : la ponctuation double ne doit jamais
       // se retrouver seule en début de ligne. On rétablit l'espace
       // insécable même si la personne a tapé une espace ordinaire.
-      .replace(/ ([?!:;»])/g, '\u00A0$1')
-      .replace(/(«) /g, '$1\u00A0')
       .replace(/\n/g, '<br>');
   }
 
@@ -125,9 +135,7 @@
       const el = document.querySelector('[data-cms-hero-label]');
       // Même règle d'espace insécable que pour les titres, mais en
       // texte simple : le label ne contient pas de mise en forme.
-      if (el) el.textContent = String(h.label)
-        .replace(/ ([?!:;»])/g, '\u00A0$1')
-        .replace(/(«) /g, '$1\u00A0');
+      if (el) el.textContent = typo(h.label);
     }
 
     if (h.titre) {
@@ -150,6 +158,63 @@
           : blocs.map((b) => `<p>${enrichir(b.trim())}</p>`).join(' ');
       }
     }
+  }
+
+  // ── REPÈRES (calendrier, cours, contact) ──────────────────────
+  // Les cartes gardent leur icône et leur numéro, dessinés à la main
+  // dans le HTML : on ne remplace que les textes. Ajouter un repère
+  // duplique la dernière carte, qui sert de gabarit.
+  const zoneInfos = document.querySelector('[data-cms-infos]');
+  if (zoneInfos) {
+    const serie = zoneInfos.dataset.cmsInfos;
+    query(`*[_type == "infoCard" && groupe == "${serie}" && actif != false] | order(ordre asc){
+      titre, texte
+    }`).then((l) => renderInfos(zoneInfos, l)).catch(() => {/* garder le HTML */});
+  }
+
+  function renderInfos(zone, liste) {
+    if (!liste || liste.length === 0) return;
+
+    const cartes = Array.from(zone.children);
+    if (cartes.length === 0) return;
+    const gabarit = cartes[cartes.length - 1];
+
+    liste.forEach((info, i) => {
+      let carte = cartes[i];
+      if (!carte) {
+        // Le gabarit porte l'icône et la structure : on le duplique
+        // plutôt que de reconstruire un balisage qu'on ne connaît pas.
+        carte = gabarit.cloneNode(true);
+        zone.appendChild(carte);
+      }
+      carte.hidden = false;
+
+      // La série Contact tient sur une seule ligne, sans titre séparé.
+      const titre = carte.querySelector('h3') || carte;
+      const texte = carte.querySelector('p:last-of-type');
+
+      if (titre === carte) {
+        // On préserve le tiret décoratif placé avant le texte.
+        const tiret = carte.querySelector('span');
+        carte.textContent = '';
+        if (tiret) { carte.appendChild(tiret); carte.appendChild(document.createTextNode(' ')); }
+        carte.appendChild(document.createTextNode(typo(info.titre)));
+      } else {
+        titre.textContent = typo(info.titre);
+        if (texte && info.texte) texte.textContent = typo(info.texte);
+      }
+
+      // Les numéros 01, 02, 03 doivent suivre l'ordre, pas rester
+      // figés sur ceux du gabarit dupliqué.
+      const num = carte.querySelector('.cal-info-num');
+      if (num) num.textContent = String(i + 1).padStart(2, '0');
+    });
+
+    // Moins de repères qu'à l'origine : on masque les cartes en trop
+    // plutôt que de les retirer, pour pouvoir les réafficher.
+    cartes.slice(liste.length).forEach((c) => { c.hidden = true; });
+
+    if (typeof window.amarteRevele === 'function') window.amarteRevele(zone);
   }
 
   // ── TARIFS (page tarifs.html) ─────────────────────────────────

@@ -1,0 +1,10 @@
+{"_id": "info-cal-1", "_type": "infoCard", "groupe": "calendrier", "ordre": 1, "actif": true, "titre": "Réserver en ligne", "texte": "Choisissez votre cours et réservez en ligne. Confirmation et infos pratiques envoyées par email."}
+{"_id": "info-cal-2", "_type": "infoCard", "groupe": "calendrier", "ordre": 2, "actif": true, "titre": "Annulation flexible", "texte": "Annulez jusqu’à 2 h avant le cours depuis votre espace compte. Votre crédit vous est alors rendu ; au-delà, il est décompté."}
+{"_id": "info-cal-3", "_type": "infoCard", "groupe": "calendrier", "ordre": 3, "actif": true, "titre": "Places limitées", "texte": "Le nombre de places est limité pour garantir l’attention de chacun. Réservez à l’avance."}
+{"_id": "info-cours-1", "_type": "infoCard", "groupe": "cours", "ordre": 1, "actif": true, "titre": "En petit comité", "texte": "15 personnes max par cours — de la place pour être vu, guidé, corrigé."}
+{"_id": "info-cours-2", "_type": "infoCard", "groupe": "cours", "ordre": 2, "actif": true, "titre": "Matériel fourni", "texte": "Tapis et accessoires sur place. Venez simplement en tenue confortable."}
+{"_id": "info-cours-3", "_type": "infoCard", "groupe": "cours", "ordre": 3, "actif": true, "titre": "Guidé à votre niveau", "texte": "Débutant ou confirmé, les profs s’adaptent à vos limites du jour."}
+{"_id": "info-acces-1", "_type": "infoCard", "groupe": "contact", "ordre": 1, "actif": true, "titre": "Parking souterrain gratuit"}
+{"_id": "info-acces-2", "_type": "infoCard", "groupe": "contact", "ordre": 2, "actif": true, "titre": "Places extérieures gratuites"}
+{"_id": "info-acces-3", "_type": "infoCard", "groupe": "contact", "ordre": 3, "actif": true, "titre": "Bus arrêt Girarde à 20 m"}
+{"_id": "info-acces-4", "_type": "infoCard", "groupe": "contact", "ordre": 4, "actif": true, "titre": "Abri vélo sécurisé"}

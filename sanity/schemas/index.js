@@ -4,6 +4,7 @@ import { settings }   from './settings'
 import { mediaBloc }  from './mediaBloc'
 import { pageHero }   from './pageHero'
 import { tarif }      from './tarif'
+import { infoCard }   from './infoCard'
 
 export const schemaTypes = [
   cours,
@@ -12,4 +13,5 @@ export const schemaTypes = [
   mediaBloc,
   pageHero,
   tarif,
+  infoCard,
 ]

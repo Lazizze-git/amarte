@@ -46,6 +46,13 @@ export default defineConfig({
                   .defaultOrdering([{ field: 'ordre', direction: 'asc' }])
               ),
             S.documentTypeListItem('pageHero').title('🖥️   En-têtes de page'),
+            S.listItem()
+              .title('📌  Repères des pages')
+              .child(
+                S.documentTypeList('infoCard')
+                  .title('Repères')
+                  .defaultOrdering([{ field: 'ordre', direction: 'asc' }])
+              ),
             S.divider(),
             S.documentTypeListItem('temoignage').title('💬  Témoignages'),
             S.documentTypeListItem('mediaBloc').title('🖼   Photos du site'),

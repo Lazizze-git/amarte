@@ -38,6 +38,7 @@ const SOURCES = [
   { fichier: 'cours.ndjson', type: 'cours',    libelle: 'cours' },
   { fichier: 'heros.ndjson', type: 'pageHero', libelle: 'en-têtes de page' },
   { fichier: 'tarifs.ndjson', type: 'tarif',   libelle: 'tarifs' },
+  { fichier: 'repere.ndjson', type: 'infoCard', libelle: 'repères' },
 ]
 
 const docs = []
