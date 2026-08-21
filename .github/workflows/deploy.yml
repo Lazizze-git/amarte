@@ -1,0 +1,63 @@
+# ==========================================================
+#  Déploiement automatique vers l'hébergement cPanel
+#  Chaque push sur `main` envoie le site par FTPS.
+#
+#  À configurer une seule fois dans GitHub :
+#  dépôt → Settings → Secrets and variables → Actions
+#
+#    FTP_HOST      ex. ftp.amarte.ch
+#    FTP_USER      l'utilisateur du compte FTP
+#    FTP_PASSWORD  son mot de passe
+#    FTP_DIR       dossier cible sur le serveur :
+#                    /public_html/            → production
+#                    /stag.amarte.ch/         → préproduction
+#                  (avec un compte FTP limité à un dossier,
+#                   c'est simplement /)
+#
+#  Ne sont pas envoyés : le dépôt Git, le studio Sanity, le
+#  guide CMS et les fichiers de configuration du déploiement.
+# ==========================================================
+name: Déployer sur cPanel
+
+on:
+  push:
+    branches: [main]
+  # Permet aussi de relancer un déploiement à la main depuis
+  # l'onglet Actions, sans avoir à pousser un commit.
+  workflow_dispatch:
+
+concurrency:
+  # Deux déploiements simultanés écriraient dans le même dossier.
+  group: deploy-cpanel
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installer lftp
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
+      - name: Envoyer les fichiers
+        env:
+          HOST: ${{ secrets.FTP_HOST }}
+          USER: ${{ secrets.FTP_USER }}
+          PASS: ${{ secrets.FTP_PASSWORD }}
+          DIR:  ${{ secrets.FTP_DIR }}
+        run: |
+          lftp -c "
+            set ftp:ssl-force true;
+            set ftp:ssl-protect-data true;
+            set ssl:verify-certificate no;
+            open -u '$USER','$PASS' '$HOST';
+            mirror --reverse --delete --verbose --parallel=4 \
+              --exclude-glob .git/ \
+              --exclude-glob .github/ \
+              --exclude-glob sanity/ \
+              --exclude-glob .gitignore \
+              --exclude-glob .cpanel.yml \
+              --exclude-glob GUIDE-CMS.md \
+              . '$DIR';
+          "
