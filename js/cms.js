@@ -84,6 +84,74 @@
       </div>`).join('');
   }
 
+  // ── EN-TÊTE DE PAGE ───────────────────────────────────────────
+  // Le label, le titre et l'introduction du bandeau du haut. Sans
+  // document pour la page, le texte du HTML reste : le CMS ne peut
+  // pas vider un en-tête.
+  const pageCourante = document.querySelector('[data-cms-hero-titre]');
+  if (pageCourante) {
+    const clePage = pageCourante.dataset.cmsHeroTitre;
+    query(`*[_type == "pageHero" && page == "${clePage}" && actif != false][0]{
+      label, titre, sousTitre
+    }`).then(renderHero).catch(() => {/* garder le texte du HTML */});
+  }
+
+  // Convention de saisie, volontairement minimale pour rester
+  // compréhensible sans formation : *mots* met en valeur, un retour
+  // à la ligne coupe la ligne. Le texte est échappé d'abord, donc
+  // rien de ce que le CMS contient ne peut injecter de balise.
+  function enrichir(texte) {
+    return esc(texte)
+      .replace(/\*([^*\n]+)\*/g, '<em>$1</em>')
+      // Typographie française : la ponctuation double ne doit jamais
+      // se retrouver seule en début de ligne. On rétablit l'espace
+      // insécable même si la personne a tapé une espace ordinaire.
+      .replace(/ ([?!:;»])/g, '\u00A0$1')
+      .replace(/(«) /g, '$1\u00A0')
+      .replace(/\n/g, '<br>');
+  }
+
+  // Le titre de la page « Première fois » colore son point final.
+  // C'est le seul endroit du site où cette règle existe : on la
+  // rétablit là, plutôt que d'ajouter une balise inerte partout.
+  function pointFinal(html) {
+    return html.replace(/\.(<\/em>)?$/, '<span class="dot">.</span>$1');
+  }
+
+  function renderHero(h) {
+    if (!h) return;
+
+    if (h.label) {
+      const el = document.querySelector('[data-cms-hero-label]');
+      // Même règle d'espace insécable que pour les titres, mais en
+      // texte simple : le label ne contient pas de mise en forme.
+      if (el) el.textContent = String(h.label)
+        .replace(/ ([?!:;»])/g, '\u00A0$1')
+        .replace(/(«) /g, '$1\u00A0');
+    }
+
+    if (h.titre) {
+      const el = document.querySelector('[data-cms-hero-titre]');
+      if (el) {
+        const html = enrichir(h.titre);
+        el.innerHTML = el.classList.contains('defi-hero-title') ? pointFinal(html) : html;
+      }
+    }
+
+    if (h.sousTitre) {
+      const el = document.querySelector('[data-cms-hero-sous]');
+      if (el) {
+        // Certaines pages présentent l'introduction en plusieurs
+        // paragraphes, d'autres en une seule phrase : on suit le
+        // balisage déjà en place plutôt que de l'imposer.
+        const blocs = String(h.sousTitre).split(/\n\s*\n/).filter((b) => b.trim());
+        el.innerHTML = el.tagName === 'P'
+          ? enrichir(blocs.join('\n'))
+          : blocs.map((b) => `<p>${enrichir(b.trim())}</p>`).join(' ');
+      }
+    }
+  }
+
   // ── COURS (page cours.html) ───────────────────────────────────
   // La grille est réécrite depuis Sanity. Tant que la réponse n'est
   // pas là — ou si elle échoue — les cours écrits dans le HTML

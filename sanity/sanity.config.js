@@ -38,6 +38,7 @@ export default defineConfig({
                   // par date de modification : on retrouve la page.
                   .defaultOrdering([{ field: 'ordre', direction: 'asc' }])
               ),
+            S.documentTypeListItem('pageHero').title('🖥️   En-têtes de page'),
             S.divider(),
             S.documentTypeListItem('temoignage').title('💬  Témoignages'),
             S.documentTypeListItem('mediaBloc').title('🖼   Photos du site'),

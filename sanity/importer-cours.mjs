@@ -1,8 +1,8 @@
 // ============================================================
 //  Import des cours dans Sanity — opération ponctuelle
 //
-//  Remplace le contenu du type « cours » par les dix cours
-//  actuels du site, repris à l'identique depuis cours.ndjson.
+//  Remplace les cours et les en-têtes de page par le contenu
+//  actuel du site, repris à l'identique.
 //
 //  ⚠ Cet import ÉCRASE tous les cours existants. Il est conçu
 //    pour la reprise initiale, pas pour tourner régulièrement :
@@ -31,25 +31,39 @@ if (!jeton && !simulation) {
 }
 
 const ici = dirname(fileURLToPath(import.meta.url))
-const docs = readFileSync(join(ici, 'cours.ndjson'), 'utf8')
-  .split('\n')
-  .filter((l) => l.trim())
-  .map((l) => JSON.parse(l))
 
-if (docs.length === 0) {
-  console.error('cours.ndjson est vide, rien à importer.')
-  process.exit(1)
+// Chaque fichier reprend un type de contenu du site. Ajouter une
+// entrée ici suffit à étendre la reprise.
+const SOURCES = [
+  { fichier: 'cours.ndjson', type: 'cours',    libelle: 'cours' },
+  { fichier: 'heros.ndjson', type: 'pageHero', libelle: 'en-têtes de page' },
+]
+
+const docs = []
+for (const src of SOURCES) {
+  const lus = readFileSync(join(ici, src.fichier), 'utf8')
+    .split('\n')
+    .filter((l) => l.trim())
+    .map((l) => JSON.parse(l))
+
+  if (lus.length === 0) {
+    console.error(`${src.fichier} est vide : import interrompu pour ne pas ` +
+                  `supprimer les ${src.libelle} sans rien remettre.`)
+    process.exit(1)
+  }
+
+  console.log(`${lus.length} ${src.libelle} :`)
+  lus.forEach((d) => console.log(`  · ${d.titre || d.page}`))
+  docs.push(...lus)
 }
-
-console.log(`${docs.length} cours à importer :`)
-docs.forEach((d) => console.log(`  ${String(d.ordre).padStart(2)}. ${d.titre} — ${d.horaire}`))
 
 // Les documents existants sont supprimés par requête plutôt que par
 // identifiant : les anciens cours ont des identifiants générés qu'on
 // ne connaît pas. Tout part dans la même mutation, donc soit
 // l'ensemble s'applique, soit rien.
+const types = SOURCES.map((s) => `"${s.type}"`).join(', ')
 const mutations = [
-  { delete: { query: '*[_type == "cours"]' } },
+  { delete: { query: `*[_type in [${types}]]` } },
   ...docs.map((doc) => ({ createOrReplace: doc })),
 ]
 
@@ -84,4 +98,4 @@ if (!reponse.ok) {
 
 const resultat = JSON.parse(corps)
 console.log(`\nImport réussi — ${resultat.results?.length ?? 0} documents écrits.`)
-console.log('Les cours sont désormais modifiables dans le Studio, rubrique « Cours ».')
+console.log('Le contenu est désormais modifiable dans le Studio.')
