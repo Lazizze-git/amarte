@@ -37,6 +37,7 @@ const ici = dirname(fileURLToPath(import.meta.url))
 const SOURCES = [
   { fichier: 'cours.ndjson', type: 'cours',    libelle: 'cours' },
   { fichier: 'heros.ndjson', type: 'pageHero', libelle: 'en-têtes de page' },
+  { fichier: 'tarifs.ndjson', type: 'tarif',   libelle: 'tarifs' },
 ]
 
 const docs = []
@@ -53,7 +54,7 @@ for (const src of SOURCES) {
   }
 
   console.log(`${lus.length} ${src.libelle} :`)
-  lus.forEach((d) => console.log(`  · ${d.titre || d.page}`))
+  lus.forEach((d) => console.log(`  · ${d.titre || d.nom || d.page}`))
   docs.push(...lus)
 }
 

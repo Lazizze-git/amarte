@@ -152,6 +152,107 @@
     }
   }
 
+  // ── TARIFS (page tarifs.html) ─────────────────────────────────
+  // Trois sections : abonnements, cartes de cours, cours privés.
+  // Sans fiche pour un groupe, la section garde ce que contient le
+  // HTML — une erreur de saisie ne peut pas vider la grille.
+  if (document.querySelector('[data-cms-tarifs]')) {
+    query(`*[_type == "tarif" && actif != false] | order(ordre asc){
+      groupe, nom, sousTitre, prix, parCours, mois, recommande,
+      lien, texteBouton, cta
+    }`).then(renderTarifs).catch(() => {/* garder les tarifs du HTML */});
+  }
+
+  // « 1 490 » doit rester insécable : un prix coupé en fin de ligne
+  // se lit mal.
+  const prixAffiche = (p) => esc(String(p || '').replace(/\s/g, '\u00A0'));
+
+  function renderTarifs(liste) {
+    if (!liste || liste.length === 0) return;
+
+    const par = { abonnement: [], pack: [], prive: [] };
+    liste.forEach((t) => { if (par[t.groupe]) par[t.groupe].push(t); });
+
+    // ── Abonnements
+    const abos = document.querySelector('[data-cms-tarifs="abonnement"]');
+    if (abos && par.abonnement.length) {
+      abos.innerHTML = par.abonnement.map((t) => `
+        <article class="tarifs-plan${t.recommande ? ' tarifs-plan--reco' : ''}">
+          ${t.recommande ? '<span class="offre-pill">Recommandé</span>' : ''}
+          <h3 class="tarifs-plan-name">${esc(t.nom)}</h3>
+          ${t.sousTitre ? `<p class="tarifs-plan-baseline">${esc(t.sousTitre)}</p>` : ''}
+          <p class="tarifs-plan-price"><span class="tarifs-plan-cur">CHF</span><span class="tarifs-plan-amount">${prixAffiche(t.prix)}</span></p>
+          ${t.parCours ? `<p class="tarifs-plan-rate">${esc(t.parCours)}</p>` : ''}
+          ${t.lien ? `<a class="btn ${t.recommande ? 'btn--primary' : 'btn--secondary'} btn--block" href="${esc(t.lien)}" data-cta="${esc(t.cta || '')}">${esc(t.texteBouton || 'Choisir')}</a>` : ''}
+        </article>`).join('');
+      synchroniserSimulateur(par.abonnement);
+    }
+
+    // ── Cartes de cours
+    const packs = document.querySelector('[data-cms-tarifs="pack"]');
+    if (packs && par.pack.length) {
+      packs.innerHTML = par.pack.map((t) => `
+        <li class="tarifs-pack">
+          <div>
+            <h3 class="tarifs-pack-name">${esc(t.nom)}</h3>
+            ${t.sousTitre ? `<p class="tarifs-pack-sub">${esc(t.sousTitre)}</p>` : ''}
+          </div>
+          <div class="tarifs-pack-figures">
+            <p class="tarifs-pack-price">CHF ${prixAffiche(t.prix)}</p>
+            ${t.parCours ? `<p class="tarifs-pack-rate">${esc(t.parCours)}</p>` : ''}
+          </div>
+          ${t.lien ? `<a class="btn btn--secondary" href="${esc(t.lien)}" data-cta="${esc(t.cta || '')}" aria-label="${esc(t.texteBouton || 'Acheter')} — ${esc(t.nom)} — CHF ${esc(t.prix)}">${esc(t.texteBouton || 'Acheter')}</a>` : ''}
+        </li>`).join('');
+    }
+
+    // ── Cours privés
+    const prives = document.querySelector('[data-cms-tarifs="prive"]');
+    if (prives && par.prive.length) {
+      prives.innerHTML = par.prive.map((t) => `
+        <div class="tarifs-private-item">
+          <span class="tarifs-private-item-name">${esc(t.nom)}</span>
+          <span class="tarifs-private-item-price">${esc(t.prix)}</span>
+        </div>`).join('');
+    }
+
+    if (typeof window.amarteRevele === 'function') window.amarteRevele(document);
+  }
+
+  // Le simulateur de la page porte ses propres montants. Sans cette
+  // reprise, modifier un abonnement afficherait deux prix différents
+  // sur la même page.
+  function synchroniserSimulateur(abonnements) {
+    const onglets = document.querySelectorAll('#sim-plan-tabs .tarifs-calc-tab');
+    if (onglets.length === 0) return;
+
+    onglets.forEach((onglet, i) => {
+      const t = abonnements[i];
+      if (!t) { onglet.hidden = true; return; }
+      const montant = String(t.prix || '').replace(/\s/g, '');
+      if (!/^\d+$/.test(montant)) { onglet.hidden = true; return; }
+      onglet.hidden = false;
+      onglet.dataset.price = montant;
+      if (t.mois) onglet.dataset.months = String(t.mois);
+      const duree = t.mois === 12 ? '1 an' : `${t.mois} mois`;
+      onglet.innerHTML = `${esc(duree)}<br><span>CHF ${prixAffiche(t.prix)}</span>`;
+    });
+
+    // Le prix du cours à l'unité sert au calcul de l'économie.
+    const unique = abonnements.length && document.getElementById('tarifs-simulateur');
+    if (unique) {
+      const carte = Array.from(document.querySelectorAll('[data-cms-tarifs="pack"] .tarifs-pack'))[0];
+      const p = carte && carte.querySelector('.tarifs-pack-price');
+      const v = p && p.textContent.replace(/[^\d]/g, '');
+      if (v) document.getElementById('tarifs-simulateur').dataset.unitPrice = v;
+    }
+
+    // Le simulateur recalcule sur changement d'onglet : on lui en
+    // signale un pour qu'il reparte des nouveaux montants.
+    const actif = document.querySelector('#sim-plan-tabs .tarifs-calc-tab[aria-pressed="true"]:not([hidden])')
+               || document.querySelector('#sim-plan-tabs .tarifs-calc-tab:not([hidden])');
+    if (actif) actif.click();
+  }
+
   // ── COURS (page cours.html) ───────────────────────────────────
   // La grille est réécrite depuis Sanity. Tant que la réponse n'est
   // pas là — ou si elle échoue — les cours écrits dans le HTML

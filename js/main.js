@@ -260,7 +260,22 @@
     // CMS) ne sont pas dans `targets` : sans cet appel elles resteraient
     // à opacité zéro, donc invisibles.
     window.amarteRevele = function (racine) {
-      var nouveaux = (racine || document).querySelectorAll('.gs-reveal, .gs-img-reveal');
+      var portee = racine || document;
+
+      // Les groupes en cascade appliquent leur décalage aux enfants.
+      // Recréés après coup, ceux-ci apparaîtraient tous en même temps.
+      var enCascade = [];
+      portee.querySelectorAll('.gs-stagger').forEach(function (groupe) {
+        Array.prototype.forEach.call(groupe.children, function (enfant, i) {
+          enfant.style.transitionDelay = Math.min(i, 5) * 70 + 'ms';
+          enCascade.push(enfant);
+        });
+      });
+
+      var nouveaux = Array.prototype.slice.call(
+        portee.querySelectorAll('.gs-reveal, .gs-img-reveal')
+      ).concat(enCascade);
+
       nouveaux.forEach(function (el) {
         if (el.classList.contains('is-in')) return;
         observer.observe(el);
