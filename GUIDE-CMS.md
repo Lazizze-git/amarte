@@ -29,19 +29,17 @@
 
 ### Étape 2 — Configurer le code
 
-Ouvrez le fichier `sanity/sanity.config.js` et remplacez :
-```
-projectId: 'VOTRE_PROJECT_ID',
-```
-par votre vrai ID, ex :
-```
-projectId: 'ab12cd34',
-```
+> Déjà fait. Le projet est configuré sur l'ID `pvvt7no0`, présent en
+> trois endroits : `sanity/sanity.config.js`, `sanity/sanity.cli.js`
+> et `js/cms.js`. Cette étape n'est à refaire que si le site change
+> de projet Sanity.
 
-Faites la même chose dans `js/cms.js` :
-```
-const SANITY_PROJECT_ID = 'ab12cd34';
-```
+Avant la mise en ligne, une seule action est nécessaire côté Sanity :
+déclarer l'origine du site dans **sanity.io/manage → API → CORS
+origins** (`https://amarte.ch`, sans « Allow credentials »). Sans
+elle, le navigateur bloque les appels et les témoignages du CMS ne
+s'affichent jamais — silencieusement, le site retombant sur les
+témoignages écrits dans la page.
 
 ### Étape 3 — Lancer le Studio CMS
 
@@ -64,12 +62,10 @@ npm run deploy
 
 ## Utilisation quotidienne
 
-### Modifier le planning hebdomadaire
-
-1. Allez dans **Horaires**
-2. Cliquez sur un créneau existant ou **+ New Horaire**
-3. Remplissez : Jour, Heure, Nom du cours, Durée, Catégorie
-4. **Publish** → le site se met à jour en quelques secondes
+> Rappel : seuls les **témoignages** et les **coordonnées** sont lus
+> par le site. Les rubriques Horaires, Cours, Tarifs, Heros et Cards
+> infos du Studio existent encore mais ne sont plus affichées : les
+> modifier n'a aucun effet.
 
 ### Ajouter un témoignage
 
@@ -79,12 +75,15 @@ npm run deploy
 4. Définissez l'**Ordre** (1 = en premier)
 5. **Publish**
 
-### Modifier un prix
+### Modifier les coordonnées
 
-1. Allez dans **Tarifs**
-2. Cliquez sur la formule à modifier
-3. Changez le **Prix** (CHF)
-4. **Publish**
+1. Allez dans **Paramètres du site**
+2. Modifiez l'e-mail, l'Instagram ou le Facebook
+3. **Publish**
+
+Le **téléphone** fait exception : il est écrit en dur dans les pages
+et n'est plus piloté par le CMS (le champ Sanity contient encore un
+ancien numéro). Le numéro officiel est **+41 78 810 64 64**.
 
 ---
 

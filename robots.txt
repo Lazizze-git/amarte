@@ -1,11 +1,11 @@
 # Amarte Studio — robots.txt
 # https://amarte.ch
 
+# Le CSS et le JS doivent rester accessibles aux moteurs : Google
+# rend la page avant de l'indexer, et les bloquer lui fait voir un
+# site cassé. /.next/ était un reliquat du gabarit Next.js initial.
 User-agent: *
 Allow: /
-Disallow: /.next/
-Disallow: /css/
-Disallow: /js/
 Disallow: /*.pdf$
 
 # Bots IA — autoriser uniquement les bots respectueux
