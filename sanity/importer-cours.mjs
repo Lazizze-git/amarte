@@ -4,13 +4,17 @@
 //  Remplace les cours et les en-têtes de page par le contenu
 //  actuel du site, repris à l'identique.
 //
-//  ⚠ Cet import ÉCRASE tous les cours existants. Il est conçu
-//    pour la reprise initiale, pas pour tourner régulièrement :
-//    relancé après coup, il effacerait les modifications faites
-//    dans le Studio. C'est pourquoi le workflow qui l'appelle ne
-//    se déclenche qu'à la main.
+//  Par défaut l'import est ADDITIF : il ne crée que les documents
+//  absents. Relancé cent fois, il ne touche jamais à ce qui a été
+//  modifié dans le Studio. C'est ce qui permet de le lancer à chaque
+//  déploiement sans risque.
+//
+//  --remplacer force la reprise complète : tout est supprimé puis
+//  réécrit depuis les fichiers. À n'utiliser que pour repartir de
+//  l'état d'origine, en connaissance de cause.
 //
 //  Usage :  SANITY_WRITE_TOKEN=... node importer-cours.mjs
+//           SANITY_WRITE_TOKEN=... node importer-cours.mjs --remplacer
 //           SANITY_WRITE_TOKEN=... node importer-cours.mjs --dry-run
 // ============================================================
 import { readFileSync } from 'node:fs'
@@ -23,6 +27,7 @@ const API     = '2024-01-01'
 
 const jeton = process.env.SANITY_WRITE_TOKEN
 const simulation = process.argv.includes('--dry-run')
+const remplacer = process.argv.includes('--remplacer')
 
 if (!jeton && !simulation) {
   console.error('SANITY_WRITE_TOKEN manquant. Créez un jeton de rôle Editor '
@@ -61,15 +66,22 @@ for (const src of SOURCES) {
   docs.push(...lus)
 }
 
-// Les documents existants sont supprimés par requête plutôt que par
-// identifiant : les anciens cours ont des identifiants générés qu'on
-// ne connaît pas. Tout part dans la même mutation, donc soit
-// l'ensemble s'applique, soit rien.
+// createIfNotExists ne touche pas à un document déjà présent : c'est
+// ce qui rend l'import rejouable sans effacer le travail du client.
+// En mode remplacement, tout est supprimé d'abord — les anciens
+// documents ayant des identifiants générés, la suppression passe par
+// une requête plutôt que par une liste d'identifiants.
 const types = SOURCES.map((s) => `"${s.type}"`).join(', ')
-const mutations = [
-  { delete: { query: `*[_type in [${types}]]` } },
-  ...docs.map((doc) => ({ createOrReplace: doc })),
-]
+const mutations = remplacer
+  ? [
+      { delete: { query: `*[_type in [${types}]]` } },
+      ...docs.map((doc) => ({ createOrReplace: doc })),
+    ]
+  : docs.map((doc) => ({ createIfNotExists: doc }))
+
+console.log(remplacer
+  ? '\nMode REMPLACEMENT : le contenu existant sera écrasé.'
+  : '\nMode additif : les documents déjà présents ne seront pas modifiés.')
 
 if (simulation) {
   console.log(`\nSimulation : ${mutations.length} mutations seraient envoyées.`)
@@ -101,5 +113,7 @@ if (!reponse.ok) {
 }
 
 const resultat = JSON.parse(corps)
-console.log(`\nImport réussi — ${resultat.results?.length ?? 0} documents écrits.`)
+const ecrits = resultat.results?.length ?? 0
+console.log(`\nImport terminé — ${ecrits} document(s) créé(s), ` +
+            `${docs.length - ecrits} déjà présent(s) et laissé(s) intact(s).`)
 console.log('Le contenu est désormais modifiable dans le Studio.')

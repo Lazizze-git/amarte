@@ -1,28 +1,36 @@
 # ==========================================================
-#  Import des cours dans Sanity — opération ponctuelle
+#  Synchronisation du contenu de reprise vers Sanity
 #
-#  ⚠ NE SE DÉCLENCHE QU'À LA MAIN. Cet import remplace tous
-#    les cours du CMS par ceux du fichier sanity/cours.ndjson.
-#    Le lancer après que le client a modifié ses cours dans le
-#    Studio effacerait son travail.
+#  Tourne automatiquement à chaque déploiement. L'import est
+#  ADDITIF : il ne crée que les documents absents et ne touche
+#  jamais à ce qui a été modifié dans le Studio. Le relancer est
+#  donc sans conséquence.
 #
-#  Sert à la reprise initiale, ou à repartir de zéro si le
-#  contenu des cours a été abîmé.
+#  Un lancement manuel permet, en dernier recours, de tout
+#  réécrire depuis les fichiers du dépôt — en saisissant
+#  REMPLACER, car cette opération efface le travail du client.
 #
 #  Secret requis :
 #    SANITY_WRITE_TOKEN   jeton de rôle « Editor »
-#                         (celui de publication du Studio ne
-#                          peut pas écrire de contenu)
 # ==========================================================
-name: Importer les cours dans Sanity
+name: Synchroniser le contenu Sanity
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'sanity/**'
+      - '.github/workflows/importer-cours.yml'
   workflow_dispatch:
     inputs:
-      confirmation:
-        description: 'Tapez REMPLACER pour confirmer l’écrasement des cours'
-        required: true
+      remplacer:
+        description: 'Tapez REMPLACER pour écraser le contenu existant (sinon, import additif)'
+        required: false
         default: ''
+
+concurrency:
+  group: sync-sanity
+  cancel-in-progress: false
 
 jobs:
   importer:
@@ -33,19 +41,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Garde-fou : sans saisie explicite, on s'arrête avant d'écrire.
-      - name: Vérifier la confirmation
-        if: ${{ github.event.inputs.confirmation != 'REMPLACER' }}
-        run: |
-          echo "Confirmation absente ou incorrecte : aucun import effectué."
-          echo "Relancez en saisissant REMPLACER dans le champ prévu."
-          exit 1
-
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Importer les cours
+      - name: Synchroniser
         env:
           SANITY_WRITE_TOKEN: ${{ secrets.SANITY_WRITE_TOKEN }}
-        run: node importer-cours.mjs
+        run: |
+          if [ "${{ github.event.inputs.remplacer }}" = "REMPLACER" ]; then
+            echo "Lancement en mode remplacement."
+            node importer-cours.mjs --remplacer
+          else
+            node importer-cours.mjs
+          fi
