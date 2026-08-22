@@ -34,6 +34,13 @@ export const mediaBloc = {
       validation: R => R.required(),
     },
     {
+      name: 'imageMobile', title: 'Variante pour téléphone', type: 'image',
+      description: 'Facultative. Une photo large se recadre mal sur un écran étroit : '
+                 + 'déposez ici une version verticale si le cadrage vous déplaît. '
+                 + 'Sans elle, la photo ci-dessus est utilisée partout.',
+      options: { hotspot: true },
+    },
+    {
       name: 'alt', title: 'Description de la photo', type: 'string',
       description: 'Lue par les lecteurs d\'écran et affichée si l\'image ne charge pas. ' +
                    'Décrivez ce qu\'on voit. Laissez vide pour garder la description actuelle.',

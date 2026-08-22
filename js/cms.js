@@ -631,7 +631,8 @@
   if (document.querySelector('[data-cms-img]')) {
     query(`*[_type in ["mediaBloc", "cours"] && actif != false && defined(image)]{
       cle, "alt": select(_type == "cours" => imageAlt, alt),
-      "ref": image.asset._ref
+      "ref": image.asset._ref,
+      "refMobile": imageMobile.asset._ref
     }`).then(renderMedias).catch(() => {/* garder les photos du site */});
   }
 
@@ -675,6 +676,16 @@
       // Les <source> pointent vers les fichiers d'origine : les retirer,
       // sinon le navigateur les préfère et la nouvelle photo ne s'affiche pas.
       picture.querySelectorAll('source').forEach((s) => s.remove());
+
+      // Variante téléphone : une photo large se recadre mal sur un
+      // écran étroit. Le navigateur choisit lui-même, sans script.
+      if (media.refMobile) {
+        const mobile = document.createElement('source');
+        mobile.media = '(max-width: 640px)';
+        mobile.srcset = urlImage(media.refMobile, 800) + ' 1x, '
+                      + urlImage(media.refMobile, 1400) + ' 2x';
+        picture.insertBefore(mobile, img);
+      }
 
       img.removeAttribute('srcset');
       img.removeAttribute('sizes');

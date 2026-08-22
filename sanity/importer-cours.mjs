@@ -116,7 +116,69 @@ async function nettoyerCoordonnees() {
   return { patch: { id: 'siteSettings', unset: orphelins } }
 }
 
+// ── Photos livrées avec le site ──────────────────────────────
+// Une rubrique vide n'apprend rien : on ne sait ni ce qu'on peut
+// remplacer, ni à quoi ressemble l'existant. Les photos actuelles
+// sont donc déposées dans Sanity et rattachées à leur emplacement,
+// pour que la liste montre d'emblée ce qui est en place. Seuls les
+// emplacements absents sont traités : une photo déjà remplacée par
+// le client n'est jamais écrasée.
+const EMPLACEMENTS = [
+  ['hero',              'Grande photo d\'accueil, salle baignée de lumière naturelle'],
+  ['cours-collectif-1', 'Cours collectif chez Amarte'],
+  ['cours-collectif-2', 'Cours collectif chez Amarte'],
+  ['salle-ensemble',    'Vue d\'ensemble de la salle'],
+  ['salle-tapis',       'Tapis disposés dans la salle'],
+  ['cta-banner',        'Ambiance du studio'],
+  ['about',             'Le studio Amarte'],
+]
+
+async function deposerImage(fichier) {
+  const chemin = join(ici, '..', 'public', 'images', `${fichier}.jpg`)
+  const envoi = `https://${PROJET}.api.sanity.io/v${API}/assets/images/${DATASET}`
+              + `?filename=${encodeURIComponent(fichier + '.jpg')}`
+  const r = await fetch(envoi, {
+    method: 'POST',
+    headers: { 'Content-Type': 'image/jpeg', Authorization: `Bearer ${jeton}` },
+    body: readFileSync(chemin),
+  })
+  if (!r.ok) throw new Error(`dépôt refusé (HTTP ${r.status})`)
+  // Sanity reconnaît un fichier à son empreinte : relancer l'import
+  // ne crée pas de doublon.
+  return (await r.json()).document._id
+}
+
+async function preparerPhotos() {
+  const requete = encodeURIComponent('*[_type == "mediaBloc"]{cle}')
+  const r = await fetch(`https://${PROJET}.api.sanity.io/v${API}/data/query/${DATASET}?query=${requete}`,
+                        { headers: { Authorization: `Bearer ${jeton}` } })
+  if (!r.ok) return []
+  const presents = new Set(((await r.json()).result || []).map((d) => d.cle))
+
+  const nouveaux = []
+  for (const [cle, alt] of EMPLACEMENTS) {
+    if (presents.has(cle)) continue
+    try {
+      const asset = await deposerImage(cle)
+      nouveaux.push({ createIfNotExists: {
+        _id: `media-${cle}`, _type: 'mediaBloc', cle, alt, actif: true,
+        image: { _type: 'image', asset: { _type: 'reference', _ref: asset } },
+      } })
+      console.log(`  photo rattachée : ${cle}`)
+    } catch (e) {
+      console.warn(`  photo ignorée (${cle}) : ${e.message}`)
+    }
+  }
+  return nouveaux
+}
+
 const url = `https://${PROJET}.api.sanity.io/v${API}/data/mutate/${DATASET}?returnIds=true`
+
+if (!remplacer) {
+  const photos = await preparerPhotos()
+  if (photos.length) mutations.push(...photos)
+}
+
 const menage = await nettoyerCoordonnees()
 if (menage) mutations.push(menage)
 
