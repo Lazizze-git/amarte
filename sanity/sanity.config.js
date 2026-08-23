@@ -102,9 +102,11 @@ export default defineConfig({
     visionTool(),
   ],
 
-  schema: { types: schemaTypes },
+  schema: {
+    types: schemaTypes,
 
-  document: {
+    // Gabarit utilisé par les sept listes du planning : créer un
+    // créneau depuis « Mardi » le pré-remplit sur mardi.
     templates: (precedents) => [
       ...precedents,
       {
