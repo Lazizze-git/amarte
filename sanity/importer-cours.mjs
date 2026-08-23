@@ -41,6 +41,7 @@ const ici = dirname(fileURLToPath(import.meta.url))
 // entrée ici suffit à étendre la reprise.
 const SOURCES = [
   { fichier: 'cours.ndjson', type: 'cours',    libelle: 'cours' },
+  { fichier: 'creneaux.ndjson', type: 'creneau', libelle: 'créneaux du calendrier' },
   { fichier: 'heros.ndjson', type: 'pageHero', libelle: 'en-têtes de page' },
   { fichier: 'tarifs.ndjson', type: 'tarif',   libelle: 'tarifs' },
   { fichier: 'repere.ndjson', type: 'infoCard', libelle: 'repères' },
@@ -62,7 +63,9 @@ for (const src of SOURCES) {
   }
 
   console.log(`${lus.length} ${src.libelle} :`)
-  lus.forEach((d) => console.log(`  · ${d.titre || d.nom || d.question || d.zone || d.page}`))
+  // Un créneau se reconnaît à son jour : « Lundi · 9h30 — Hatha Flow ».
+  lus.forEach((d) => console.log(`  · ${d.jour ? `${d.jour} \u00B7 ${d.heure} — ` : ''}`
+                               + `${d.titre || d.nom || d.question || d.zone || d.page}`))
   docs.push(...lus)
 }
 

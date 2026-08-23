@@ -1,4 +1,5 @@
 import { cours }      from './cours'
+import { creneau }    from './creneau'
 import { tarif }      from './tarif'
 import { pageHero }   from './pageHero'
 import { bloc }       from './bloc'
@@ -10,6 +11,7 @@ import { settings }   from './settings'
 
 export const schemaTypes = [
   cours,
+  creneau,
   tarif,
   pageHero,
   bloc,

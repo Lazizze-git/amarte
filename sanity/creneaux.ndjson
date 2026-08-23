@@ -1,0 +1,10 @@
+{"_id": "creneau-lundi-930-hatha-flow", "_type": "creneau", "jour": "Lundi", "heure": "9h30", "nom": "Hatha Flow", "instructeur": "Laurence", "niveau": "2", "actif": true}
+{"_id": "creneau-lundi-1830-yoga-flow", "_type": "creneau", "jour": "Lundi", "heure": "18h30", "nom": "Yoga Flow", "instructeur": "Yuta", "niveau": "2", "actif": true}
+{"_id": "creneau-mardi-900-yogilates", "_type": "creneau", "jour": "Mardi", "heure": "9h00", "nom": "Yogilates", "instructeur": "Isabella", "niveau": "3", "actif": true}
+{"_id": "creneau-mardi-1830-pilates-tonus", "_type": "creneau", "jour": "Mardi", "heure": "18h30", "nom": "Pilates Tonus", "instructeur": "Gisel", "niveau": "2", "actif": true}
+{"_id": "creneau-mercredi-930-pilates-fondation", "_type": "creneau", "jour": "Mercredi", "heure": "9h30", "nom": "Pilates Fondation", "instructeur": "Carolina", "niveau": "1", "actif": true}
+{"_id": "creneau-mercredi-1830-vinyasa-flow", "_type": "creneau", "jour": "Mercredi", "heure": "18h30", "nom": "Vinyasa Flow", "instructeur": "Edith", "niveau": "2", "actif": true}
+{"_id": "creneau-jeudi-930-nia-doux", "_type": "creneau", "jour": "Jeudi", "heure": "9h30", "nom": "Nia Doux", "instructeur": "Sonia", "niveau": "1", "actif": true}
+{"_id": "creneau-jeudi-1830-pilates-traditionnel", "_type": "creneau", "jour": "Jeudi", "heure": "18h30", "nom": "Pilates traditionnel", "instructeur": "Patricia", "niveau": "2", "actif": true}
+{"_id": "creneau-vendredi-900-kundalini", "_type": "creneau", "jour": "Vendredi", "heure": "9h00", "nom": "Kundalini", "instructeur": "Kallia", "niveau": "2", "actif": true}
+{"_id": "creneau-dimanche-1830-pilates-dynamique", "_type": "creneau", "jour": "Dimanche", "heure": "18h30", "nom": "Pilates dynamique", "instructeur": "Sofia", "niveau": "3", "actif": true}

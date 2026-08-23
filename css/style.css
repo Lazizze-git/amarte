@@ -1427,6 +1427,12 @@ body.menu-open .nav-scrim {
 .pf-week-slot { padding: var(--sp-4) var(--sp-3); border-bottom: 1px solid var(--border); }
 .pf-week-slot:last-child { border-bottom: none; }
 .pf-week-slot--empty { color: var(--text-muted); }
+/* Deux cours sur la même demi-journée : un filet les sépare dans la case. */
+.pf-slot-sep {
+  border: 0;
+  border-top: 1px dashed var(--border);
+  margin: var(--sp-3) calc(var(--sp-3) * -1);
+}
 .pf-slot-time { font-variant-numeric: tabular-nums; font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 0.25rem; }
 .pf-slot-name { font-family: var(--font-serif); font-size: var(--fs-sm); color: var(--text); line-height: 1.25; overflow-wrap: break-word; }
 .pf-slot-teacher { font-size: var(--fs-xs); color: var(--text-muted); margin-bottom: 0.45rem; }

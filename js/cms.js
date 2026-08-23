@@ -398,15 +398,25 @@
   // restent affichés : la page ne peut pas se vider.
   // La page Cours affiche tout ; l'accueil une sélection. Une seule
   // requête sert les deux, chaque page ne rendant que ce qui la concerne.
-  if (document.getElementById('cours-grid') || document.querySelector('.disc2-grid')) {
+  if (document.getElementById('cours-grid') || document.querySelector('.disc2-grid')
+   || document.querySelector('[data-cms-cours-rail]')) {
     query(`*[_type == "cours" && actif != false] | order(ordre asc){
       titre, categorie, horaire, instructeur, description, niveau, tag,
       accueil, ordreAccueil, cle, imageFichier, imageAlt, "ref": image.asset._ref
     }`).then((liste) => {
       renderCours(liste);
       renderDisciplines(liste);
-      renderSemaine(liste);
     }).catch(() => {/* garder les cours du HTML */});
+  }
+
+  // ── PLANNING DE LA SEMAINE (page Première fois) ───────────────
+  // Le calendrier a ses propres fiches, séparées des cours : on peut
+  // y ajouter ou en retirer un créneau sans toucher aux cours, et
+  // modifier un cours sans déplacer le calendrier.
+  if (document.querySelector('[data-cms-semaine]')) {
+    query(`*[_type == "creneau" && actif != false]{
+      jour, heure, nom, instructeur, niveau
+    }`).then(renderSemaine).catch(() => {/* garder le calendrier du HTML */});
   }
 
   const NIVEAUX = { '1': 'Doux', '2': 'Moyen', '3': 'Dynamique' };
@@ -499,11 +509,18 @@
     document.dispatchEvent(new CustomEvent('cours:rendus'));
   }
 
-  // ── PLANNING DE LA SEMAINE (page Première fois) ───────────────
-  // Une grille de sept jours sur deux rangées, matin et soir, remplie
-  // à partir des mêmes fiches de cours. Un horaire modifié dans le CMS
-  // déplace le cours dans le planning sans autre intervention.
+  // Sept jours, deux rangées : le matin et le soir. Chaque créneau
+  // vient s'y placer selon son jour et son heure. Une demi-journée
+  // qui en compte plusieurs les empile, séparés d'un filet ; une
+  // journée entièrement vide reste grisée.
   const JOURS_SEMAINE = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+
+  // « 9h30 » vaut 570 : sert à ranger les créneaux d'une même
+  // demi-journée du plus tôt au plus tard.
+  function enMinutes(heure) {
+    const m = /(\d{1,2})\s*[hH:]\s*(\d{0,2})/.exec(String(heure || ''));
+    return m ? Number(m[1]) * 60 + Number(m[2] || 0) : 0;
+  }
 
   function renderSemaine(liste) {
     const grille = document.querySelector('[data-cms-semaine]');
@@ -514,41 +531,43 @@
     if (!intitules) return;
 
     const parJour = {};
-    JOURS_SEMAINE.forEach((j) => { parJour[j] = { matin: null, soir: null }; });
+    JOURS_SEMAINE.forEach((j) => { parJour[j] = { matin: [], soir: [] }; });
 
     liste.forEach((c) => {
-      const parts = String(c.horaire || '').split('·');
-      if (parts.length < 2) return;
-      const jour = parts[0].trim();
-      const heure = parts.slice(1).join('·').trim();
-      if (!parJour[jour]) return;
+      const jour = String(c.jour || '').trim();
+      if (!parJour[jour] || !c.nom) return;
       // Avant midi au matin, le reste au soir — c'est le découpage
       // qu'utilise déjà la page.
-      const h = parseInt(heure, 10);
-      const rangee = (isNaN(h) || h < 12) ? 'matin' : 'soir';
-      if (!parJour[jour][rangee]) parJour[jour][rangee] = { heure, cours: c };
+      const rangee = enMinutes(c.heure) < 12 * 60 ? 'matin' : 'soir';
+      parJour[jour][rangee].push(c);
     });
 
-    const creneau = (x) => {
-      if (!x) return '<div class="pf-week-slot pf-week-slot--empty">—</div>';
-      const c = x.cours;
+    const fiche = (c) => {
       const niveau = String(c.niveau || '2');
-      return `<div class="pf-week-slot">
-        <p class="pf-slot-time">${esc(typo(x.heure))}</p>
-        <p class="pf-slot-name">${esc(c.titre)}</p>
+      return `
+        <p class="pf-slot-time">${esc(typo(c.heure || ''))}</p>
+        <p class="pf-slot-name">${esc(c.nom)}</p>
         <p class="pf-slot-teacher">${esc(c.instructeur || '')}</p>
-        <span class="disc2-intensity" data-level="${esc(niveau)}" role="img" aria-label="Intensité ${esc(INTENSITES[niveau] || 'moyenne')}"><i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i><span class="pf-level-text" aria-hidden="true">${esc(NIVEAUX[niveau] || 'Moyen')}</span></span>
+        <span class="disc2-intensity" data-level="${esc(niveau)}" role="img" aria-label="Intensité ${esc(INTENSITES[niveau] || 'moyenne')}"><i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i><span class="pf-level-text" aria-hidden="true">${esc(NIVEAUX[niveau] || 'Moyen')}</span></span>`;
+    };
+
+    // Un créneau seul reproduit exactement le balisage écrit dans la
+    // page : le calendrier ne bouge pas d'un pixel tant qu'on n'y
+    // touche pas dans le CMS.
+    const cellule = (arr) => {
+      if (arr.length === 0) return '<div class="pf-week-slot pf-week-slot--empty">—</div>';
+      const ranges = arr.slice().sort((a, b) => enMinutes(a.heure) - enMinutes(b.heure));
+      return `<div class="pf-week-slot">${ranges.map(fiche).join('\n        <hr class="pf-slot-sep" />')}
       </div>`;
     };
 
     const colonnes = JOURS_SEMAINE.map((jour) => {
       const j = parJour[jour];
-      // Une journée sans aucun cours est grisée, comme aujourd'hui.
-      const vide = !j.matin && !j.soir ? ' pf-week-col--off' : '';
+      const vide = j.matin.length === 0 && j.soir.length === 0 ? ' pf-week-col--off' : '';
       return `<div class="pf-week-col${vide}">
         <p class="pf-week-dayname">${esc(jour)}</p>
-        ${creneau(j.matin)}
-        ${creneau(j.soir)}
+        ${cellule(j.matin)}
+        ${cellule(j.soir)}
       </div>`;
     }).join('');
 

@@ -1,7 +1,11 @@
 // ── COURS — une fiche par cours de la page Cours ──────────────
-// Ces fiches pilotent réellement la page : titre, horaire,
-// intervenant·e, description, niveau, tag et photo. Les quatre
-// cours mis en avant sur l'accueil reprennent la même photo.
+// Ces fiches décrivent l'offre : titre, intervenant·e, description,
+// niveau, tag et photo. Les quatre cours mis en avant sur l'accueil
+// reprennent la même fiche.
+//
+// Elles ne pilotent PAS le calendrier de la semaine, qui a ses
+// propres fiches (rubrique Planning). Modifier un cours ne déplace
+// donc rien dans la grille, et inversement.
 //
 // Si Sanity est injoignable, la page garde les cours écrits dans
 // le HTML : le site ne peut pas se retrouver sans contenu.
@@ -30,8 +34,10 @@ export const cours = {
       validation: R => R.required(),
     },
     {
-      name: 'horaire', title: 'Jour et heure', type: 'string',
-      description: 'Affiché tel quel. Format : Lundi · 9h30',
+      name: 'horaire', title: 'Jour et heure affichés sur la carte', type: 'string',
+      description: 'Affiché tel quel sur la carte du cours. Format : Lundi · 9h30. '
+                 + 'Ne touche pas au calendrier de la semaine, qui se règle '
+                 + 'dans la rubrique Planning.',
       validation: R => R.required().max(40),
     },
     {
