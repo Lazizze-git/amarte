@@ -6,3 +6,5 @@
 {"_id": "bloc-pf-savoir", "_type": "bloc", "zone": "pf-savoir", "actif": true, "label": "Ce qu’il faut savoir", "titre": "Tout est pensé pour que vous vous sentiez *à votre place.*"}
 {"_id": "bloc-pf-cours", "_type": "bloc", "zone": "pf-cours", "actif": true, "label": "Les cours", "titre": "Trouvez votre pratique, *et vos créneaux.*", "intro": "Plusieurs disciplines, plusieurs profs, du plus doux au plus tonique — chaque prof s’adapte à vous, à votre niveau et à vos limites du jour."}
 {"_id": "bloc-pf-faq", "_type": "bloc", "zone": "pf-faq", "actif": true, "label": "Questions fréquentes", "titre": "Les questions *qu’on nous pose.*"}
+{"_id": "bloc-pf-semaine", "_type": "bloc", "zone": "pf-semaine", "actif": true, "titre": "Aperçu de la semaine"}
+{"_id": "bloc-pf-detail", "_type": "bloc", "zone": "pf-detail", "actif": true, "titre": "Les cours en détail"}

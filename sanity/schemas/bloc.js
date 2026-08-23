@@ -21,6 +21,8 @@ export const bloc = {
           { title: '✨  Première fois — Les résultats',    value: 'pf-resultats' },
           { title: '✨  Première fois — Ce qu\'il faut savoir', value: 'pf-savoir' },
           { title: '✨  Première fois — Les cours',        value: 'pf-cours' },
+          { title: '✨  Première fois — Aperçu de la semaine', value: 'pf-semaine' },
+          { title: '✨  Première fois — Les cours en détail',  value: 'pf-detail' },
           { title: '✨  Première fois — Questions fréquentes', value: 'pf-faq' },
           { title: '📅  Calendrier — Comment ça marche',   value: 'cal-info' },
           { title: '🧘  Cours — Ce qu\'il faut savoir',     value: 'cours-savoir' },
