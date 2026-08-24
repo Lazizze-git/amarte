@@ -36,31 +36,45 @@ AddDefaultCharset UTF-8
   RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 
 
-  # ── ANCIENNES ADRESSES WORDPRESS ────────────────────────
-  # WordPress servait des adresses en dossier — /cours/, /tarifs/ —
-  # là où le site sert des fichiers — /cours.html. Sans ces règles,
-  # ce que Google avait indexé tomberait en 404 et le référencement
-  # acquis serait perdu.
-  #
-  # Renommages d'abord : les slugs qui ne portent pas le nom du
-  # fichier. La liste est volontairement large — une redirection de
-  # trop ne coûte rien, une manquante coûte une page.
-  RewriteRule ^(a-propos|qui-sommes-nous|le-studio|studio)/?$                 /apropos.html [R=301,L,NC]
-  RewriteRule ^(planning|horaires|reservation|reserver)/?$                    /calendrier.html [R=301,L,NC]
-  RewriteRule ^(tarif|prix|abonnement|abonnements)/?$                         /tarifs.html [R=301,L,NC]
-  RewriteRule ^(nous-contacter|acces|contactez-nous)/?$                       /contact.html [R=301,L,NC]
-  RewriteRule ^(entreprise|entreprises|corporate|bien-etre-en-entreprise)/?$  /corpo.html [R=301,L,NC]
-  RewriteRule ^(louer-la-salle|salle|location-de-salle|location-salle)/?$     /location.html [R=301,L,NC]
-  RewriteRule ^(debuter|debutant|commencer|nouveau|premiere-visite)/?$        /premiere-fois.html [R=301,L,NC]
-  RewriteRule ^(yoga|pilates|nos-cours|les-cours|disciplines)/?$              /cours.html [R=301,L,NC]
+  # ── ADRESSES SANS EXTENSION ─────────────────────────────
+  # Le site s'écrit en fichiers .html mais se lit sans : /cours,
+  # pas /cours.html. Chaque page n'a donc qu'une seule adresse —
+  # c'est plus lisible, et Google n'a pas deux versions à départager.
 
-  # Puis le cas général : /quelque-chose/ devient quelque-chose.html
-  # quand ce fichier existe. Un seul segment, et seulement si la
-  # cible existe vraiment — tout le reste tombe sur la page 404.
+  # 1. /index.html et /cours.html renvoient vers l'adresse courte.
+  #    La condition porte sur la requête d'origine, pas sur le
+  #    chemin réécrit : sans elle, l'étape 4 rouvrirait la boucle.
+  RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
+  RewriteRule ^ / [R=301,L]
+
+  RewriteCond %{THE_REQUEST} \s/+([^?\s]*?)\.html[\s?] [NC]
+  RewriteRule ^ /%1 [R=301,L,NE]
+
+  # 2. /cours/ renvoie vers /cours. La barre finale casserait les
+  #    chemins relatifs de la page (css/, js/, public/).
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+  RewriteRule ^([A-Za-z0-9_-]+)/$ /$1 [R=301,L]
+
+  # 3. Anciennes adresses WordPress dont le nom a changé. La liste
+  #    est volontairement large : une redirection de trop ne coûte
+  #    rien, une manquante coûte une page.
+  RewriteRule ^(a-propos|qui-sommes-nous|le-studio|studio)/?$                 /apropos [R=301,L,NC]
+  RewriteRule ^(planning|horaires|reservation|reserver)/?$                    /calendrier [R=301,L,NC]
+  RewriteRule ^(tarif|prix|abonnement|abonnements)/?$                         /tarifs [R=301,L,NC]
+  RewriteRule ^(nous-contacter|acces|contactez-nous)/?$                       /contact [R=301,L,NC]
+  RewriteRule ^(entreprise|entreprises|corporate|bien-etre-en-entreprise)/?$  /corpo [R=301,L,NC]
+  RewriteRule ^(louer-la-salle|salle|location-de-salle|location-salle)/?$     /location [R=301,L,NC]
+  RewriteRule ^(debuter|debutant|commencer|nouveau|premiere-visite)/?$        /premiere-fois [R=301,L,NC]
+  RewriteRule ^(yoga|pilates|nos-cours|les-cours|disciplines)/?$              /cours [R=301,L,NC]
+
+  # 4. Enfin, /cours sert cours.html — sans redirection, l'adresse
+  #    affichée reste courte. Tout le reste tombe sur la page 404.
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{DOCUMENT_ROOT}/$1.html -f
-  RewriteRule ^([A-Za-z0-9_-]+)/?$ /$1.html [R=301,L]
+  RewriteRule ^([A-Za-z0-9_-]+)$ /$1.html [L]
+
 </IfModule>
 
 

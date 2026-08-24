@@ -132,7 +132,7 @@
       // est restreinte à http(s), mailto et aux pages du site, pour
       // qu'un contenu du CMS ne puisse pas exécuter de script.
       .replace(/\[([^\]\n]+)\]\(([^)\s]+)\)/g, (tout, libelle, url) =>
-        /^(https?:\/\/|mailto:|[\w-]+\.html|\/)/.test(url)
+        /^(https?:\/\/|mailto:|[\w-]+(\.html)?$|\/)/.test(url)
           ? `<a href="${url}"${/^https?:\/\//.test(url) ? ' target="_blank" rel="noopener"' : ''}>${libelle}</a>`
           : libelle)
       // Typographie française : la ponctuation double ne doit jamais
@@ -291,7 +291,7 @@
     if (typeof window.amarteRevele === 'function') window.amarteRevele(zone);
   }
 
-  // ── TARIFS (page tarifs.html) ─────────────────────────────────
+  // ── TARIFS (page /tarifs) ────────────────────────────────────
   // Trois sections : abonnements, cartes de cours, cours privés.
   // Sans fiche pour un groupe, la section garde ce que contient le
   // HTML — une erreur de saisie ne peut pas vider la grille.
@@ -392,7 +392,7 @@
     if (actif) actif.click();
   }
 
-  // ── COURS (page cours.html) ───────────────────────────────────
+  // ── COURS (page /cours) ───────────────────────────────────────
   // La grille est réécrite depuis Sanity. Tant que la réponse n'est
   // pas là — ou si elle échoue — les cours écrits dans le HTML
   // restent affichés : la page ne peut pas se vider.
@@ -491,7 +491,7 @@
             <span class="cours-level" data-level="${esc(niveau)}">${esc(NIVEAUX[niveau] || 'Moyen')}</span>
             ${c.tag ? `<span class="cours-item-tag">${esc(c.tag)}</span>` : ''}
           </div>
-          <a href="calendrier.html" class="btn btn--secondary cours-card-btn"
+          <a href="calendrier" class="btn btn--secondary cours-card-btn"
              data-cta="cours-reserver-${esc(ident(c.titre))}"
              aria-label="Réserver un cours ${esc(c.titre)}">Réserver <span aria-hidden="true">→</span></a>
         </div>

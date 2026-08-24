@@ -10,59 +10,59 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://amarte.ch/" />
   </url>
   <url>
-    <loc>https://amarte.ch/tarifs.html</loc>
+    <loc>https://amarte.ch/tarifs</loc>
     <lastmod>2026-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
-    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://amarte.ch/tarifs.html" />
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://amarte.ch/tarifs" />
   </url>
   <url>
-    <loc>https://amarte.ch/premiere-fois.html</loc>
+    <loc>https://amarte.ch/premiere-fois</loc>
     <lastmod>2026-08-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://amarte.ch/premiere-fois.html" />
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://amarte.ch/premiere-fois" />
   </url>
   <url>
-    <loc>https://amarte.ch/cours.html</loc>
+    <loc>https://amarte.ch/cours</loc>
     <lastmod>2026-08-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
-    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://amarte.ch/cours.html" />
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://amarte.ch/cours" />
   </url>
   <url>
-    <loc>https://amarte.ch/calendrier.html</loc>
+    <loc>https://amarte.ch/calendrier</loc>
     <lastmod>2026-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://amarte.ch/calendrier.html" />
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://amarte.ch/calendrier" />
   </url>
   <url>
-    <loc>https://amarte.ch/location.html</loc>
+    <loc>https://amarte.ch/location</loc>
     <lastmod>2026-08-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://amarte.ch/location.html" />
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://amarte.ch/location" />
   </url>
   <url>
-    <loc>https://amarte.ch/corpo.html</loc>
+    <loc>https://amarte.ch/corpo</loc>
     <lastmod>2026-08-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.65</priority>
-    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://amarte.ch/corpo.html" />
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://amarte.ch/corpo" />
   </url>
   <url>
-    <loc>https://amarte.ch/contact.html</loc>
+    <loc>https://amarte.ch/contact</loc>
     <lastmod>2026-08-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://amarte.ch/contact.html" />
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://amarte.ch/contact" />
   </url>
   <url>
-    <loc>https://amarte.ch/apropos.html</loc>
+    <loc>https://amarte.ch/apropos</loc>
     <lastmod>2026-08-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
-    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://amarte.ch/apropos.html" />
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://amarte.ch/apropos" />
   </url>
 </urlset>

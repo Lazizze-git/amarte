@@ -288,8 +288,8 @@
 
   /* ── 5 · Formulaires de contact ────────────────────────── */
 
-  /* Présélection du sujet depuis l'adresse : contact.html?sujet=entreprise.
-     Les clés sont les `value` des <option> de contact.html. Paramètre absent
+  /* Présélection du sujet depuis l'adresse : /contact?sujet=entreprise.
+     Les clés sont les `value` des <option> de /contact. Paramètre absent
      ou inconnu : le champ garde son choix par défaut, rien ne casse. Le
      formulaire reste utilisable si ce script ne s'exécute pas. */
   (function presetSubject() {
