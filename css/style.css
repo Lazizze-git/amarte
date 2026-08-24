@@ -950,6 +950,8 @@ body.menu-open .nav-scrim {
   line-height: 1.7;
 }
 .page-hero-sub em, .cours-hero-sub em { color: var(--white); }
+/* Boutons sous un en-tête de page — utilisé par la page 404. */
+.page-hero-actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-6); }
 
 /* ── Bandeau photo — la respiration ──
    Composant transversal, posé ENTRE deux <section> : une photo pleine

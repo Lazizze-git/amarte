@@ -34,7 +34,40 @@ AddDefaultCharset UTF-8
   # www → sans www (l'URL canonique du sitemap est https://amarte.ch)
   RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
   RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+
+  # ── ANCIENNES ADRESSES WORDPRESS ────────────────────────
+  # WordPress servait des adresses en dossier — /cours/, /tarifs/ —
+  # là où le site sert des fichiers — /cours.html. Sans ces règles,
+  # ce que Google avait indexé tomberait en 404 et le référencement
+  # acquis serait perdu.
+  #
+  # Renommages d'abord : les slugs qui ne portent pas le nom du
+  # fichier. La liste est volontairement large — une redirection de
+  # trop ne coûte rien, une manquante coûte une page.
+  RewriteRule ^(a-propos|qui-sommes-nous|le-studio|studio)/?$                 /apropos.html [R=301,L,NC]
+  RewriteRule ^(planning|horaires|reservation|reserver)/?$                    /calendrier.html [R=301,L,NC]
+  RewriteRule ^(tarif|prix|abonnement|abonnements)/?$                         /tarifs.html [R=301,L,NC]
+  RewriteRule ^(nous-contacter|acces|contactez-nous)/?$                       /contact.html [R=301,L,NC]
+  RewriteRule ^(entreprise|entreprises|corporate|bien-etre-en-entreprise)/?$  /corpo.html [R=301,L,NC]
+  RewriteRule ^(louer-la-salle|salle|location-de-salle|location-salle)/?$     /location.html [R=301,L,NC]
+  RewriteRule ^(debuter|debutant|commencer|nouveau|premiere-visite)/?$        /premiere-fois.html [R=301,L,NC]
+  RewriteRule ^(yoga|pilates|nos-cours|les-cours|disciplines)/?$              /cours.html [R=301,L,NC]
+
+  # Puis le cas général : /quelque-chose/ devient quelque-chose.html
+  # quand ce fichier existe. Un seul segment, et seulement si la
+  # cible existe vraiment — tout le reste tombe sur la page 404.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+  RewriteRule ^([A-Za-z0-9_-]+)/?$ /$1.html [R=301,L]
 </IfModule>
+
+
+# ══ PAGE D'ERREUR ═════════════════════════════════════════
+# Une ancienne adresse sans équivalent atterrit sur une vraie page
+# du site plutôt que sur le mur d'Apache.
+ErrorDocument 404 /404.html
 
 
 # ══ TYPES MIME ════════════════════════════════════════════
