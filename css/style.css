@@ -902,19 +902,6 @@ body.menu-open .nav-scrim {
 }
 .page-hero-inner, .cours-hero-content { max-width: var(--max-w); margin-inline: auto; }
 
-.page-hero-breadcrumb {
-  display: flex;
-  gap: var(--sp-2);
-  align-items: center;
-  font-size: var(--fs-xs);
-  color: rgba(255,255,255,0.7);
-  margin-top: calc(-1 * var(--sp-3));
-  margin-bottom: var(--sp-3);
-}
-.page-hero-breadcrumb a { display: inline-flex; align-items: center; min-height: 44px; transition: color var(--dur-2); }
-.page-hero-breadcrumb a:hover { color: var(--white); text-decoration: underline; text-underline-offset: 3px; }
-.page-hero-breadcrumb .sep { color: rgba(255,255,255,0.45); }
-
 .page-hero-head {
   display: flex;
   align-items: flex-end;
