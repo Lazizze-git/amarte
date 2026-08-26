@@ -692,6 +692,13 @@
       const url = urlImage(media.ref, 1600);
       if (!url) return;
 
+      // La photo est parfois déjà écrite dans la page : elle y est mise
+      // à la publication (outils/photos-en-dur.mjs) pour éviter que le
+      // visiteur voie l'ancienne avant la bonne. Dans ce cas il n'y a
+      // rien à faire — y toucher quand même ferait clignoter l'image
+      // pour rien.
+      if (img.getAttribute('src') === url) return;
+
       // Les <source> pointent vers les fichiers d'origine : les retirer,
       // sinon le navigateur les préfère et la nouvelle photo ne s'affiche pas.
       picture.querySelectorAll('source').forEach((s) => s.remove());

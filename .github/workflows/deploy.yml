@@ -14,8 +14,9 @@
 #                  (avec un compte FTP limité à un dossier,
 #                   c'est simplement /)
 #
-#  Ne sont pas envoyés : le dépôt Git, le studio Sanity, le
-#  guide CMS et les fichiers de configuration du déploiement.
+#  Ne sont pas envoyés : le dépôt Git, le studio Sanity, les
+#  outils de publication, le guide CMS et les fichiers de
+#  configuration du déploiement.
 # ==========================================================
 name: Déployer sur cPanel
 
@@ -36,6 +37,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Sans cette étape, une page part avec la photo d'origine et
+      # c'est le navigateur du visiteur qui interroge Sanity puis la
+      # remplace : on voit l'ancienne photo une fraction de seconde,
+      # et deux images sont téléchargées au lieu d'une. On interroge
+      # donc Sanity une fois ici, et les pages partent avec la bonne
+      # photo déjà dedans.
+      #
+      # Si Sanity ne répond pas, le script laisse les pages en l'état
+      # et la publication continue : le site reste servi avec ses
+      # photos d'origine, comme avant.
+      - name: Écrire les photos de Sanity dans les pages
+        run: node outils/photos-en-dur.mjs
 
       # Le CSS et le JS sont mis en cache une semaine par les
       # navigateurs et par Cloudflare. Sans estampille, un
@@ -68,6 +86,7 @@ jobs:
               --exclude-glob .git/ \
               --exclude-glob .github/ \
               --exclude-glob sanity/ \
+              --exclude-glob outils/ \
               --exclude-glob .gitignore \
               --exclude-glob .cpanel.yml \
               --exclude-glob GUIDE-CMS.md \
