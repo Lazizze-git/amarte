@@ -9,7 +9,12 @@
    Le formulaire est envoyé en fetch() par js/main.js, qui attend
    une réponse JSON et un statut HTTP 2xx.
 
-   Réglages : voir la section CONFIGURATION ci-dessous.
+   Le tri du spam est délégué à spam-filter.php, qui rend un
+   verdict et ne dit rien d'autre : un message écarté reçoit
+   exactement la même réponse qu'un message accepté.
+
+   Réglages : voir la section CONFIGURATION ci-dessous, et le haut
+   de spam-filter.php pour ceux du filtre.
    ============================================================ */
 
 /* ── CONFIGURATION ────────────────────────────────────────── */
@@ -23,8 +28,11 @@ const DEST = 'hello@amarte.ch';
 const FROM_MAIL = 'hello@amarte.ch';
 const FROM_NOM  = 'Site Amarte';
 
-// Nombre maximum d'envois par adresse IP et par heure.
-const MAX_PAR_HEURE = 5;
+// Le filtre antispam : cinq couches, décrites dans son en-tête.
+// La constante ci-dessous lui sert de garde — il refuse de
+// s'exécuter si on l'appelle directement depuis un navigateur.
+define('AMARTE_ANTISPAM', true);
+require __DIR__ . '/spam-filter.php';
 
 
 /* ── RÉPONSE JSON ─────────────────────────────────────────── */
@@ -38,29 +46,6 @@ function repondre(int $code, string $message): void {
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     repondre(405, 'Méthode non autorisée.');
-}
-
-
-/* ── ANTI-SPAM ────────────────────────────────────────────── */
-
-// Champ piège, invisible pour un humain : seul un robot le remplit.
-// On renvoie un succès pour ne pas lui signaler qu'il est détecté.
-if (trim((string)($_POST['site_web'] ?? '')) !== '') {
-    repondre(200, 'Message reçu.');
-}
-
-// Limitation par IP : évite qu'un robot inonde la boîte mail.
-$ip      = (string)($_SERVER['REMOTE_ADDR'] ?? 'inconnue');
-$fichier = sys_get_temp_dir() . '/amarte-contact-' . md5($ip) . '.txt';
-$envois  = [];
-if (is_readable($fichier)) {
-    $envois = array_filter(
-        explode("\n", (string)file_get_contents($fichier)),
-        fn($t) => is_numeric($t) && (time() - (int)$t) < 3600
-    );
-}
-if (count($envois) >= MAX_PAR_HEURE) {
-    repondre(429, 'Trop de messages envoyés. Réessayez dans une heure.');
 }
 
 
@@ -107,6 +92,39 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 
+/* ── VERDICT ANTISPAM ─────────────────────────────────────── */
+// Les champs courts sont examinés à part : une adresse web dans
+// un nom ou dans un numéro de téléphone n'arrive jamais chez un
+// vrai visiteur.
+$courts = [];
+foreach (['prenom', 'nom', 'telephone', 'sujet', 'type', 'participants'] as $cle) {
+    if ($valeurs[$cle] !== '') $courts[$champs[$cle]] = $valeurs[$cle];
+}
+
+$verdict = as_verdict([
+    'message'       => $valeurs['message'],
+    'email'         => $email,
+    'champs_courts' => $courts,
+    // Deux champs pièges : l'historique `site_web` et `website`,
+    // que les robots remplissent presque par réflexe.
+    'pieges'        => [
+        'site_web' => $_POST['site_web'] ?? '',
+        'website'  => $_POST['website']  ?? '',
+    ],
+    'jeton'         => $_POST['jeton'] ?? '',
+    'turnstile'     => $_POST['cf-turnstile-response'] ?? '',
+]);
+
+$ip = $verdict['ip'];
+
+// Réponse strictement identique à celle d'un envoi réussi. Un
+// robot qui apprend ce qui l'a fait échouer réécrit son message
+// et revient ; la raison du refus est dans le journal, pas ici.
+if (!$verdict['accepte']) {
+    repondre(200, 'Message reçu.');
+}
+
+
 /* ── CONSTRUCTION DU MESSAGE ──────────────────────────────── */
 
 $origine = (string)($_POST['origine'] ?? 'Site');
@@ -129,11 +147,21 @@ $corps .= str_repeat('─', 46) . "\n";
 $corps .= 'Page      : ' . $nettoyer((string)($_SERVER['HTTP_REFERER'] ?? '—')) . "\n";
 $corps .= 'Reçu le   : ' . date('d.m.Y à H:i') . "\n";
 $corps .= 'IP        : ' . $ip . "\n";
+// Le score du filtre antispam, pour juger sur pièces si un
+// message douteux passe : plus il est proche de 7, plus il a
+// déclenché de signaux.
+$corps .= 'Antispam  : ' . $verdict['score'] . '/' . AS_SEUIL;
+$corps .= $verdict['raisons'] ? ' — ' . implode(' ; ', $verdict['raisons']) : ' — aucun signal';
+$corps .= "\n";
 
 $entetes = implode("\r\n", [
     'From: ' . sprintf('=?UTF-8?B?%s?= <%s>', base64_encode(FROM_NOM), FROM_MAIL),
     // Répondre au message écrit directement à la personne.
-    'Reply-To: ' . sprintf('=?UTF-8?B?%s?= <%s>', base64_encode($expediteur), $email),
+    // FILTER_VALIDATE_EMAIL refuse déjà les retours à la ligne ;
+    // on repasse quand même l'adresse au nettoyeur, pour que la
+    // règle « rien d'insaisi dans un en-tête » n'ait pas
+    // d'exception à retenir.
+    'Reply-To: ' . sprintf('=?UTF-8?B?%s?= <%s>', base64_encode($expediteur), $nettoyer($email)),
     'Content-Type: text/plain; charset=UTF-8',
     'Content-Transfer-Encoding: 8bit',
     'MIME-Version: 1.0',
@@ -151,8 +179,5 @@ if (!$envoye) {
     error_log('[amarte-contact] échec de mail() pour ' . $email);
     repondre(500, "L'envoi a échoué. Écrivez-nous à " . DEST . '.');
 }
-
-$envois[] = (string)time();
-@file_put_contents($fichier, implode("\n", $envois), LOCK_EX);
 
 repondre(200, 'Message reçu.');

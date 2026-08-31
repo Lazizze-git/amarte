@@ -15,8 +15,13 @@
 #                   c'est simplement /)
 #
 #  Ne sont pas envoyés : le dépôt Git, le studio Sanity, les
-#  outils de publication, le guide CMS et les fichiers de
-#  configuration du déploiement.
+#  outils de publication, les guides internes (CMS, antispam) et
+#  les fichiers de configuration du déploiement.
+#
+#  ⚠ `mirror --delete` supprime sur le serveur tout ce qui n'est
+#    pas dans le dépôt. Le dossier de travail de l'antispam est
+#    donc explicitement exclu : sans cette ligne, ses compteurs et
+#    son journal seraient effacés à chaque mise en ligne.
 # ==========================================================
 name: Déployer sur cPanel
 
@@ -84,11 +89,13 @@ jobs:
             open -u '$USER','$PASS' '$HOST';
             mirror --reverse --delete --verbose --parallel=4 \
               --exclude-glob .git/ \
+              --exclude-glob antispam-donnees/ \
               --exclude-glob .github/ \
               --exclude-glob sanity/ \
               --exclude-glob outils/ \
               --exclude-glob .gitignore \
               --exclude-glob .cpanel.yml \
               --exclude-glob GUIDE-CMS.md \
+              --exclude-glob ANTISPAM.md \
               . '$DIR';
           "

@@ -48,3 +48,9 @@ next-env.d.ts
 
 # éditeur local
 .vscode/
+
+# antispam : compteurs, empreintes et journal des décisions.
+# Écrits sur le serveur, jamais versionnés. Exclus aussi du
+# déploiement FTP (voir .github/workflows/deploy.yml) : `mirror
+# --delete` effacerait leur contenu à chaque mise en ligne.
+/antispam-donnees/

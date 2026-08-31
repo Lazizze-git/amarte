@@ -311,6 +311,34 @@
      personne ne doit rester sans moyen de nous joindre.
      Un <form> sans `data-endpoint` affiche la confirmation sans rien
      envoyer — à ne laisser que pour une maquette. */
+  /* Jeton de page — couche 2 de l'antispam (voir spam-filter.php).
+
+     On écrit ici, au chargement, un horodatage suivi d'une somme de
+     contrôle. Le PHP la recalcule à l'identique : un robot qui poste
+     directement sur contact.php sans jamais afficher la page ne peut pas
+     la produire, et le serveur déduit de l'horodatage le temps de
+     remplissage (moins de trois secondes = machine).
+
+     Le sel et le hachage doivent rester identiques à ceux de
+     spam-filter.php — hachage 31 sur 32 bits rendu en base 36. Ce n'est
+     pas de la cryptographie : ça n'a pas à résister à quelqu'un qui lit
+     le code du site, seulement à coûter plus cher qu'un POST à l'aveugle. */
+  (function jetonDePage() {
+    var champs = document.querySelectorAll('[data-jeton]');
+    if (!champs.length) return;
+
+    var SALT = 'antispam-v1';
+    var seconds = Math.floor(Date.now() / 1000);
+    var source = SALT + ':' + seconds;
+    var hash = 0;
+    for (var i = 0; i < source.length; i++) {
+      hash = (hash * 31 + source.charCodeAt(i)) >>> 0;
+    }
+    var jeton = seconds + '.' + hash.toString(36);
+
+    champs.forEach(function (champ) { champ.value = jeton; });
+  })();
+
   document.querySelectorAll('.contact-form').forEach(function (form) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();

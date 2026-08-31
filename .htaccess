@@ -155,6 +155,20 @@ ErrorDocument 404 /404.html
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>
 
+# spam-filter.php est inclus par contact.php, jamais appelé
+# directement. Il refuse déjà de s'exécuter seul (garde en tête de
+# fichier) ; cette règle évite en plus qu'un serveur mal configuré
+# en serve le code source en clair.
+<Files "spam-filter.php">
+  Require all denied
+</Files>
+
+# Dossier de travail de l'antispam : compteurs, empreintes et
+# journal des décisions. Il est normalement créé AU-DESSUS de la
+# racine web ; cette règle couvre le cas où l'hébergement ne le
+# permet pas et où il retombe ici.
+RedirectMatch 404 ^/antispam-donnees(/|$)
+
 # Bloque l'accès aux fichiers cachés (.git, .env, .htaccess…)
 <FilesMatch "^\.">
   Require all denied

@@ -239,7 +239,16 @@
             <div class="form-hp" aria-hidden="true">
               <label for="c-site-web">Ne pas remplir</label>
               <input type="text" id="c-site-web" name="site_web" tabindex="-1" autocomplete="off" />
+              <label for="c-website">Ne pas remplir</label>
+              <input type="text" id="c-website" name="website" tabindex="-1" autocomplete="off" />
             </div>
+            <!-- Jeton de page : js/main.js y écrit un horodatage signé au
+                 chargement. contact.php recalcule la signature et en déduit
+                 le temps de remplissage. Un robot qui poste directement sans
+                 exécuter le JavaScript ne peut pas le produire. Son absence
+                 coûte des points, elle ne bloque pas : un envoi sans
+                 JavaScript reste possible. -->
+            <input type="hidden" name="jeton" data-jeton />
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label" for="c-prenom">Prénom</label>
