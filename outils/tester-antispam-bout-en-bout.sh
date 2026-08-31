@@ -100,16 +100,51 @@ else
 fi
 
 echo
-echo "── 3 · Limite de fréquence : 3 envois par heure et par IP"
+echo "── 3 · Un renvoi ne doit pas manger le quota horaire"
+# Le scénario qui coûte un vrai message : l'envoi paraît lent, le
+# visiteur reclique deux fois, puis écrit un message différent.
+# Les renvois identiques sont des doublons — ils ne doivent rien
+# décompter. Avec l'anti-doublon APRÈS la limite de fréquence, les
+# trois clics épuisaient le quota de 3/h et le message suivant,
+# bien réel, partait à la poubelle en silence.
+rm -rf "$DONNEES"
+for i in 1 2 3; do
+  envoyer "clic n°$i, message identique" "$SUCCES" \
+    -F 'prenom=Marie' -F 'nom=Dupont' -F 'email=marie@exemple.ch' \
+    -F 'message=Bonjour, je souhaite des informations sur vos cours du soir.' \
+    -F "jeton=$(jeton 40)"
+done
+envoyer "message suivant, différent" "$SUCCES" \
+  -F 'prenom=Marie' -F 'nom=Dupont' -F 'email=marie@exemple.ch' \
+  -F 'message=J’oubliais : est-ce que la salle est accessible en fauteuil ?' \
+  -F "jeton=$(jeton 40)"
+envoyer "encore un autre message" "$SUCCES" \
+  -F 'prenom=Marie' -F 'nom=Dupont' -F 'email=marie@exemple.ch' \
+  -F 'message=Et avez-vous un parking pour les participants ? Merci beaucoup.' \
+  -F "jeton=$(jeton 40)"
+
+# La réponse HTTP est la même partout : seul le journal dit qui est
+# passé. Les deux derniers messages doivent y être acceptés.
+TOTAL=$(grep -hc '"verdict":"accepte"' "$DONNEES"/journal-*.log 2>/dev/null)
+FIN=$(tail -2 "$DONNEES"/journal-*.log 2>/dev/null | grep -c '"verdict":"accepte"')
+if [ "${FIN:-0}" = "2" ] && [ "${TOTAL:-0}" = "3" ]; then
+  echo "  ✔ 2 doublons ignorés sans rien décompter, les 2 messages suivants passent"
+else
+  echo "  ✘ ${FIN:-0}/2 des 2 derniers messages acceptés (${TOTAL:-0} au total, attendu 3)"
+  ECHECS=$((ECHECS + 1))
+fi
+
+echo
+echo "── 3 bis · Limite de fréquence : 3 messages DISTINCTS par heure et par IP"
 rm -rf "$DONNEES"
 for i in 1 2 3 4; do
-  envoyer "envoi n°$i" "$SUCCES" \
+  envoyer "message distinct n°$i" "$SUCCES" \
     -F 'prenom=Marie' -F 'nom=Dupont' -F 'email=marie@exemple.ch' \
     -F "message=Bonjour, question numéro $i sur vos cours du soir. Merci." \
     -F "jeton=$(jeton 40)"
 done
 if grep -q 'limite de fréquence' "$DONNEES"/journal-*.log 2>/dev/null; then
-  echo "  ✔ le 4e envoi est écarté (réponse inchangée, journal explicite)"
+  echo "  ✔ le 4e message distinct est écarté (réponse inchangée, journal explicite)"
 else
   echo "  ✘ la limite de fréquence ne s'est pas déclenchée"; ECHECS=$((ECHECS + 1))
 fi

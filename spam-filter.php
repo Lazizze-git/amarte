@@ -723,14 +723,22 @@ function as_verdict(array $ctx): array {
         return $refuser(array_merge($analyse['raisons'], ['Turnstile refusé']));
     }
 
-    /* Couche 4 — fréquence. */
-    if (as_frequence_depassee($ip)) {
-        return $refuser(array_merge($analyse['raisons'], ['limite de fréquence dépassée']));
-    }
+    /* Couche 5 — doublon.
 
-    /* Couche 5 — doublon. */
+       AVANT la limite de fréquence, et l'ordre compte : un envoi
+       qui semble lent fait recliquer, et chaque renvoi identique
+       serait sinon décompté du quota horaire. Le visiteur épuise
+       son quota sur un seul et même message, puis son message
+       suivant — bien réel, et différent — est écarté en silence.
+       Un doublon ne coûte donc rien : on le laisse tomber ici,
+       avant tout comptage. */
     if (as_doublon($email, $message)) {
         return $refuser(array_merge($analyse['raisons'], ['message déjà reçu dans les 24 h']));
+    }
+
+    /* Couche 4 — fréquence. Ne voit que des messages distincts. */
+    if (as_frequence_depassee($ip)) {
+        return $refuser(array_merge($analyse['raisons'], ['limite de fréquence dépassée']));
     }
 
     as_journaliser([

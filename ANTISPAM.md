@@ -49,6 +49,15 @@ coûte un client ; un faux négatif coûte une seconde de suppression.
 5. **Un anti-doublon** : le même message renvoyé dans les 24 h est
    ignoré (empreinte sur e-mail + message normalisé).
 
+L'anti-doublon est vérifié **avant** la limite de fréquence, et
+l'ordre n'est pas anodin : un envoi qui paraît lent fait recliquer,
+et chaque renvoi identique serait sinon décompté du quota horaire.
+Le visiteur épuiserait ses 3 envois sur un seul et même message,
+puis son message suivant — bien réel, et différent — serait écarté
+en silence. Un doublon ne coûte donc rien. Le cas est couvert par
+la section 3 du parcours de bout en bout ; ne pas remettre les deux
+couches dans l'ordre de leur numérotation.
+
 Deux cas bloquent d'office, parce qu'un visiteur réel ne peut pas
 les produire : un formulaire posté depuis un autre domaine, et trois
 domaines différents ou plus dans un même message.
